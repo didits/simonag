@@ -1,17 +1,13 @@
 package com.simonag.simonag;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.EditText;
 
-import com.simonag.simonag.adapter.DataProgramAdapter;
 import com.simonag.simonag.model.ProgramModel;
 import com.simonag.simonag.utils.EditHapusInterface;
 
@@ -31,7 +27,7 @@ public class DataProgramActivity extends AppCompatActivity implements EditHapusI
     @BindView(R.id.fab_add)
     FloatingActionButton fabAdd;
 
-    DataProgramAdapter adapter;
+//    DataProgramAdapter adapter;
     List<ProgramModel> programModels;
 
     @Override
@@ -49,8 +45,8 @@ public class DataProgramActivity extends AppCompatActivity implements EditHapusI
         rvProgram.setLayoutManager(llm);
         rvProgram.setHasFixedSize(true);
 
-        adapter = new DataProgramAdapter(this, programModels, this);
-        rvProgram.setAdapter(adapter);
+        //adapter = new DataProgramAdapter(this, programModels, this);
+//        rvProgram.setAdapter(adapter);
 
     }
 

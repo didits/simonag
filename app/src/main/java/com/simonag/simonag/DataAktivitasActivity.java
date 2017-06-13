@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.simonag.simonag.adapter.DataAktivitasAdapter;
 import com.simonag.simonag.model.AktivitasModel;
 import com.simonag.simonag.utils.EditHapusInterface;
 
@@ -26,7 +25,7 @@ public class DataAktivitasActivity extends AppCompatActivity implements EditHapu
     @BindView(R.id.fab_add)
     FloatingActionButton fabAdd;
 
-    DataAktivitasAdapter adapter;
+//    DataAktivitasAdapter adapter;
     List<AktivitasModel> aktivitasModels;
 
     @Override
