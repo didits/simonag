@@ -47,4 +47,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'org.parceler:parceler:1.1.6'
+    compile 'com.anthonycr.progress:animated-progress:1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

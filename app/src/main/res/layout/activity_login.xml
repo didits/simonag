@@ -52,7 +52,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="250dp"
         android:textColor="@android:color/white"
-        android:background="@color/primary"
+        android:background="@drawable/button"
         android:textAlignment="center"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
