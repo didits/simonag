@@ -5,5 +5,5 @@ package com.simonag.simonag.model;
  */
 
 public class AktivitasModel {
-    public String id,nama,kategori,target,revenue,duedate,program;
+    public String id,nama,kategori,target,revenue,duedate,program,satuan;
 }
