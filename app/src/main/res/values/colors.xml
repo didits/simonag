@@ -4,4 +4,8 @@
     <color name="colorBGDark">#D1D2D4</color>
     <color name="colorBGLight">#E8ECEB</color>
     <color name="colorAccent">#1D2856</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
 </resources>
