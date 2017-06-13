@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.MenuItem;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -27,6 +29,7 @@ public class ResetPassword extends AppCompatActivity {
         setContentView(R.layout.reset_password);
         showActionBar();
     }
+
 
     private void showActionBar() {
         ActionBar actionbar = getSupportActionBar();

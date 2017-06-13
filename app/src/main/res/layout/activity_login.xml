@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBGLight"
+    android:background="@color/colorBGDark"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".LoginActivity"
@@ -39,12 +39,17 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp" />
 
+            <FrameLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="2px" android:background="@color/colorBGDark"/>
+
             <EditText
                 android:id="@+id/login_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/edit_text"
                 android:hint="Email"
                 android:inputType="textPersonName"
