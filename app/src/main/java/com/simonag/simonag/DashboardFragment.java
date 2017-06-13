@@ -61,7 +61,7 @@ public class DashboardFragment extends Fragment {
         private ArrayList<Dashboard> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public String mBoundString;
+            public ArrayList<Dashboard>  mBoundString;
 
             public final View mView;
             public final ImageView mImageView;
@@ -96,8 +96,8 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            /*holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position));
+            //holder.mBoundString = mValues.get(position);
+            //holder.mTextView.setText(mValues.get(position).getNama_bumn());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,7 +108,7 @@ public class DashboardFragment extends Fragment {
 
                     context.startActivity(intent);
                 }
-            });*/
+            });
             /*
             Glide.with(holder.mImageView.getContext())
                     .load(Cheeses.getRandomCheeseDrawable())
