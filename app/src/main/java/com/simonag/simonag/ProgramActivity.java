@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.simonag.simonag.Model.Dashboard;
 import com.simonag.simonag.Model.Program;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class ProgramActivity extends AppCompatActivity {
         private ArrayList<Program> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Dashboard>  mBoundString;
+            public ArrayList<Program>  mBoundString;
 
             public final View mView;
             public final ImageView mImageView;

@@ -14,12 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.simonag.simonag.Model.Dashboard;
+import com.simonag.simonag.model.Dashboard;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 
 /**
@@ -103,10 +100,7 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, ProgramActivity.class);
-                    intent.putExtra(ProgramActivity.EXTRA_NAME, holder.mBoundString);
-
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, DataProgramActivity.class));
                 }
             });
             /*

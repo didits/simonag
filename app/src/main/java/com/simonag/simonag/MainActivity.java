@@ -1,8 +1,7 @@
 package com.simonag.simonag;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,31 +9,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ToxicBakery.viewpager.transforms.CubeInTransformer;
-import com.ToxicBakery.viewpager.transforms.RotateUpTransformer;
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,28 +47,22 @@ public class MainActivity extends AppCompatActivity {
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
             viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
             setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-            createTabIcons();
         }
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.logo_text)
+                .withHeaderBackground(R.drawable.logo_text_bg)
                 .addProfiles(
                         new ProfileDrawerItem().withName("Andi").withEmail("andi@gmail.com").withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
                 )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        return false;
-                    }
-                })
+                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
         result = new DrawerBuilder()
@@ -87,32 +70,31 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withIdentifier(1).withName("A"),
-                        new PrimaryDrawerItem().withIdentifier(1).withName("B")
+                        new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withIdentifier(2).withName("Semua").withIcon(FontAwesome.Icon.faw_users),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("BUMN").withIcon(FontAwesome.Icon.faw_user_secret),
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withIdentifier(4).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        Fragment fragment = null;
-                        Class fragmentClass;
                         switch((int) drawerItem.getIdentifier()) {
                             case 1:
-                                fragmentClass = DashboardFragment.class;
                                 break;
                             case 2:
-                                fragmentClass = ViewAktivitasFragment.class;
                                 break;
-                            default:
-                                fragmentClass = DashboardFragment.class;
+                            case 3:
+                                break;
+                            case 4:
+                                startActivity(new Intent(MainActivity.this, TentangActivity.class));
+                                break;
+                            case 5:
+                                out();
+                                break;
                         }
-                        try {
-                            fragment = (Fragment) fragmentClass.newInstance();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        /*FragmentManager fragmentManager = getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();*/
                         return false;
                     }
                 })
@@ -121,32 +103,32 @@ public class MainActivity extends AppCompatActivity {
         //result.setSelection(1, true);
     }
 
-    private void createTabIcons() {
-
-        LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        TextView one = (TextView) tabOne.getRootView().findViewById(R.id.tab);
-        one.setText("Kualitas");
-
-        tabLayout.getTabAt(0).setCustomView(tabOne);
-
-        LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        TextView two = (TextView) tabTwo.getRootView().findViewById(R.id.tab);
-        two.setText("Kapasitas");
-        tabLayout.getTabAt(1).setCustomView(tabTwo);
-
-        LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        TextView three = (TextView) tabThree.getRootView().findViewById(R.id.tab);
-        three.setText("Komersial");
-        tabLayout.getTabAt(2).setCustomView(tabThree);
-
-    }
-
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new DashboardFragment(), "Category 1");
-        adapter.addFragment(new DashboardFragment(), "Category 2");
-        adapter.addFragment(new DashboardFragment(), "Category 3");
+        adapter.addFragment(new DashboardFragment(), "Kualitas");
+        adapter.addFragment(new DashboardFragment(), "Kapasitas");
+        adapter.addFragment(new DashboardFragment(), "Komersial");
         viewPager.setAdapter(adapter);
+    }
+
+    private void out() {
+        AlertDialog.Builder pilihan = new AlertDialog.Builder(this);
+        pilihan.setMessage("Anda ingin keluar?");
+        pilihan.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Prefs.clear();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
+        pilihan.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        AlertDialog alert = pilihan.create();
+        alert.show();
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -177,6 +159,4 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitles.get(position);
         }
     }
-
-
 }

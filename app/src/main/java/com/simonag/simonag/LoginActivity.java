@@ -84,18 +84,14 @@ public class LoginActivity extends AppCompatActivity {
     private void resetdialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Masukan Email Anda");
-
-        // Set an EditText view to get user input
         final EditText input = new EditText(this);
         alert.setView(input);
-
         alert.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 return;
             }
         });
-
         alert.setNegativeButton("Batal",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
