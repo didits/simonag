@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,10 +30,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
-
 import com.simonag.simonag.model.Program;
 import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,14 +44,24 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
-    public static final String EXTRA_NAME = "id_bumn";
     String value;
-    LinearLayout loading;
     int id_progam;
+    @BindView(R.id.program)
+    EditText program_text;
+    @BindView(R.id.tambah_program)
+    Button tambahProgram;
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView avi;
+    @BindView(R.id.rv_program)
     RecyclerView rv;
+    @BindView(R.id.edit)
+    LinearLayout edit;
+    @BindView(R.id.hapus)
+    LinearLayout hapus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,37 +70,11 @@ public class ProgramActivity extends AppCompatActivity {
         if (extras != null) {
             value = extras.getString("KEY");
         }
-
         setContentView(R.layout.activity_data_program);
+        ButterKnife.bind(this);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
-        loading = (LinearLayout) findViewById(R.id.loading);
-        rv = (RecyclerView) findViewById(R.id.rv_program);
-        getProgram();
-        LinearLayout edit = (LinearLayout) findViewById(R.id.edit);
-        LinearLayout hapus = (LinearLayout) findViewById(R.id.hapus);
-
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        hapus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteProgram();
-            }
-        });
-
         showActionBar();
-        final Button tambah_program = (Button) findViewById(R.id.tambah_program);
-        tambah_program.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tambah_program();
-            }
-        });
+        getProgram();
     }
 
 
@@ -143,10 +127,8 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     private void tambah_program() {
-        EditText tambah_program = (EditText) findViewById(R.id.program);
-        String program = tambah_program.getText().toString();
+        String program = program_text.getText().toString();
         uploadProgram(program);
-
     }
 
     private void showActionBar() {
@@ -162,6 +144,7 @@ public class ProgramActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -169,7 +152,7 @@ public class ProgramActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Program> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this,p);
+        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(int id) {
@@ -182,28 +165,26 @@ public class ProgramActivity extends AppCompatActivity {
 
 
     private void getProgram() {
+        avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("tokena", tokena);
         final String url = Config.URL_GET_PROGRAM_PER + tokena + "/" + Prefs.getInt(Config.ID_BUMN, 0);
-
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("token", response.toString() + url);
-                        loading.setVisibility(View.GONE);
+                        avi.hide();
                         try {
                             if (response.getString("status").equals("success")) {
                                 setupRecyclerView(rv, jsonDecodeProgram(response.getString("program")));
-                            }else if(response.getString("status").equals("wrong-id")){
-                                /*GetToken k = new GetToken(ProgramActivity.this);
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(ProgramActivity.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
                                         getProgram();
                                     }
-                                });*/
+                                });
 
                             }
 
@@ -230,17 +211,15 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     private void deleteProgram() {
+        avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("tokena", tokena);
-        final String url = Config.URL_GET_DELETE_PROGRAM_PER + tokena + "/" + id_progam;
-
+        final String url = Config.URL_DELETE_PROGRAM_PER + tokena + "/" + id_progam;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("token", response.toString()+url);
-                        loading.setVisibility(View.GONE);
+                        avi.hide();
                         try {
                             if (response.getString("status").equals("delete-success")) {
                                 getProgram();
@@ -276,7 +255,7 @@ public class ProgramActivity extends AppCompatActivity {
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
                     Program d = new Program(
-                            i+1,
+                            i + 1,
                             jObject.getInt("id_program"),
                             jObject.getString("nama_program")
                     );
@@ -291,14 +270,13 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     private void uploadProgram(String nama_program) {
-        loading.setVisibility(View.VISIBLE);
+        avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
-
         VolleyClass cek = new VolleyClass(this, true);
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-
+                avi.hide();
                 Log.d("respon onSuccess", response);
                 try {
                     JSONObject jObject = new JSONObject(response);
@@ -312,7 +290,8 @@ public class ProgramActivity extends AppCompatActivity {
                     } else if (status.equals("post-failed")) {
                         Toast.makeText(ProgramActivity.this, "Post data gagal", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(ProgramActivity.this, "Token salah", Toast.LENGTH_LONG).show();}
+                        Toast.makeText(ProgramActivity.this, "Token salah", Toast.LENGTH_LONG).show();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -330,6 +309,20 @@ public class ProgramActivity extends AppCompatActivity {
                 "id_perusahaan" + "|" + Prefs.getInt(Config.ID_BUMN, 0)
 
         });
+    }
+
+    @OnClick({R.id.tambah_program, R.id.edit, R.id.hapus})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tambah_program:
+                tambah_program();
+                break;
+            case R.id.edit:
+                break;
+            case R.id.hapus:
+                deleteProgram();
+                break;
+        }
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -370,14 +363,14 @@ public class ProgramActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nama_program, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_program, parent, false);
             view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder,final int position) {
-            holder.tvNo.setText(mValues.get(position).getNo()+"");
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvNama.setText(mValues.get(position).getNama_program());
             holder.tvMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -387,12 +380,12 @@ public class ProgramActivity extends AppCompatActivity {
                     }
                 }
             });
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            holder.tvNama.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, AktifitasActivity.class);
-                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
+                    intent.putExtra("id_program", mValues.get(position).getId_program());
                     context.startActivity(intent);
                 }
             });

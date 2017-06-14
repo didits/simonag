@@ -12,7 +12,7 @@ public class Config {
     public static final String URL_GET_ALL_SATUAN = URL + "get/allSatuan/";
     public static final String URL_GET_DASHBOARD = URL + "get/Dashboard/";
     public static final String URL_GET_PROGRAM_PER = URL + "get/programPerusahaan/";
-    public static final String URL_GET_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
+    public static final String URL_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
     public static final String URL_GET_TARGET_PROGRAM = URL + "get/targetProgram/";
     public static final String URL_GET_TOKEN = URL + "getToken";
     public static final String URL_POST_PROGRAM_PER= URL + "post/programPerusahaan/";
@@ -20,7 +20,6 @@ public class Config {
     public static final String URL_POST_REALISASI_TARGET = URL + "post/realisasiTarget/";
     public static final String URL_EDIT_TARGET_PROGRAM = URL + "edit/targetProgram/";
     public static final String URL_EDIT_PROGRAM_PER = URL + "edit/programPerusahaan/";
-    public static final String URL_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
     public static final String URL_DELETE_TARGET_PROGRAM = URL + "delete/targetProgram/";
     public static final String URL_DELETE_REAL_TARGET = URL + "delete/realisasiTarget/";
     public static final String URL_FORGOT_PASS_REQ = URL + "sendEmailForgotPassword";

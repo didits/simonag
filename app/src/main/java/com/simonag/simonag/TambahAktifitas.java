@@ -1,8 +1,8 @@
 package com.simonag.simonag;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +17,6 @@ import butterknife.OnClick;
 
 public class TambahAktifitas extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.tv_nama)
     EditText tvNama;
     @BindView(R.id.tv_kategori)
@@ -40,9 +38,15 @@ public class TambahAktifitas extends AppCompatActivity {
         setContentView(R.layout.activity_tambah_aktifitas);
         ButterKnife.bind(this);
         setTitle("Tambah Aktivitas");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(false);
+        showActionBar();
+    }
+
+    private void showActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setElevation(0);
+        actionbar.setDisplayUseLogoEnabled(true);
+        actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -38,6 +38,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.Config;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,19 +58,20 @@ public class MainActivity extends AppCompatActivity {
     public AccountHeader headerResult;
     public Drawer result;
     ArrayList<Dashboard> db = new ArrayList<>();
+    @BindView(R.id.tabs)
     TabLayout tabLayout;
-    LinearLayout loading;
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView avi;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        loading = (LinearLayout) findViewById(R.id.loading);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        getDashboard();
-
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.logo_text_bg)
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         //result.setSelection(1, true);
+        getDashboard();
     }
 
     private void createTabIcons(Double kualitas, Double kapasitas, Double komersial) {
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
         judul.setText("KUALITAS");
-        persentase.setText( kualitas + " %");
+        persentase.setText(kualitas + " %");
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -201,26 +204,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getDashboard() {
+        avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("tokena", tokena);
         final String url = Config.URL_GET_DASHBOARD + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("token", response.toString());
                         try {
                             db = jsonDecodeBilling(response.getString("perusahaan"));
-                            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
                             if (viewPager != null) {
                                 viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                 setupViewPager(viewPager);
                             }
-                            tabLayout = (TabLayout) findViewById(R.id.tabs);
                             tabLayout.setupWithViewPager(viewPager);
                             jsonDecodePersentaseKategori(response.getString("kategori"));
-                            loading.setVisibility(View.GONE);
+                            avi.hide();
                         } catch (JSONException E) {
                             Log.e("json_error", E.toString());
                         }
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void jsonDecodePersentaseKategori(String jsonStr) {
-        Double kualitas = 0.0, kapasitas =0.0, komersial =0.0;
+        Double kualitas = 0.0, kapasitas = 0.0, komersial = 0.0;
 
         if (jsonStr != null) {
             try {
