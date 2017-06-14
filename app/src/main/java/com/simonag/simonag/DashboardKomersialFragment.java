@@ -13,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.simonag.simonag.model.Dashboard;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -66,22 +68,22 @@ public class DashboardKomersialFragment extends Fragment {
             public ArrayList<Dashboard>  mBoundString;
 
             public final View mView;
-            public final ImageView mImageView;
-            public final TextView mTextView;
-            public final ProgressBar percent;
+            @BindView(R.id.avatar)
+            ImageView avatar;
+            @BindView(android.R.id.text1)
+            TextView text1;
+            @BindView(android.R.id.progress)
+            ProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mImageView = (ImageView) view.findViewById(R.id.avatar);
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
-                percent = (ProgressBar) view.findViewById(android.R.id.progress);
-
+                ButterKnife.bind(this, view);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mTextView.getText();
+                return super.toString() + " '" + text1.getText();
             }
         }
 
@@ -103,8 +105,8 @@ public class DashboardKomersialFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position).getPersentase_komersial()+" %");
-            holder.percent.setProgress((int)mValues.get(position).getPersentase_komersial());
+            holder.text1.setText(mValues.get(position).getPersentase_komersial()+" %");
+            holder.progress.setProgress((int)mValues.get(position).getPersentase_komersial());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

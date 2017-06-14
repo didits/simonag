@@ -10,7 +10,7 @@ public class Config {
     public static final String URL_ALL_PER = URL + "get/allPerusahaan/";
     public static final String URL_GET_ALL_KATEGORI = URL + "get/allKategori/";
     public static final String URL_GET_ALL_SATUAN = URL + "get/allSatuan/";
-    public static final String URL_GET_DASHBOARD = URL + "get/dashboard/";
+    public static final String URL_GET_DASHBOARD = URL + "get/Dashboard/";
     public static final String URL_GET_PROGRAM_PER = URL + "get/programPerusahaan/";
     public static final String URL_GET_TARGET_PROGRAM = URL + "get/targetProgram/";
     public static final String URL_GET_TOKEN = URL + "getToken";

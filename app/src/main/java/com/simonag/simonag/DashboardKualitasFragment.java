@@ -15,17 +15,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.simonag.simonag.model.Dashboard;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DashboardKualitasFragment extends Fragment {
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,15 +41,17 @@ public class DashboardKualitasFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
                 ((MainActivity) getActivity()).db));
+
+
     }
 
     private ArrayList<Dashboard> getRandomSublist() {
         ArrayList<Dashboard> list = new ArrayList<>();
-        list.add(new Dashboard(0, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(1, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(2, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(3, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(4, 12,"Pertamina", 90f, 90f, 90f, "llll"));
+        list.add(new Dashboard(0, 12, "Pertamina", 90f, 90f, 90f, "llll"));
+        list.add(new Dashboard(1, 12, "Pertamina", 90f, 90f, 90f, "llll"));
+        list.add(new Dashboard(2, 12, "Pertamina", 90f, 90f, 90f, "llll"));
+        list.add(new Dashboard(3, 12, "Pertamina", 90f, 90f, 90f, "llll"));
+        list.add(new Dashboard(4, 12, "Pertamina", 90f, 90f, 90f, "llll"));
         return list;
     }
 
@@ -58,26 +61,29 @@ public class DashboardKualitasFragment extends Fragment {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Dashboard> mValues;
+        Context context;
+
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Dashboard>  mBoundString;
+            public ArrayList<Dashboard> mBoundString;
 
             public final View mView;
-            public final ImageView mImageView;
-            public final TextView mTextView;
-            public final ProgressBar percent;
+            @BindView(R.id.avatar)
+            ImageView avatar;
+            @BindView(android.R.id.text1)
+            TextView text1;
+            @BindView(android.R.id.progress)
+            ProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mImageView = (ImageView) view.findViewById(R.id.avatar);
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
-                percent = (ProgressBar) view.findViewById(android.R.id.progress);
+                ButterKnife.bind(this, view);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mTextView.getText();
+                return super.toString() + " '" + text1.getText();
             }
         }
 
@@ -85,6 +91,7 @@ public class DashboardKualitasFragment extends Fragment {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            this.context = context;
         }
 
         @Override
@@ -98,9 +105,8 @@ public class DashboardKualitasFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position).getPersentase_kualitas()+" %");
-            holder.percent.setProgress((int)mValues.get(position).getPersentase_komersial());
-
+            holder.text1.setText(mValues.get(position).getPersentase_komersial() + " %");
+            holder.progress.setProgress((int) mValues.get(position).getPersentase_komersial());
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,12 +114,11 @@ public class DashboardKualitasFragment extends Fragment {
                     context.startActivity(new Intent(context, ProgramActivity.class));
                 }
             });
-
-
+            /*
             Glide.with(holder.mImageView.getContext())
-                    .load(mValues.get(position).getLink_gambar())
+                    .load(Cheeses.getRandomCheeseDrawable())
                     .fitCenter()
-                    .into(holder.mImageView);
+                    .into(holder.mImageView);*/
         }
 
         @Override

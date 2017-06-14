@@ -69,8 +69,7 @@ public class AktifitasActivity extends AppCompatActivity {
         return list;
     }
 
-    public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
@@ -103,15 +102,15 @@ public class AktifitasActivity extends AppCompatActivity {
         }
 
         @Override
-        public DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.adapter_aktivitas, parent, false);
             view.setBackgroundResource(mBackground);
-            return new DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
             //holder.mTextView.setText(mValues.get(position).getNama_bumn());
 

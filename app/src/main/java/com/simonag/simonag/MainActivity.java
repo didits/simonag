@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     private void getDashboard(){
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-
+        Log.d("tokena",tokena);
         final String url = Config.URL_GET_DASHBOARD + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -209,9 +209,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
-
                     JSONObject jObject = transaksi.getJSONObject(i);
-
                     Dashboard d = new Dashboard(
                             i,
                             jObject.getInt("id_perusahaan"),

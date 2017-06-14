@@ -20,6 +20,9 @@ import com.simonag.simonag.model.Program;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by diditsepiyanto on 6/13/17.
  */
@@ -70,29 +73,30 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Program> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Program>  mBoundString;
+            public ArrayList<Program> mBoundString;
 
-            public final View mView;
-            public final ImageView mImageView;
-            public final TextView mTextView;
+            @BindView(R.id.tv_no)
+            TextView tvNo;
+            @BindView(R.id.tv_nama)
+            TextView tvNama;
+            @BindView(R.id.tv_menu)
+            ImageView tvMenu;
 
             public ViewHolder(View view) {
                 super(view);
-                mView = view;
-                mImageView = (ImageView) view.findViewById(R.id.avatar);
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
+                ButterKnife.bind(this, view);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mTextView.getText();
+                return super.toString() + " '" + tvNama.getText();
             }
         }
 
@@ -103,17 +107,21 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         @Override
-        public DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nama_program, parent, false);
             view.setBackgroundResource(mBackground);
-            return new DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
-            //holder.mBoundString = mValues.get(position);
-            //holder.mTextView.setText(mValues.get(position).getNama_bumn());
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            holder.tvNama.setText(mValues.get(position).getNama_program());
+            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+            holder.tvNama.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
