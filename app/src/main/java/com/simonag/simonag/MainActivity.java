@@ -1,9 +1,7 @@
 package com.simonag.simonag;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
-//import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,6 +43,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+//import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -171,12 +170,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getDashboard(){
-        final SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_USER, Context.MODE_PRIVATE);
-        String token = sharedPreferences.getString(Config.TOKEN_BUMN, null);
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        token = "tf29iienGq5ude02hEtaaWolJPS6f5mBUgMmZJqp3x9BZdyNEBQR0NJbjRnl";
 
-        final String url = Config.URL_DASHBOARD + token;
+        final String url = Config.URL_GET_DASHBOARD + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
