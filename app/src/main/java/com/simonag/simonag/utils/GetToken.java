@@ -1,9 +1,6 @@
-package com.simonag.simonag;
+package com.simonag.simonag.utils;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -17,8 +14,6 @@ import org.json.JSONObject;
 public class GetToken {
     private callback callback_variable;
     public GetToken(Context c){
-
-
         VolleyClass cek = new VolleyClass(c, true);
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
             @Override

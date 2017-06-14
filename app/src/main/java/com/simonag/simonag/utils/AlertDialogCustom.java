@@ -1,15 +1,14 @@
-package com.simonag.simonag;
+package com.simonag.simonag.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.simonag.simonag.R;
 
 /**
  * Created by diditsepiyanto on 5/30/17.

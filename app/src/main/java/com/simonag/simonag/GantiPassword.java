@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.VolleyClass;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

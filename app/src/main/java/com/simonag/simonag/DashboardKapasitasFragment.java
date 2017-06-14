@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
 

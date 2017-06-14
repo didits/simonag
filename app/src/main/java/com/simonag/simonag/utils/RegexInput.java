@@ -1,4 +1,4 @@
-package com.simonag.simonag;
+package com.simonag.simonag.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

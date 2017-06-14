@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,12 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.DefaultRetryPolicy;
 
 import com.android.volley.Request;
@@ -37,6 +33,8 @@ import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import com.simonag.simonag.model.Program;
+import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.VolleyClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +44,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;

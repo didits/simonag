@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.VolleyClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;

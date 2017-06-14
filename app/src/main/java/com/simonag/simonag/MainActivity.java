@@ -37,6 +37,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.utils.Config;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +49,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
 public class MainActivity extends AppCompatActivity {
 
