@@ -26,13 +26,18 @@
             android:layout_weight="1"
             android:text="Penyediaan Jaringan Telekomunikasi "
             android:textColor="@color/primary" />
-
-        <ImageView
+        <LinearLayout
             android:id="@+id/tv_menu"
             android:layout_width="20dp"
-            android:layout_height="8dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/more" />
+            android:layout_height="20dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/more" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <FrameLayout
