@@ -3,20 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".DataProgramActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tambah Program"
+                android:layout_marginBottom="5dp"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/edit_text"
+                    android:hint="ex: Penyediaan Jaringan Telekomunikasi"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="@dimen/text" />
+                <Button
+                    android:layout_marginLeft="6dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="+"
+                    android:textSize="30sp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/button"/>
+            </LinearLayout>
 
-    </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+    
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_program"
@@ -35,5 +66,6 @@
         android:layout_marginBottom="24dp"
         android:layout_marginRight="24dp"
         android:src="@drawable/ic_add_white_24dp" />
+    </LinearLayout>
 
 </RelativeLayout>

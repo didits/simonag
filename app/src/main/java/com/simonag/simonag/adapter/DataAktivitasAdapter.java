@@ -1,4 +1,4 @@
-package com.simonag.simonag.adapter;
+/*package com.simonag.simonag.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -23,17 +23,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Ilham Aulia Majid on 07-May-17.
- */
-
+*/
+/*
 public class DataAktivitasAdapter extends RecyclerView.Adapter<DataAktivitasAdapter.ViewHolder> {
 
     Context context;
-    List<AktivitasModel> aktivitasModels;
+    List<Aktifitas> aktivitasModels;
     EditHapusInterface listener;
 
-    public DataAktivitasAdapter(Context context, List<AktivitasModel> aktivitasModels, EditHapusInterface listener) {
+    public DataAktivitasAdapter(Context context, List<Aktifitas> aktivitasModels, EditHapusInterface listener) {
         this.aktivitasModels = aktivitasModels;
         this.context = context;
         this.listener = listener;
@@ -47,7 +45,7 @@ public class DataAktivitasAdapter extends RecyclerView.Adapter<DataAktivitasAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        AktivitasModel aktivitas = aktivitasModels.get(position);
+        Aktifitas aktivitas = aktivitasModels.get(position);
         holder.tvNama.setText(aktivitas.nama);
         holder.tvDuedate.setText(aktivitas.duedate);
         holder.tvTarget.setText(aktivitas.target);
@@ -117,4 +115,4 @@ public class DataAktivitasAdapter extends RecyclerView.Adapter<DataAktivitasAdap
             ButterKnife.bind(this, itemView);
         }
     }
-}
+}*/

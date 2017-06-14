@@ -100,7 +100,7 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    context.startActivity(new Intent(context, DataProgramActivity.class));
+                    context.startActivity(new Intent(context, ProgramActivity.class));
                 }
             });
             /*

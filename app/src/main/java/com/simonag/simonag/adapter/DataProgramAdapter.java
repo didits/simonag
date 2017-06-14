@@ -1,4 +1,4 @@
-package com.simonag.simonag.adapter;
+/*package com.simonag.simonag.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -20,11 +20,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
+*/
 /**
  * Created by Ilham Aulia Majid on 07-May-17.
  */
-
+/*
 public class DataProgramAdapter extends RecyclerView.Adapter<DataProgramAdapter.ViewHolder> {
 
     Context context;
@@ -96,4 +96,4 @@ public class DataProgramAdapter extends RecyclerView.Adapter<DataProgramAdapter.
             ButterKnife.bind(this, itemView);
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.simonag.simonag.Model;
+package com.simonag.simonag.model;
 
 /**
  * Created by diditsepiyanto on 6/14/17.

@@ -4,17 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.simonag.simonag.Model.Program;
+import com.simonag.simonag.model.Program;
 
 import java.util.ArrayList;
 
@@ -28,9 +30,28 @@ public class ProgramActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.program);
-        RecyclerView rv = (RecyclerView) findViewById(R.id.list_program);
+        setContentView(R.layout.activity_data_program);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv_program);
         setupRecyclerView(rv);
+        showActionBar();
+    }
+
+    private void showActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setElevation(0);
+        actionbar.setDisplayUseLogoEnabled(true);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -98,8 +119,8 @@ public class ProgramActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, ProgramActivity.class);
-                    intent.putExtra(ProgramActivity.EXTRA_NAME, holder.mBoundString);
+                    Intent intent = new Intent(context, AktifitasActivity.class);
+                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
 
                     context.startActivity(intent);
                 }

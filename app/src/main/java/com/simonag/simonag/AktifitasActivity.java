@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.simonag.simonag.model.Aktifitas;
 import com.simonag.simonag.model.Program;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import java.util.ArrayList;
  * Created by diditsepiyanto on 6/13/17.
  */
 
-public class ProgramActivity extends AppCompatActivity {
-    public static final String EXTRA_NAME = "id_bumn";
+public class AktifitasActivity extends AppCompatActivity {
+    public static final String EXTRA_NAME = "id_program";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,12 +61,12 @@ public class ProgramActivity extends AppCompatActivity {
                 getRandomSublist()));
     }
 
-    private ArrayList<Program> getRandomSublist() {
-        ArrayList<Program> list = new ArrayList<>();
-        list.add(new Program(0, "Pertamina"));
-        list.add(new Program(1, "Pertamina"));
-        list.add(new Program(2, "Pertamina"));
-        list.add(new Program(3, "Pertamina"));
+    private ArrayList<Aktifitas> getRandomSublist() {
+        ArrayList<Aktifitas> list = new ArrayList<>();
+        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
+        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
+        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
+        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
         return list;
     }
 
@@ -74,10 +75,10 @@ public class ProgramActivity extends AppCompatActivity {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private ArrayList<Program> mValues;
+        private ArrayList<Aktifitas> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Program>  mBoundString;
+            public ArrayList<Aktifitas>  mBoundString;
 
             public final View mView;
             public final ImageView mImageView;
@@ -96,7 +97,7 @@ public class ProgramActivity extends AppCompatActivity {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Program> items) {
+        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Aktifitas> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -105,7 +106,7 @@ public class ProgramActivity extends AppCompatActivity {
         @Override
         public DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_nama_program, parent, false);
+                    .inflate(R.layout.adapter_aktivitas, parent, false);
             view.setBackgroundResource(mBackground);
             return new DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
         }
@@ -119,8 +120,8 @@ public class ProgramActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, ProgramActivity.class);
-                    intent.putExtra(ProgramActivity.EXTRA_NAME, holder.mBoundString);
+                    Intent intent = new Intent(context, AktifitasActivity.class);
+                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
 
                     context.startActivity(intent);
                 }
