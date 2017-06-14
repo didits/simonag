@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,15 +23,17 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * Created by diditsepiyanto on 6/14/17.
+ * Created by root on 6/14/17.
  */
 
-public class ResetPassword extends AppCompatActivity {
+public class VerifikasiKodeReset extends AppCompatActivity {
 
-    @BindView(R.id.ET_email)
-    EditText email;
-    @BindView(R.id.B_reset)
-    Button resetButton;
+    @BindView(R.id.ET_email_verifikasi)
+    EditText email_verifikasi;
+    @BindView(R.id.ET_kode_verifikasi)
+    EditText kode_verifikasi;
+    @BindView(R.id.B_verifikasi)
+    Button verifikasiButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,25 +43,31 @@ public class ResetPassword extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.reset_password);
+        setContentView(R.layout.verifikasi_kode);
         ButterKnife.bind(this);
+        Intent in = getIntent();
+        if(in.getExtras() != null){
+            email_verifikasi.setText(in.getExtras().getString("email"));
+        }
         showActionBar();
-
     }
 
-    @OnClick({R.id.B_reset })
+    @OnClick({R.id.B_verifikasi })
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.B_reset:
+            case R.id.B_verifikasi:
                 sendCode();
                 break;
         }
     }
 
-    private void move() {
-        Intent i = new Intent(ResetPassword.this, VerifikasiKodeReset.class);
-        i.putExtra("email",email.getText().toString());
+    private void move(String id_user) {
+        Intent i = new Intent(VerifikasiKodeReset.this, GantiPassword.class);
+        i.putExtra("id_user",id_user);
+        i.putExtra("email",email_verifikasi.getText().toString());
+        i.putExtra("code",kode_verifikasi.getText().toString());
         startActivity(i);
+        finish();
     }
 
     private void sendCode() {
@@ -73,11 +79,12 @@ public class ResetPassword extends AppCompatActivity {
                 try {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
-                    if (status.equals("send-success")) {
-                        Toast.makeText(ResetPassword.this, "Berhasil mengirim", Toast.LENGTH_LONG).show();
-                        move();
-                    } else if (status.equals("not-exist")) {
-                        Toast.makeText(ResetPassword.this, "email tidak ada", Toast.LENGTH_LONG).show();
+                    String id_user = jObject.getString("id_user");
+                    if (status.equals("success")) {
+                        Toast.makeText(VerifikasiKodeReset.this, "Berhasil mengirim", Toast.LENGTH_LONG).show();
+                        move(id_user);
+                    } else if (status.equals("failed")) {
+                        Toast.makeText(VerifikasiKodeReset.this, "Kode salah", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -89,9 +96,15 @@ public class ResetPassword extends AppCompatActivity {
             public void onError() {
 
             }
-        }, Config.URL_SEND_EMAIL_FORGOT_PASSWORD, new String[]{
-                "email" + "|" + email.getText().toString()
+        }, Config.URL_VERIFY_CODE_EMAIL, new String[]{
+                "email" + "|" + email_verifikasi.getText().toString(),
+                "code" + "|" + kode_verifikasi.getText().toString()
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     private void showActionBar() {
@@ -112,9 +125,5 @@ public class ResetPassword extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
 }

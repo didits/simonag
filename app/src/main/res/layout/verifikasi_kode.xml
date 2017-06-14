@@ -41,7 +41,7 @@
 
 
             <EditText
-                android:id="@+id/ET_email"
+                android:id="@+id/ET_email_verifikasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -54,14 +54,27 @@
                 android:textSize="@dimen/text" />
 
 
+            <EditText
+                android:id="@+id/ET_kode_verifikasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text"
+                android:hint="Kode Verifikasi pada Email"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
             <Button
-                android:id="@+id/B_reset"
+                android:id="@+id/B_verifikasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
-                android:text="KIRIM KODE RESET"
+                android:text="VERIFIKASI KODE"
                 android:textAlignment="center"
                 android:textColor="@android:color/white" />
 

@@ -29,6 +29,8 @@
         <activity android:name=".MainActivity" android:theme="@style/Login"/>
         <activity android:name=".LoginActivity" android:theme="@style/Login" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ResetPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".VerifikasiKodeReset" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".GantiPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ProgramActivity" android:theme="@style/AppTheme" android:label="View Program" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".AktifitasActivity" android:theme="@style/AppTheme" android:label="View Aktivitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TentangActivity" android:theme="@style/AppTheme" android:label="View Program" android:windowSoftInputMode="stateHidden" />

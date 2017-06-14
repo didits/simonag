@@ -18,6 +18,10 @@ public class Config {
     public static final String URL_POST_TARGET_PROGRAM = URL + "post/targetProgram/";
     public static final String URL_POST_REALISASI_TARGET = URL + "post/realisasiTarget/";
 
+    public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword/";
+    public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail/";
+    public static final String URL_CHANGE_PASSWORD = URL + "changePassword/";
+
     //----------- USER BUMN --------------//
     public static final String SHARED_USER = "user";
     public static final String ID_BUMN = "id_bumn";
