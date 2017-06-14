@@ -9,44 +9,49 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="@dimen/padding">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tambah Program"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:text="Tambah Program" />
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <EditText
-                    android:layout_weight="1"
-                    android:id="@+id/login_password"
+                    android:id="@+id/program"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
                     android:background="@drawable/edit_text"
                     android:hint="ex: Penyediaan Jaringan Telekomunikasi"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="@dimen/text" />
+
                 <Button
-                    android:layout_marginLeft="6dp"
+                    android:id="@+id/tambah_program"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="6dp"
+                    android:background="@drawable/button"
                     android:text="+"
-                    android:textSize="30sp"
                     android:textColor="@color/colorWhite"
-                    android:background="@drawable/button"/>
+                    android:textSize="30sp" />
             </LinearLayout>
 
         </LinearLayout>
-    
 
 
         <LinearLayout
@@ -64,12 +69,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="2px"
                 android:background="@color/colorBGLight"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_program"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/toolbar">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/loading"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.wang.avi.AVLoadingIndicatorView
+                        android:id="@+id/avi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:indicatorColor="@color/primary"
+                        app:indicatorName="BallPulseIndicator" />
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_program"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
         </LinearLayout>
 
 

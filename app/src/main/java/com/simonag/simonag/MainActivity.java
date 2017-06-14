@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -57,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
     public Drawer result;
     ArrayList<Dashboard> db = new ArrayList<>();
     TabLayout tabLayout;
+    LinearLayout loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        loading = (LinearLayout) findViewById(R.id.loading);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
         getDashboard();
@@ -217,11 +220,10 @@ public class MainActivity extends AppCompatActivity {
                             tabLayout = (TabLayout) findViewById(R.id.tabs);
                             tabLayout.setupWithViewPager(viewPager);
                             jsonDecodePersentaseKategori(response.getString("kategori"));
+                            loading.setVisibility(View.GONE);
                         } catch (JSONException E) {
                             Log.e("json_error", E.toString());
                         }
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -231,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
         queue.add(getRequest);
     }
 

@@ -72,6 +72,8 @@ public class DashboardKomersialFragment extends Fragment {
             ImageView avatar;
             @BindView(android.R.id.text1)
             TextView text1;
+            @BindView(android.R.id.text2)
+            TextView text2;
             @BindView(android.R.id.progress)
             ProgressBar progress;
 
@@ -105,7 +107,8 @@ public class DashboardKomersialFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.text1.setText(mValues.get(position).getPersentase_komersial()+" %");
+            holder.text1.setText(mValues.get(position).getNama_bumn());
+            holder.text2.setText(mValues.get(position).getPersentase_komersial()+" %");
             holder.progress.setProgress((int)mValues.get(position).getPersentase_komersial());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 
 import java.util.ArrayList;
@@ -44,16 +45,6 @@ public class DashboardKapasitasFragment extends Fragment {
                 ((MainActivity) getActivity()).db));
     }
 
-    private ArrayList<Dashboard> getRandomSublist() {
-        ArrayList<Dashboard> list = new ArrayList<>();
-        list.add(new Dashboard(0, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(1, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(2, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(3, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(4, 12,"Pertamina", 90f, 90f, 90f, "llll"));
-        return list;
-    }
-
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
 
@@ -69,6 +60,8 @@ public class DashboardKapasitasFragment extends Fragment {
             ImageView avatar;
             @BindView(android.R.id.text1)
             TextView text1;
+            @BindView(android.R.id.text2)
+            TextView text2;
             @BindView(android.R.id.progress)
             ProgressBar progress;
 
@@ -99,16 +92,18 @@ public class DashboardKapasitasFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.text1.setText(mValues.get(position).getPersentase_kapasitas()+" %");
+            holder.text1.setText(mValues.get(position).getNama_bumn());
+            holder.text2.setText(mValues.get(position).getPersentase_kapasitas()+" %");
             holder.progress.setProgress((int)mValues.get(position).getPersentase_kapasitas());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mValues.get(position).getId_bumn()== Prefs.getInt(Config.ID_BUMN, 0)){
                     Context context = v.getContext();
-                    context.startActivity(new Intent(context, ProgramActivity.class));
+                    context.startActivity(new Intent(context, ProgramActivity.class));}
                 }
             });
             /*

@@ -4,29 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="top"
-    android:orientation="horizontal"
-    android:padding="@dimen/padding">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_no"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
-        android:text="1."
-        android:textColor="@color/primary" />
-
-    <TextView
-        android:id="@+id/tv_nama"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Penyediaan Jaringan Telekomunikasi "
-        android:textColor="@color/primary" />
+        android:orientation="horizontal"
+        android:padding="@dimen/padding">
 
-    <ImageView
-        android:id="@+id/tv_menu"
-        android:layout_width="30dp"
-        android:layout_height="10dp"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/more" />
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="1."
+            android:textColor="@color/primary" />
+
+        <TextView
+            android:id="@+id/tv_nama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Penyediaan Jaringan Telekomunikasi "
+            android:textColor="@color/primary" />
+
+        <ImageView
+            android:id="@+id/tv_menu"
+            android:layout_width="20dp"
+            android:layout_height="8dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/more" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_marginRight="@dimen/padding"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/colorBGLight" />
+
 
 </LinearLayout>

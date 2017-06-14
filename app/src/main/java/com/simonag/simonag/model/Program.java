@@ -5,12 +5,26 @@ package com.simonag.simonag.model;
  */
 
 public class Program {
+    int no;
     int id_program;
     String nama_program;
+    Double realisasi_persen;
+    Double kualitas_persen;
+    Double kuantitas_persen;
+    Double komersial_persen;
 
-    public Program(int id_program, String nama_program) {
+    public Program(int no, int id_program, String nama_program) {
+        this.no = no;
         this.id_program = id_program;
         this.nama_program = nama_program;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public int getId_program() {

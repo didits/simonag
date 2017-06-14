@@ -7,11 +7,11 @@
     tools:context=".SplashActivity">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView"
@@ -24,12 +24,11 @@
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
-        android:layout_margin="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        app:indicatorColor="@color/primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:indicatorName="BallPulseIndicator"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        app:indicatorColor="@color/primary"
+        app:indicatorName="BallPulseIndicator" />
 </RelativeLayout>
