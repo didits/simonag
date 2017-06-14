@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.simonag.simonag.model.Aktifitas;
-import com.simonag.simonag.model.Program;
 
 import java.util.ArrayList;
 
@@ -71,7 +70,7 @@ public class AktifitasActivity extends AppCompatActivity {
     }
 
     public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder> {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
@@ -104,15 +103,15 @@ public class AktifitasActivity extends AppCompatActivity {
         }
 
         @Override
-        public DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.adapter_aktivitas, parent, false);
             view.setBackgroundResource(mBackground);
-            return new DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
+            return new DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final DashboardFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
             //holder.mTextView.setText(mValues.get(position).getNama_bumn());
 

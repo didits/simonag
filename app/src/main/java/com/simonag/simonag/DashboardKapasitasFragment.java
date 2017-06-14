@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.simonag.simonag.model.Dashboard;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DashboardKuantitasFragment extends Fragment {
+public class DashboardKapasitasFragment extends Fragment {
 
 
     @Override
@@ -37,7 +38,7 @@ public class DashboardKuantitasFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                getRandomSublist()));
+                ((MainActivity) getActivity()).db));
     }
 
     private ArrayList<Dashboard> getRandomSublist() {
@@ -63,12 +64,14 @@ public class DashboardKuantitasFragment extends Fragment {
             public final View mView;
             public final ImageView mImageView;
             public final TextView mTextView;
+            public final ProgressBar percent;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.avatar);
                 mTextView = (TextView) view.findViewById(android.R.id.text1);
+                percent = (ProgressBar) view.findViewById(android.R.id.progress);
             }
 
             @Override
@@ -94,7 +97,8 @@ public class DashboardKuantitasFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.mTextView.setText(mValues.get(position).getNama_bumn());
+            holder.mTextView.setText(mValues.get(position).getPersentase_komersial()+" %");
+            holder.percent.setProgress((int)mValues.get(position).getPersentase_kapasitas());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -7,6 +7,7 @@ package com.simonag.simonag;
 public class Config {
     public static final String URL = "http://simonag.owline.org/api/v1/";
     public static final String URL_LOGIN = URL + "login";
+    public static final String URL_DASHBOARD = URL + "get/Dashboard/";
 
     //----------- USER BUMN --------------//
     public static final String SHARED_USER = "user";

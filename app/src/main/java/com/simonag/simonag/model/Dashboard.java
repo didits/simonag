@@ -8,12 +8,12 @@ public class Dashboard {
     int id;
     int id_bumn;
     String nama_bumn;
-    float persentase_komersial;
-    float persentase_kualitas;
-    float persentase_kapasitas;
+    double persentase_komersial;
+    double persentase_kualitas;
+    double persentase_kapasitas;
     String link_gambar;
 
-    public Dashboard(int id, int id_bumn, String nama_bumn, float persentase_komersial, float persentase_kualitas, float persentase_kapasitas, String link_gambar) {
+    public Dashboard(int id, int id_bumn, String nama_bumn, double persentase_komersial, double persentase_kualitas, double persentase_kapasitas, String link_gambar) {
         this.id = id;
         this.id_bumn = id_bumn;
         this.nama_bumn = nama_bumn;
@@ -47,27 +47,27 @@ public class Dashboard {
         this.nama_bumn = nama_bumn;
     }
 
-    public float getPersentase_komersial() {
+    public double getPersentase_komersial() {
         return persentase_komersial;
     }
 
-    public void setPersentase_komersial(float persentase_komersial) {
+    public void setPersentase_komersial(double persentase_komersial) {
         this.persentase_komersial = persentase_komersial;
     }
 
-    public float getPersentase_kualitas() {
+    public double getPersentase_kualitas() {
         return persentase_kualitas;
     }
 
-    public void setPersentase_kualitas(float persentase_kualitas) {
+    public void setPersentase_kualitas(double persentase_kualitas) {
         this.persentase_kualitas = persentase_kualitas;
     }
 
-    public float getPersentase_kapasitas() {
+    public double getPersentase_kapasitas() {
         return persentase_kapasitas;
     }
 
-    public void setPersentase_kapasitas(float persentase_kapasitas) {
+    public void setPersentase_kapasitas(double persentase_kapasitas) {
         this.persentase_kapasitas = persentase_kapasitas;
     }
 
