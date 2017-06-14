@@ -104,8 +104,7 @@ public class ProgramActivity extends AppCompatActivity {
 
         @Override
         public DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_nama_program, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nama_program, parent, false);
             view.setBackgroundResource(mBackground);
             return new DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder(view);
         }
@@ -114,22 +113,15 @@ public class ProgramActivity extends AppCompatActivity {
         public void onBindViewHolder(final DashboardKualitasFragment.SimpleStringRecyclerViewAdapter.ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
             //holder.mTextView.setText(mValues.get(position).getNama_bumn());
-
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, AktifitasActivity.class);
                     intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
-
                     context.startActivity(intent);
                 }
             });
-            /*
-            Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
-                    .fitCenter()
-                    .into(holder.mImageView);*/
         }
 
         @Override

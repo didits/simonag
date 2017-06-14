@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
         private void move() {
-        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        Intent i = new Intent(LoginActivity.this, ProgramActivity.class);
         startActivity(i);
         finish();
     }
