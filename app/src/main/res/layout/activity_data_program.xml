@@ -29,6 +29,7 @@
 
                 <EditText
                     android:id="@+id/program"
+
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
@@ -42,6 +43,7 @@
 
                 <Button
                     android:id="@+id/tambah_program"
+
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="6dp"
@@ -96,16 +98,6 @@
         </LinearLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginRight="24dp"
-        android:src="@drawable/ic_add_white_24dp" />
     </LinearLayout>
 
 </RelativeLayout>

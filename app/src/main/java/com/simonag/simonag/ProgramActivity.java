@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.DefaultRetryPolicy;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,7 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Dashboard;
+
 import com.simonag.simonag.model.Program;
 
 import org.json.JSONArray;
@@ -43,15 +44,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by diditsepiyanto on 6/13/17.
- */
+import butterknife.OnClick;
 
 public class ProgramActivity extends AppCompatActivity {
+
     public static final String EXTRA_NAME = "id_bumn";
     String value;
     LinearLayout loading;
+
     RecyclerView rv;
 
     @Override
@@ -81,6 +81,7 @@ public class ProgramActivity extends AppCompatActivity {
         EditText tambah_program = (EditText) findViewById(R.id.program);
         String program = tambah_program.getText().toString();
         uploadProgram(program);
+
     }
 
     private void showActionBar() {
@@ -106,6 +107,7 @@ public class ProgramActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(this,
                 p));
     }
+
 
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
@@ -181,6 +183,7 @@ public class ProgramActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         Log.d("tokena", tokena);
         final String url = Config.URL_GET_PROGRAM_PER + tokena + "/" + Prefs.getInt(Config.ID_BUMN, 0);
+
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -195,6 +198,7 @@ public class ProgramActivity extends AppCompatActivity {
                         } catch (JSONException E) {
                             Log.e("json_error", E.toString());
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -215,7 +219,6 @@ public class ProgramActivity extends AppCompatActivity {
 
     public ArrayList<Program> jsonDecodeProgram(String jsonStr) {
         ArrayList<Program> billing = new ArrayList<>();
-
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
@@ -239,10 +242,12 @@ public class ProgramActivity extends AppCompatActivity {
     private void uploadProgram(String nama_program) {
         loading.setVisibility(View.VISIBLE);
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
+
         VolleyClass cek = new VolleyClass(this, true);
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
+
                 Log.d("respon onSuccess", response);
                 try {
                     JSONObject jObject = new JSONObject(response);
@@ -251,7 +256,13 @@ public class ProgramActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(ProgramActivity.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
                         toast.show();
                         getProgram();
-                    }
+                    } else if (status.equals("wrong-id")) {
+                        Toast.makeText(ProgramActivity.this, "Perusahaan tidak ada", Toast.LENGTH_LONG).show();
+                    } else if (status.equals("post-failed")) {
+                        Toast.makeText(ProgramActivity.this, "Post data gagal", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ProgramActivity.this, "Token salah", Toast.LENGTH_LONG).show();}
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -266,6 +277,7 @@ public class ProgramActivity extends AppCompatActivity {
                 "nama_program" + "|" + nama_program,
                 "keterangan" + "|" + "null",
                 "id_perusahaan" + "|" + Prefs.getInt(Config.ID_BUMN, 0)
+
         });
     }
 }
