@@ -36,6 +36,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ import butterknife.OnClick;
 public class AktifitasActivity extends AppCompatActivity {
     public static final String EXTRA_NAME = "id_program";
     public BottomSheetBehavior bottomSheetBehavior;
-    int id_aktivitas;
+    Aktifitas temp_aktivitas;
     @BindView(R.id.tambah_aktifitas)
     Button tambahAktifitas;
     @BindView(R.id.avi)
@@ -145,8 +146,8 @@ public class AktifitasActivity extends AppCompatActivity {
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public void action(int id) {
-                id_aktivitas = id;
+            public void action(Aktifitas aktifitas) {
+                temp_aktivitas=aktifitas;
                 setView("expanded");
             }
         });
@@ -164,7 +165,13 @@ public class AktifitasActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.edit:
-                startActivity(new Intent(AktifitasActivity.this, TambahAktifitas.class));
+                Intent intent2 = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_program", getIntent().getExtras().getInt("id_program"));
+                bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
+                intent2.putExtras(bundle);
+                startActivity(intent2);
+                finish();
                 break;
             case R.id.hapus:
                 deleteAktifitas();
@@ -176,7 +183,7 @@ public class AktifitasActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_DELETE_TARGET_PROGRAM + tokena + "/" + id_aktivitas;
+        final String url = Config.URL_DELETE_TARGET_PROGRAM + tokena + "/" + temp_aktivitas.getId();
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -345,12 +352,13 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.tvNo.setText(mValues.get(position).getNo()+"");
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
+            holder.tvTarget.setText(mValues.get(position).getTarget()+"");
             holder.tvRealisasi.setText(mValues.get(position).getRealisasi()+"");
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (callback_variable != null) {
-                        callback_variable.action(mValues.get(position).getId());
+                        callback_variable.action(mValues.get(position));
                     }
                 }
             });
@@ -367,7 +375,7 @@ public class AktifitasActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            public void action(int id_progam);
+            public void action(Aktifitas aktifitas);
         }
     }
 }

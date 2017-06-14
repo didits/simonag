@@ -1,9 +1,11 @@
 package com.simonag.simonag.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Zaki on 13/06/2017.
  */
-
+@Parcel
 public class Aktifitas {
     int no;
     int id;
@@ -15,7 +17,7 @@ public class Aktifitas {
     int realisasi_revenue;
     String duedate;
     String satuan;
-
+    public Aktifitas(){}
     public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan) {
         this.no = no;
         this.id = id;
