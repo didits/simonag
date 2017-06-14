@@ -3,7 +3,9 @@ package com.simonag.simonag;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -47,11 +49,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ProgramActivity extends AppCompatActivity {
-
+    public BottomSheetBehavior bottomSheetBehavior;
     public static final String EXTRA_NAME = "id_bumn";
     String value;
     LinearLayout loading;
-
+    int id_progam;
     RecyclerView rv;
 
     @Override
@@ -63,9 +65,26 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_data_program);
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         loading = (LinearLayout) findViewById(R.id.loading);
         rv = (RecyclerView) findViewById(R.id.rv_program);
         getProgram();
+        LinearLayout edit = (LinearLayout) findViewById(R.id.edit);
+        LinearLayout hapus = (LinearLayout) findViewById(R.id.hapus);
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        hapus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteProgram();
+            }
+        });
 
         showActionBar();
         final Button tambah_program = (Button) findViewById(R.id.tambah_program);
@@ -73,6 +92,55 @@ public class ProgramActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 tambah_program();
+            }
+        });
+    }
+
+
+    public void setView(@NonNull String state) {
+        switch (state) {
+            case "collapsed":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+            case "expanded":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            case "hidden":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case "settling":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_SETTLING);
+                break;
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                // Check Logs to see how bottom sheets behaves
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_EXPANDED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        setView("collapsed");
+                        Log.e("Bottom Sheet Behaviour", "STATE_HIDDEN");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_SETTLING");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
             }
         });
     }
@@ -104,79 +172,17 @@ public class ProgramActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Program> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(this,
-                p));
-    }
-
-
-    public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
-
-        private final TypedValue mTypedValue = new TypedValue();
-        private int mBackground;
-        private ArrayList<Program> mValues;
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Program> mBoundString;
-
-            public final View mView;
-            @BindView(R.id.tv_no)
-            TextView tvNo;
-            @BindView(R.id.tv_nama)
-            TextView tvNama;
-            @BindView(R.id.tv_menu)
-            ImageView tvMenu;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                ButterKnife.bind(this, view);
-            }
-
+        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this,p);
+        k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public String toString() {
-                return super.toString() + " '" + tvNama.getText();
+            public void action(int id) {
+                id_progam = id;
+                setView("expanded");
             }
-        }
-
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Program> items) {
-            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
-            mBackground = mTypedValue.resourceId;
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nama_program, parent, false);
-            view.setBackgroundResource(mBackground);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.tvNo.setText(mValues.get(position).getNo()+"");
-            holder.tvNama.setText(mValues.get(position).getNama_program());
-            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, AktifitasActivity.class);
-                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
-                    context.startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
+        });
+        recyclerView.setAdapter(k);
     }
+
 
     private void getProgram() {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
@@ -188,11 +194,59 @@ public class ProgramActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("token", response.toString());
+                        Log.d("token", response.toString() + url);
                         loading.setVisibility(View.GONE);
                         try {
                             if (response.getString("status").equals("success")) {
                                 setupRecyclerView(rv, jsonDecodeProgram(response.getString("program")));
+                            }else if(response.getString("status").equals("wrong-id")){
+                                /*GetToken k = new GetToken(ProgramActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getProgram();
+                                    }
+                                });*/
+
+                            }
+
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(ProgramActivity.this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
+        queue.add(getRequest);
+    }
+
+    private void deleteProgram() {
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        Log.d("tokena", tokena);
+        final String url = Config.URL_GET_DELETE_PROGRAM_PER + tokena + "/" + id_progam;
+
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("token", response.toString()+url);
+                        loading.setVisibility(View.GONE);
+                        try {
+                            if (response.getString("status").equals("delete-success")) {
+                                getProgram();
                             }
 
                         } catch (JSONException E) {
@@ -279,5 +333,85 @@ public class ProgramActivity extends AppCompatActivity {
                 "id_perusahaan" + "|" + Prefs.getInt(Config.ID_BUMN, 0)
 
         });
+    }
+
+    public static class SimpleStringRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+        private callback callback_variable;
+        private final TypedValue mTypedValue = new TypedValue();
+        private int mBackground;
+        private ArrayList<Program> mValues;
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public ArrayList<Program> mBoundString;
+
+            public final View mView;
+            @BindView(R.id.tv_no)
+            TextView tvNo;
+            @BindView(R.id.tv_nama)
+            TextView tvNama;
+            @BindView(R.id.tv_menu)
+            LinearLayout tvMenu;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                ButterKnife.bind(this, view);
+            }
+
+            @Override
+            public String toString() {
+                return super.toString() + " '" + tvNama.getText();
+            }
+        }
+
+        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Program> items) {
+            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+            mBackground = mTypedValue.resourceId;
+            mValues = items;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_nama_program, parent, false);
+            view.setBackgroundResource(mBackground);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder,final int position) {
+            holder.tvNo.setText(mValues.get(position).getNo()+"");
+            holder.tvNama.setText(mValues.get(position).getNama_program());
+            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback_variable != null) {
+                        callback_variable.action(mValues.get(position).getId_program());
+                    }
+                }
+            });
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, AktifitasActivity.class);
+                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
+
+        public void setCallback(callback callback) {
+            this.callback_variable = callback;
+        }
+
+        public interface callback {
+            public void action(int id_progam);
+        }
     }
 }

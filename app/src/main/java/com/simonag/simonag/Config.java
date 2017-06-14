@@ -12,6 +12,7 @@ public class Config {
     public static final String URL_GET_ALL_SATUAN = URL + "get/allSatuan/";
     public static final String URL_GET_DASHBOARD = URL + "get/Dashboard/";
     public static final String URL_GET_PROGRAM_PER = URL + "get/programPerusahaan/";
+    public static final String URL_GET_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
     public static final String URL_GET_TARGET_PROGRAM = URL + "get/targetProgram/";
     public static final String URL_GET_TOKEN = URL + "getToken";
     public static final String URL_POST_PROGRAM_PER= URL + "post/programPerusahaan/";
