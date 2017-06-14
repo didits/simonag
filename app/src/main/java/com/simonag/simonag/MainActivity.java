@@ -63,12 +63,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getDashboard();
 
-
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.logo_text_bg)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Andi").withEmail("andi@gmail.com").withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
+                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN,"")).withEmail(Prefs.getString(Config.EMAIL_BUMN,"")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
