@@ -39,21 +39,9 @@ public class DashboardKualitasFragment extends Fragment {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivity) getActivity()).db));
-
-
+        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(), ((MainActivity) getActivity()).db));
     }
 
-    private ArrayList<Dashboard> getRandomSublist() {
-        ArrayList<Dashboard> list = new ArrayList<>();
-        list.add(new Dashboard(0, 12, "Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(1, 12, "Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(2, 12, "Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(3, 12, "Pertamina", 90f, 90f, 90f, "llll"));
-        list.add(new Dashboard(4, 12, "Pertamina", 90f, 90f, 90f, "llll"));
-        return list;
-    }
 
     public static class SimpleStringRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {

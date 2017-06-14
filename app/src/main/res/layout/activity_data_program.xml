@@ -23,26 +23,29 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <EditText
-                    android:layout_weight="1"
-                    android:id="@+id/login_password"
+                    android:id="@+id/tv_program"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
                     android:background="@drawable/edit_text"
                     android:hint="ex: Penyediaan Jaringan Telekomunikasi"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="@dimen/text" />
+
                 <Button
-                    android:layout_marginLeft="6dp"
+                    android:id="@+id/add"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="6dp"
+                    android:background="@drawable/button"
                     android:text="+"
-                    android:textSize="30sp"
                     android:textColor="@color/colorWhite"
-                    android:background="@drawable/button"/>
+                    android:textSize="30sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -73,16 +76,6 @@
         </LinearLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginRight="24dp"
-        android:src="@drawable/ic_add_white_24dp" />
     </LinearLayout>
 
 </RelativeLayout>

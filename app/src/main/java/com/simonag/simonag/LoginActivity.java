@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-        private void move() {
+    private void move() {
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
         finish();
@@ -98,9 +98,9 @@ public class LoginActivity extends AppCompatActivity {
                         Prefs.putBoolean(Config.STATUS_LOGIN, true);
                         move();
                     } else if (status.equals("failed")) {
-                        Toast.makeText(LoginActivity.this, "Periksa email atau password Anda", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "username / pass salah", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Login bermasalah", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "username tidak ada", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -122,7 +122,5 @@ public class LoginActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-
 
 }
