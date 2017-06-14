@@ -13,7 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.Request;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public AccountHeader headerResult;
     public Drawer result;
     ArrayList<Dashboard> db = new ArrayList<>();
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.logo_text_bg)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN,"")).withEmail(Prefs.getString(Config.EMAIL_BUMN,"")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
+                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch((int) drawerItem.getIdentifier()) {
+                        switch ((int) drawerItem.getIdentifier()) {
                             case 1:
                                 break;
                             case 2:
@@ -108,6 +112,31 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         //result.setSelection(1, true);
+    }
+
+    private void createTabIcons(Double kualitas, Double kapasitas, Double komersial) {
+
+        LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        TextView judul = (TextView) tabOne.findViewById(R.id.tab);
+        TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
+        judul.setText("KUALITAS");
+        persentase.setText( kualitas + " %");
+        tabLayout.getTabAt(0).setCustomView(tabOne);
+
+        LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
+        TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
+        judulTwo.setText("KAPASITAS");
+        persentaseTwo.setText(kapasitas + "%");
+        tabLayout.getTabAt(1).setCustomView(tabTwo);
+
+        LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
+        TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
+        judulThree.setText("KOMERSIAL");
+        persentaseThree.setText(komersial + " %");
+        tabLayout.getTabAt(2).setCustomView(tabThree);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -168,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getDashboard(){
+    private void getDashboard() {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d("tokena",tokena);
+        Log.d("tokena", tokena);
         final String url = Config.URL_GET_DASHBOARD + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -180,16 +209,19 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("token", response.toString());
                         try {
                             db = jsonDecodeBilling(response.getString("perusahaan"));
-                        }catch (JSONException E){
+                            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                            if (viewPager != null) {
+                                viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                                setupViewPager(viewPager);
+                            }
+                            tabLayout = (TabLayout) findViewById(R.id.tabs);
+                            tabLayout.setupWithViewPager(viewPager);
+                            jsonDecodePersentaseKategori(response.getString("kategori"));
+                        } catch (JSONException E) {
                             Log.e("json_error", E.toString());
                         }
-                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                        if (viewPager != null) {
-                            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                            setupViewPager(viewPager);
-                        }
-                        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-                        tabLayout.setupWithViewPager(viewPager);
+
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -226,6 +258,31 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        return  billing;
+        return billing;
+    }
+
+    public void jsonDecodePersentaseKategori(String jsonStr) {
+        Double kualitas = 0.0, kapasitas =0.0, komersial =0.0;
+
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+                    JSONObject jObject = transaksi.getJSONObject(i);
+                    if (jObject.getString("nama_kategori").equals("kualitas")) {
+                        kualitas = jObject.getDouble("realisasi_persen");
+                    } else if (jObject.getString("nama_kategori").equals("kapasitas")) {
+                        kapasitas = jObject.getDouble("realisasi_persen");
+                    } else if (jObject.getString("nama_kategori").equals("komersial")) {
+                        komersial = jObject.getDouble("realisasi_persen");
+                    }
+                }
+
+                createTabIcons(kualitas, kapasitas, komersial);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -101,7 +101,7 @@ public class DashboardKapasitasFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             //holder.mBoundString = mValues.get(position);
-            holder.text1.setText(mValues.get(position).getPersentase_komersial()+" %");
+            holder.text1.setText(mValues.get(position).getPersentase_kapasitas()+" %");
             holder.progress.setProgress((int)mValues.get(position).getPersentase_kapasitas());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
