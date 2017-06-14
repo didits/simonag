@@ -88,13 +88,14 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("success")) {
-                        Prefs.putBoolean(Config.STATUS_LOGIN, true);
-                        Prefs.putString(Config.EMAIL_BUMN, jObject.getString("status_daftar"));
-                        Prefs.putString(Config.PASSWORD_BUMN, jObject.getString("status_daftar"));
-                        Prefs.putString(Config.NAMA_BUMN, jObject.getString("nama"));
                         Prefs.putInt(Config.ID_BUMN, jObject.getInt("id_perusahaan"));
+                        Prefs.putInt(Config.ID_ROLE, jObject.getInt("id_role"));
+                        Prefs.putString(Config.NAMA_BUMN, jObject.getString("nama"));
                         Prefs.putInt(Config.STATUS_BUMN, jObject.getInt("status_daftar"));
                         Prefs.putString(Config.TOKEN_BUMN, jObject.getString("token"));
+                        Prefs.putString(Config.EMAIL_BUMN, loginUsername.getText().toString());
+                        Prefs.putString(Config.PASSWORD_BUMN, loginPassword.getText().toString());
+                        Prefs.putBoolean(Config.STATUS_LOGIN, true);
                         move();
                     } else if (status.equals("failed")) {
                         Toast.makeText(LoginActivity.this, "Periksa email atau password Anda", Toast.LENGTH_LONG).show();
