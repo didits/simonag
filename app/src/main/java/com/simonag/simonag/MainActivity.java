@@ -1,19 +1,30 @@
 package com.simonag.simonag;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
+//import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -24,6 +35,11 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.simonag.simonag.model.Dashboard;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +47,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
+    ArrayList<Dashboard> db = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,23 +62,14 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        getDashboard();
 
-
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-            setupViewPager(viewPager);
-        }
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.logo_text_bg)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN,"")).withEmail(Prefs.getString(Config.EMAIL_BUMN,"")).withIcon(FontAwesome.Icon.faw_user_secret)
+                        new ProfileDrawerItem().withName("Andi").withEmail("andi@gmail.com").withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -108,9 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new DashboardFragment(), "Kualitas");
-        adapter.addFragment(new DashboardFragment(), "Kapasitas");
-        adapter.addFragment(new DashboardFragment(), "Komersial");
+        adapter.addFragment(new DashboardKualitasFragment(), "Kualitas");
+        adapter.addFragment(new DashboardKapasitasFragment(), "Kapasitas");
+        adapter.addFragment(new DashboardKomersialFragment(), "Komersial");
         viewPager.setAdapter(adapter);
     }
 
@@ -161,5 +167,71 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+
+    private void getDashboard(){
+        final SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_USER, Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString(Config.TOKEN_BUMN, null);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        token = "tf29iienGq5ude02hEtaaWolJPS6f5mBUgMmZJqp3x9BZdyNEBQR0NJbjRnl";
+
+        final String url = Config.URL_DASHBOARD + token;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("token", response.toString());
+                        try {
+                            db = jsonDecodeBilling(response.getString("perusahaan"));
+                        }catch (JSONException E){
+                            Log.e("json_error", E.toString());
+                        }
+                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                        if (viewPager != null) {
+                            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                            setupViewPager(viewPager);
+                        }
+                        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                        tabLayout.setupWithViewPager(viewPager);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        queue.add(getRequest);
+    }
+
+    public ArrayList<Dashboard> jsonDecodeBilling(String jsonStr) {
+        ArrayList<Dashboard> billing = new ArrayList<>();
+
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+
+                    JSONObject jObject = transaksi.getJSONObject(i);
+
+                    Dashboard d = new Dashboard(
+                            i,
+                            jObject.getInt("id_perusahaan"),
+                            jObject.getString("nama_perusahaan"),
+                            jObject.getDouble("komersial_persen"),
+                            jObject.getDouble("kualitas_persen"),
+                            jObject.getDouble("kapasitas_persen"),
+                            jObject.getString("image")
+                    );
+                    billing.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return  billing;
     }
 }
