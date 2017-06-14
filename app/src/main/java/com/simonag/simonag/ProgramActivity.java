@@ -185,7 +185,6 @@ public class ProgramActivity extends AppCompatActivity {
                                         getProgram();
                                     }
                                 });
-
                             }
 
                         } catch (JSONException E) {
@@ -223,6 +222,14 @@ public class ProgramActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("delete-success")) {
                                 getProgram();
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(ProgramActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        deleteProgram();
+                                    }
+                                });
                             }
 
                         } catch (JSONException E) {
@@ -277,11 +284,11 @@ public class ProgramActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
                 avi.hide();
-                Log.d("respon onSuccess", response);
                 try {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("post-success")) {
+                        program_text.setText("");
                         Toast toast = Toast.makeText(ProgramActivity.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
                         toast.show();
                         getProgram();
@@ -290,7 +297,13 @@ public class ProgramActivity extends AppCompatActivity {
                     } else if (status.equals("post-failed")) {
                         Toast.makeText(ProgramActivity.this, "Post data gagal", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(ProgramActivity.this, "Token salah", Toast.LENGTH_LONG).show();
+                        GetToken k = new GetToken(ProgramActivity.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                tambah_program();
+                            }
+                        });
                     }
 
                 } catch (JSONException e) {
@@ -301,7 +314,7 @@ public class ProgramActivity extends AppCompatActivity {
 
             @Override
             public void onError() {
-
+                avi.hide();
             }
         }, Config.URL_POST_PROGRAM_PER + token, new String[]{
                 "nama_program" + "|" + nama_program,

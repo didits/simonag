@@ -158,7 +158,10 @@ public class AktifitasActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_aktifitas:
-                startActivity(new Intent(AktifitasActivity.this, TambahAktifitas.class));
+                Intent intent = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
+                startActivity(intent);
+                finish();
                 break;
             case R.id.edit:
                 startActivity(new Intent(AktifitasActivity.this, TambahAktifitas.class));
@@ -182,6 +185,14 @@ public class AktifitasActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("delete-success")) {
                                 getAktifitas();
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(AktifitasActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getAktifitas();
+                                    }
+                                });
                             }
 
                         } catch (JSONException E) {
@@ -211,13 +222,15 @@ public class AktifitasActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_PROGRAM_PER + tokena + "/" + getIntent().getExtras().getInt("id_program");
+        final String url = Config.URL_GET_TARGET_PROGRAM + tokena + "/" + getIntent().getExtras().getInt("id_program");
+        Log.d("url",url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         avi.hide();
                         try {
+                            Log.d("status",response.getString("status"));
                             if (response.getString("status").equals("success")) {
                                 setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")));
                             } else if (response.getString("status").equals("invalid-token")) {
@@ -261,6 +274,7 @@ public class AktifitasActivity extends AppCompatActivity {
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
                     Aktifitas d = new Aktifitas(
+                            i+1,
                             jObject.getInt("id_target"),
                             jObject.getString("nama_aktivitas"),
                             jObject.getString("nama_kategori"),
@@ -289,8 +303,6 @@ public class AktifitasActivity extends AppCompatActivity {
         private ArrayList<Aktifitas> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Aktifitas> mBoundString;
-
             public final View mView;
             @BindView(R.id.tv_no)
             TextView tvNo;
@@ -330,9 +342,10 @@ public class AktifitasActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.tvNo.setText(mValues.get(position).getNo()+"");
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
-            holder.tvRealisasi.setText(mValues.get(position).getRealisasi());
+            holder.tvRealisasi.setText(mValues.get(position).getRealisasi()+"");
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

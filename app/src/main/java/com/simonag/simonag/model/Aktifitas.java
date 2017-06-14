@@ -5,6 +5,7 @@ package com.simonag.simonag.model;
  */
 
 public class Aktifitas {
+    int no;
     int id;
     String nama;
     String kategori;
@@ -15,7 +16,8 @@ public class Aktifitas {
     String duedate;
     String satuan;
 
-    public Aktifitas(int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan) {
+    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan) {
+        this.no = no;
         this.id = id;
         this.nama = nama;
         this.kategori = kategori;
@@ -25,6 +27,14 @@ public class Aktifitas {
         this.realisasi_revenue = realisasi_revenue;
         this.duedate = duedate;
         this.satuan = satuan;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public int getId() {

@@ -1,11 +1,34 @@
 package com.simonag.simonag;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.pixplicity.easyprefs.library.Prefs;
+import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.VolleyClass;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,28 +40,63 @@ import butterknife.OnClick;
 
 public class TambahAktifitas extends AppCompatActivity {
 
-    @BindView(R.id.tv_nama)
-    EditText tvNama;
-    @BindView(R.id.tv_kategori)
-    EditText tvKategori;
+    @BindView(R.id.et_nama)
+    EditText etNama;
+    @BindView(R.id.et_target)
+    EditText etTarget;
+    @BindView(R.id.et_revenue)
+    EditText etRevenue;
+    @BindView(R.id.button)
+    Button button;
     @BindView(R.id.tv_duedate)
-    EditText tvDuedate;
-    @BindView(R.id.tv_satuan)
-    EditText tvSatuan;
-    @BindView(R.id.tv_target)
-    EditText tvTarget;
-    @BindView(R.id.tv_revenue)
-    EditText tvRevenue;
-    @BindView(R.id.login_button)
-    Button loginButton;
+    TextView tvDuedate;
+    @BindView(R.id.sp_kategori)
+    Spinner spKategori;
+    @BindView(R.id.sp_satuan)
+    Spinner spSatuan;
+    HashMap<Integer, String> kategoriMap, satuanMap;
+    DatePickerDialog datepicker;
+    SimpleDateFormat dateFormatter;
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView avi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tambah_aktifitas);
         ButterKnife.bind(this);
+        avi.hide();
         setTitle("Tambah Aktivitas");
         showActionBar();
+//        Kategori spinner
+        String[] kategoriArray = new String[3];
+        kategoriMap = new HashMap<Integer, String>();
+        kategoriMap.put(0, "Kualitas");
+        kategoriMap.put(1, "Kuantitas");
+        kategoriMap.put(2, "Komersial");
+        kategoriArray[0] = "Kualitas";
+        kategoriArray[1] = "Kuantitas";
+        kategoriArray[2] = "Komersial";
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spKategori.setAdapter(adapter);
+//        Satuan Spinner
+        String[] satuanArray = new String[5];
+        satuanMap = new HashMap<Integer, String>();
+        satuanMap.put(0, "Unit");
+        satuanMap.put(1, "Gigabyte");
+        satuanMap.put(2, "Penumpang");
+        satuanMap.put(3, "Pelanggan");
+        satuanMap.put(4, "Orang");
+        satuanArray[0] = "Unit";
+        satuanArray[1] = "Gigabyte";
+        satuanArray[2] = "Penumpang";
+        satuanArray[3] = "Pelanggan";
+        satuanArray[4] = "Orang";
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, satuanArray);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSatuan.setAdapter(adapter2);
     }
 
     private void showActionBar() {
@@ -53,7 +111,7 @@ public class TambahAktifitas extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                kembali();
                 break;
             default:
                 break;
@@ -61,7 +119,129 @@ public class TambahAktifitas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.login_button)
-    public void onViewClicked() {
+    @OnClick({R.id.tv_duedate, R.id.button})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_duedate:
+                getdate();
+                break;
+            case R.id.button:
+                tambah_aktifitas();
+                break;
+        }
+    }
+
+    private void getdate() {
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        Calendar newCalendar = Calendar.getInstance();
+        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                tvDuedate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datepicker.show();
+    }
+
+    private void tambah_aktifitas() {
+        int id_program = getIntent().getExtras().getInt("id_program");
+        int id_kategori = spKategori.getSelectedItemPosition()+1;
+        int id_satuan = 0;
+        String nama_satuan = spKategori.getSelectedItem().toString();
+        String deadline = tvDuedate.getText().toString();
+        String keterangan = "cobacoba";
+        String nama_aktivitas = etNama.getText().toString();
+        int target_nilai = Integer.parseInt(etTarget.getText().toString());
+        int revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
+        Log.d("sasa",id_program +" "+
+                id_kategori +" "+
+                id_satuan +" "+
+                nama_satuan +" "+
+                deadline +" "+
+                keterangan +" "+
+                nama_aktivitas +" "+
+                target_nilai +" "+
+                revenue_target_nilai);
+        uploadAktifitas(
+                id_program,
+                id_kategori,
+                id_satuan,
+                nama_satuan,
+                deadline,
+                keterangan,
+                nama_aktivitas,
+                target_nilai,
+                revenue_target_nilai);
+    }
+
+    private void uploadAktifitas(
+            int id_program,
+            int id_kategori,
+            int id_satuan,
+            String nama_satuan,
+            String deadline,
+            String keterangan,
+            String nama_aktivitas,
+            int target_nilai,
+            int revenue_target_nilai) {
+        avi.show();
+        String token = Prefs.getString(Config.TOKEN_BUMN, "");
+        VolleyClass cek = new VolleyClass(this, true);
+        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                avi.hide();
+                Log.d("respon onSuccess", response);
+                try {
+                    JSONObject jObject = new JSONObject(response);
+                    String status = jObject.getString("status");
+                    if (status.equals("post-success")) {
+                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
+                        toast.show();
+                        kembali();
+                    } else if (status.equals("wrong-id")) {
+                        Toast.makeText(TambahAktifitas.this, "Perusahaan tidak ada", Toast.LENGTH_LONG).show();
+                    } else if (status.equals("post-failed")) {
+                        Toast.makeText(TambahAktifitas.this, "Post data gagal", Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.d("token lama",Prefs.getString(Config.TOKEN_BUMN, ""));
+                        GetToken k = new GetToken(TambahAktifitas.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                Log.d("token baru",Prefs.getString(Config.TOKEN_BUMN, ""));
+                                tambah_aktifitas();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError() {
+                avi.hide();
+            }
+        }, Config.URL_POST_TARGET_PROGRAM + token, new String[]{
+                "id_program" + "|" + id_program,
+                "id_kategori" + "|" + id_kategori,
+                "id_satuan" + "|" + id_satuan,
+                "nama_satuan" + "|" + nama_satuan,
+                "deadline" + "|" + deadline,
+                "keterangan" + "|" + keterangan,
+                "nama_aktivitas" + "|" + nama_aktivitas,
+                "target_nilai" + "|" + target_nilai,
+                "revenue_target_nilai" + "|" + revenue_target_nilai
+        });
+    }
+
+    private void kembali() {
+        Intent intent = new Intent(TambahAktifitas.this, AktifitasActivity.class);
+        intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
+        startActivity(intent);
+        finish();
     }
 }
