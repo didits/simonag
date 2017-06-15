@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,6 +51,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,13 +72,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Asap-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.logo_text_bg)
+                .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
                         new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
                 )
@@ -209,22 +217,22 @@ public class MainActivity extends AppCompatActivity {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = Config.URL_GET_DASHBOARD + tokena;
-        Log.d("urla",url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("respon", response.toString());
                         try {
-                            if (response.getString("status").equals("success")) {
-                                    db = jsonDecodeBilling(response.getString("perusahaan"));
-                                    if (viewPager != null) {
-                                        viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                                        setupViewPager(viewPager);
-                                    }
-                                    tabLayout.setupWithViewPager(viewPager);
-                                    jsonDecodePersentaseKategori(response.getString("kategori"));
-                                    avi.hide();
-                            } else if(response.getString("status").equals("invalid-token")) {
+                            if(response.getString("status").equals("success")){
+                                db = jsonDecodeBilling(response.getString("perusahaan"));
+                                if (viewPager != null) {
+                                    viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                                    setupViewPager(viewPager);
+                                }
+                                tabLayout.setupWithViewPager(viewPager);
+                                jsonDecodePersentaseKategori(response.getString("kategori"));
+                                avi.hide();
+                            }else if(response.getString("status").equals("invalid-token")){
                                 GetToken k = new GetToken(MainActivity.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
@@ -233,10 +241,10 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -305,5 +313,10 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

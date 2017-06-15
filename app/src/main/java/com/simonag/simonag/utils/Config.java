@@ -6,6 +6,7 @@ package com.simonag.simonag.utils;
 
 public class Config {
     public static final String URL = "http://simonag.owline.org/api/v1/";
+    public static final String URL_GAMBAR = "http://simonag.owline.org/logo/";
     public static final String URL_LOGIN = URL + "login";
     public static final String URL_GET_ALL_PER = URL + "get/allPerusahaan/";
     public static final String URL_GET_ALL_KATEGORI = URL + "get/allKategori/";

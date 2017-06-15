@@ -1,12 +1,14 @@
 package com.simonag.simonag;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +17,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +58,11 @@ public class DashboardKapasitasFragment extends Fragment {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Dashboard> mValues;
+        Activity c;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Dashboard>  mBoundString;
+            public ArrayList<Dashboard> mBoundString;
+
 
             public final View mView;
             @BindView(R.id.avatar)
@@ -64,7 +72,7 @@ public class DashboardKapasitasFragment extends Fragment {
             @BindView(android.R.id.text2)
             TextView text2;
             @BindView(android.R.id.progress)
-            ProgressBar progress;
+            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -78,10 +86,11 @@ public class DashboardKapasitasFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Dashboard> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Dashboard> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            this.c = context;
         }
 
         @Override
@@ -94,24 +103,39 @@ public class DashboardKapasitasFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            //holder.mBoundString = mValues.get(position);
             holder.text1.setText(mValues.get(position).getNama_bumn());
-            holder.text2.setText(mValues.get(position).getPersentase_kapasitas()+" %");
-            holder.progress.setProgress((int)mValues.get(position).getPersentase_kapasitas());
+            holder.text2.setText(mValues.get(position).getPersentase_kapasitas() + " %");
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (holder.progress.getProgress() <= (int) mValues.get(position).getPersentase_kapasitas()) {
+                                holder.progress.incrementProgressBy(1);
+                            }
+                        }
+                    });
+                }
+            }, 500, 100);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mValues.get(position).getId_bumn()== Prefs.getInt(Config.ID_BUMN, 0)){
-                    Context context = v.getContext();
-                    context.startActivity(new Intent(context, ProgramActivity.class));}
+                    if (mValues.get(position).getId_bumn() == Prefs.getInt(Config.ID_BUMN, 0)) {
+                        Context context = v.getContext();
+                        context.startActivity(new Intent(context, ProgramActivity.class));
+                    }
                 }
             });
-            /*
-            Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
+            String url = Config.URL_GAMBAR + mValues.get(position).getLink_gambar();
+            Log.d("gambar", url);
+
+            Glide.with(holder.avatar.getContext())
+                    .load(url)
                     .fitCenter()
-                    .into(holder.mImageView);*/
+                    .into(holder.avatar);
         }
 
         @Override

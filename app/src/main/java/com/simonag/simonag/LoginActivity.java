@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 
 import org.json.JSONException;
@@ -59,6 +62,47 @@ public class LoginActivity extends AppCompatActivity {
             move();
         }
 
+        loginButton.setEnabled(false);
+        loginButton.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+
+        loginUsername.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                RegexInput regex = new RegexInput();
+                if (regex.EmailValidator(loginUsername.getText().toString()) && !loginPassword.getText().toString().equals("")) {
+                    loginButton.setEnabled(true);
+                    loginButton.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    loginButton.setEnabled(false);
+                    loginButton.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
+
+        loginPassword.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                RegexInput regex = new RegexInput();
+                if (!loginPassword.getText().toString().equals("") && regex.EmailValidator(loginUsername.getText().toString())) {
+                    loginButton.setEnabled(true);
+                    loginButton.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    loginButton.setEnabled(false);
+                    loginButton.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
+
     }
 
     @OnClick({R.id.login_button, R.id.login_lupa})
@@ -93,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         Prefs.putInt(Config.ID_BUMN, jObject.getInt("id_perusahaan"));
                         Prefs.putInt(Config.ID_ROLE, jObject.getInt("id_role"));
                         Prefs.putString(Config.NAMA_BUMN, jObject.getString("nama"));
-                        Prefs.putInt(Config.STATUS_BUMN, jObject.getInt("status_daftar"));
+                        Prefs.putInt(Config.STATUS_BUMN, jObject.getInt("active"));
                         Prefs.putString(Config.TOKEN_BUMN, jObject.getString("token"));
                         Prefs.putString(Config.EMAIL_BUMN, loginUsername.getText().toString());
                         Prefs.putString(Config.PASSWORD_BUMN, loginPassword.getText().toString());
@@ -107,7 +151,6 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
