@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
@@ -63,14 +65,27 @@ public class ProgramActivity extends AppCompatActivity {
     @BindView(R.id.hapus)
     LinearLayout hapus;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Asap-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             value = extras.getString("KEY");
         }
+
         setContentView(R.layout.activity_data_program);
+        LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
+        if(Prefs.getInt(Config.ID_BUMN,0) == Integer.parseInt(value)){
+            tambah_program.setVisibility(View.VISIBLE);
+        }else{
+            tambah_program.setVisibility(View.GONE);
+        }
         ButterKnife.bind(this);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
@@ -168,7 +183,7 @@ public class ProgramActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_PROGRAM_PER + tokena + "/" + Prefs.getInt(Config.ID_BUMN, 0);
+        final String url = Config.URL_GET_PROGRAM_PER + tokena + "/" + value;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -393,7 +408,7 @@ public class ProgramActivity extends AppCompatActivity {
                     }
                 }
             });
-            holder.tvNama.setOnClickListener(new View.OnClickListener() {
+            holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
@@ -416,5 +431,10 @@ public class ProgramActivity extends AppCompatActivity {
         public interface callback {
             void action(int id_progam);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

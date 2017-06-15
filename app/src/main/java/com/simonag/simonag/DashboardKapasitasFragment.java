@@ -123,14 +123,14 @@ public class DashboardKapasitasFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mValues.get(position).getId_bumn() == Prefs.getInt(Config.ID_BUMN, 0)) {
-                        Context context = v.getContext();
-                        context.startActivity(new Intent(context, ProgramActivity.class));
-                    }
+                    Context context = v.getContext();
+                    Intent i = new Intent(context, ProgramActivity.class);
+                    i.putExtra("KEY", "" + mValues.get(position).getId_bumn());
+                    context.startActivity(i);
+
                 }
             });
             String url = Config.URL_GAMBAR + mValues.get(position).getLink_gambar();
-            Log.d("gambar", url);
 
             Glide.with(holder.avatar.getContext())
                     .load(url)

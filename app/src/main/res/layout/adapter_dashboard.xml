@@ -48,9 +48,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                custom:progress_reached_bar_height="2dp"
+                custom:progress_reached_bar_height="3dp"
                 custom:progress_reached_color="@color/colorPrimary"
                 custom:progress_text_color="@color/colorPrimary"
+                custom:progress_text_size="14sp"
                 custom:progress_unreached_bar_height="1dp" />
 
         </RelativeLayout>
