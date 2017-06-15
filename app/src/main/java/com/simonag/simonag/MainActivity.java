@@ -38,6 +38,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.GetToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -208,22 +209,34 @@ public class MainActivity extends AppCompatActivity {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = Config.URL_GET_DASHBOARD + tokena;
+        Log.d("urla",url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            db = jsonDecodeBilling(response.getString("perusahaan"));
-                            if (viewPager != null) {
-                                viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                                setupViewPager(viewPager);
+                            if (response.getString("status").equals("success")) {
+                                    db = jsonDecodeBilling(response.getString("perusahaan"));
+                                    if (viewPager != null) {
+                                        viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                                        setupViewPager(viewPager);
+                                    }
+                                    tabLayout.setupWithViewPager(viewPager);
+                                    jsonDecodePersentaseKategori(response.getString("kategori"));
+                                    avi.hide();
+                            } else if(response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(MainActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getDashboard();
+                                    }
+                                });
                             }
-                            tabLayout.setupWithViewPager(viewPager);
-                            jsonDecodePersentaseKategori(response.getString("kategori"));
-                            avi.hide();
-                        } catch (JSONException E) {
-                            Log.e("json_error", E.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
