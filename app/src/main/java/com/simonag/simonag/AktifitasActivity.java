@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
 import com.simonag.simonag.utils.Config;
@@ -39,10 +43,16 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static java.lang.String.format;
 
 /**
  * Created by diditsepiyanto on 6/13/17.
@@ -51,6 +61,7 @@ import butterknife.OnClick;
 public class AktifitasActivity extends AppCompatActivity {
     public static final String EXTRA_NAME = "id_program";
     public BottomSheetBehavior bottomSheetBehavior;
+    String value, nama, pic, program;
     Aktifitas temp_aktivitas;
     @BindView(R.id.tambah_aktifitas)
     Button tambahAktifitas;
@@ -67,11 +78,42 @@ public class AktifitasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Asap-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_data_aktifitas);
+        TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
+        TextView nama_program = (TextView) findViewById(R.id.nama_program);
+        ImageView gambar_bumn = (ImageView) findViewById(R.id.gambar_bumn);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            value = extras.getString("ID_BUMN");
+            nama = extras.getString("NAMA_PERUSAHAAN");
+            program = extras.getString("NAMA_PROGRAM");
+            pic = extras.getString("GAMBAR_PERUSAHAAN");
+        }
+
+
+
+        nama_bumn.setText(nama);
+        nama_program.setText("Program: " + program);
+        String url = Config.URL_GAMBAR + pic;
+
+        Glide.with(gambar_bumn.getContext())
+                .load(url)
+                .fitCenter()
+                .into(gambar_bumn);
+
         ButterKnife.bind(this);
+        if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(value)) {
+            tambahAktifitas.setVisibility(View.GONE);
+        }
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
         getAktifitas();
+
     }
 
     public void setView(@NonNull String state) {
@@ -141,9 +183,9 @@ public class AktifitasActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Aktifitas> p) {
+    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Aktifitas> p, String value) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
+        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(Aktifitas aktifitas) {
@@ -162,7 +204,6 @@ public class AktifitasActivity extends AppCompatActivity {
                 Intent intent = new Intent(AktifitasActivity.this, TambahAktifitas.class);
                 intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
                 startActivity(intent);
-                finish();
                 break;
             case R.id.edit:
                 Intent intent2 = new Intent(AktifitasActivity.this, TambahAktifitas.class);
@@ -171,7 +212,6 @@ public class AktifitasActivity extends AppCompatActivity {
                 bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
                 intent2.putExtras(bundle);
                 startActivity(intent2);
-                finish();
                 break;
             case R.id.hapus:
                 deleteAktifitas();
@@ -236,9 +276,9 @@ public class AktifitasActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         avi.hide();
                         try {
-                            Log.d("status", response.getString("status"));
+                            Log.d("statuss", response.toString());
                             if (response.getString("status").equals("success")) {
-                                setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")));
+                                setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")), value);
                             } else if (response.getString("status").equals("invalid-token")) {
                                 GetToken k = new GetToken(AktifitasActivity.this);
                                 k.setCallback(new GetToken.callback() {
@@ -289,7 +329,8 @@ public class AktifitasActivity extends AppCompatActivity {
                             jObject.getInt("realisasi"),
                             jObject.getInt("realisasi_revenue"),
                             jObject.getString("due_date"),
-                            jObject.getString("nama_satuan")
+                            jObject.getString("nama_satuan"),
+                            jObject.getDouble("realisasi_persen")
                     );
                     billing.add(d);
                 }
@@ -307,6 +348,8 @@ public class AktifitasActivity extends AppCompatActivity {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Aktifitas> mValues;
+        private String val;
+        Activity c;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
@@ -324,6 +367,8 @@ public class AktifitasActivity extends AppCompatActivity {
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
+            @BindView(android.R.id.progress)
+            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -337,10 +382,12 @@ public class AktifitasActivity extends AppCompatActivity {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Aktifitas> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Aktifitas> items, String value) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            this.val = value;
+            this.c = context;
         }
 
         @Override
@@ -355,8 +402,37 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
-            holder.tvTarget.setText(mValues.get(position).getTarget() + "");
-            holder.tvRealisasi.setText(mValues.get(position).getRealisasi() + "");
+            holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + " dari " + mValues.get(position).getTarget() + "");
+            holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
+                     + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
+            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
+                holder.tvMenu.setVisibility(View.GONE);
+            } else {
+                holder.tvMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback_variable != null) {
+                            callback_variable.action(mValues.get(position));
+                        }
+                    }
+                });
+
+            }
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
+                                holder.progress.incrementProgressBy(1);
+                            }
+                        }
+                    });
+                }
+            }, 500, 100);
+
             holder.viewDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -365,17 +441,9 @@ public class AktifitasActivity extends AppCompatActivity {
                     intent2.putExtra("id_aktivitas", mValues.get(position).getId());
                     intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
                     context.startActivity(intent2);
-                    ((AktifitasActivity) context).finish();
                 }
             });
-            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (callback_variable != null) {
-                        callback_variable.action(mValues.get(position));
-                    }
-                }
-            });
+
 
         }
 
@@ -393,5 +461,14 @@ public class AktifitasActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAktifitas();
+    }
 }

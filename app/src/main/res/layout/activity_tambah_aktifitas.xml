@@ -1,166 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <com.wang.avi.AVLoadingIndicatorView
-        android:layout_centerInParent="true"
         android:id="@+id/avi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         app:indicatorColor="@color/primary"
         app:indicatorName="BallPulseIndicator" />
 
-<LinearLayout
-android:layout_alignParentTop="true"
-android:layout_alignParentStart="true"
-        android:orientation="vertical"
-        android:padding="@dimen/padding"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Nama Aktifitas" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:padding="@dimen/padding">
 
-    <EditText
-        android:id="@+id/et_nama"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:background="@drawable/edit_text"
-        android:inputType="text"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Nama Aktifitas" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Kategori" />
+            <EditText
+                android:id="@+id/et_nama"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:inputType="text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
 
-    <Spinner
-        android:id="@+id/sp_kategori"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Kategori" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Due Date" />
+            <Spinner
+                android:id="@+id/sp_kategori"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
 
-    <TextView
-        android:id="@+id/tv_duedate"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:background="@drawable/edit_text"
-        android:paddingBottom="5dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Due Date" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Satuan" />
+            <TextView
+                android:id="@+id/tv_duedate"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
 
-    <Spinner
-        android:id="@+id/sp_satuan"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Satuan" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Target" />
+            <Spinner
+                android:id="@+id/sp_satuan"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
 
-    <EditText
-        android:id="@+id/et_target"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:background="@drawable/edit_text"
-        android:inputType="number"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Target" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Target Revenue" />
+            <EditText
+                android:id="@+id/et_target"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:inputType="number"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
 
-    <EditText
-        android:id="@+id/et_revenue"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        android:background="@drawable/edit_text"
-        android:inputType="number"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Target Revenue" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/button"
-        android:text="TAMBAH"
-        android:textAlignment="center"
-        android:textColor="@android:color/white" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_revenue"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:inputType="number"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button"
+                android:text="TAMBAH"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

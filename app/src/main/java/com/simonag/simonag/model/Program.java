@@ -10,15 +10,16 @@ public class Program {
     int no;
     int id_program;
     String nama_program;
-    Double realisasi_persen;
-    Double kualitas_persen;
-    Double kuantitas_persen;
-    Double komersial_persen;
+    double realisasi_persen;
+    double kualitas_persen;
+    double kuantitas_persen;
+    double komersial_persen;
     public Program(){}
-    public Program(int no, int id_program, String nama_program) {
+    public Program(int no, int id_program, String nama_program, Double realisasi_persen) {
         this.no = no;
         this.id_program = id_program;
         this.nama_program = nama_program;
+        this.realisasi_persen = realisasi_persen;
     }
 
     public int getNo() {
@@ -43,5 +44,13 @@ public class Program {
 
     public void setNama_program(String nama_program) {
         this.nama_program = nama_program;
+    }
+
+    public double getRealisasi_persen() {
+        return realisasi_persen;
+    }
+
+    public void setRealisasi_persen(Double realisasi_persen) {
+        this.realisasi_persen = realisasi_persen;
     }
 }

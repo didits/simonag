@@ -3,56 +3,112 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="MissingPrefix">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        android:background="@drawable/edit_text"
         android:orientation="vertical">
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding"
-        android:text="Daftar Aktifitas" />
-
-    <Button
-        android:id="@+id/tambah_aktifitas"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_margin="6dp"
-        android:background="@drawable/button"
-        android:text="+"
-        android:textColor="@color/colorWhite"
-        android:textSize="30sp" />
-
-</RelativeLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding">
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/avi"
+            <TextView
+                android:id="@+id/nama_bumn"
+                fontPath="fonts/Asap-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                app:indicatorColor="@color/primary"
-                app:indicatorName="BallPulseIndicator" />
+                android:text="PT. Pertamina"
+                android:textSize="16sp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_aktifitas"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"></android.support.v7.widget.RecyclerView>
+            <ImageView
+                android:id="@+id/gambar_bumn"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/bundar" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_text"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Daftar Aktifitas" />
+
+                    <TextView
+                        android:id="@+id/nama_program"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Program: "
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/tambah_aktifitas"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/button"
+                    android:text="+"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="3px"
+                android:background="@color/colorBGLight" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/avi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:indicatorColor="@color/primary"
+                    app:indicatorName="BallPulseIndicator" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_aktifitas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

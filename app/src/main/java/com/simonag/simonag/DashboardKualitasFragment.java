@@ -118,7 +118,7 @@ public class DashboardKualitasFragment extends Fragment {
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (holder.progress.getProgress() <= (int) mValues.get(position).getPersentase_kualitas()) {
+                            if (holder.progress.getProgress() < (int) mValues.get(position).getPersentase_kualitas()) {
                                 holder.progress.incrementProgressBy(1);
                             }
                         }
@@ -132,6 +132,8 @@ public class DashboardKualitasFragment extends Fragment {
                     Context context = v.getContext();
                     Intent i = new Intent(context, ProgramActivity.class);
                     i.putExtra("KEY", "" + mValues.get(position).getId_bumn());
+                    i.putExtra("NAMA_PERUSAHAAN", "" + mValues.get(position).getNama_bumn());
+                    i.putExtra("GAMBAR_PERUSAHAAN", "" + mValues.get(position).getLink_gambar());
                     context.startActivity(i);
                 }
             });

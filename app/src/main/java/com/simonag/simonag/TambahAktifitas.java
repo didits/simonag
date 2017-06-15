@@ -1,6 +1,7 @@
 package com.simonag.simonag;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -35,6 +36,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by diditsepiyanto on 6/14/17.
@@ -67,6 +70,11 @@ public class TambahAktifitas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Asap-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_tambah_aktifitas);
         ButterKnife.bind(this);
         avi.hide();
@@ -122,7 +130,7 @@ public class TambahAktifitas extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                kembali();
+                onBackPressed();
                 break;
             default:
                 break;
@@ -214,7 +222,7 @@ public class TambahAktifitas extends AppCompatActivity {
                     if (status.equals("edit-success")) {
                         Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Mengedit Program", Toast.LENGTH_LONG);
                         toast.show();
-                        kembali();
+                        onBackPressed();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(TambahAktifitas.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
                     } else if (status.equals("edit-failed")) {
@@ -276,7 +284,7 @@ public class TambahAktifitas extends AppCompatActivity {
                     if (status.equals("post-success")) {
                         Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
                         toast.show();
-                        kembali();
+                        onBackPressed();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(TambahAktifitas.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
                     } else if (status.equals("post-failed")) {
@@ -313,15 +321,9 @@ public class TambahAktifitas extends AppCompatActivity {
         });
     }
 
-    private void kembali() {
-        Intent intent = new Intent(TambahAktifitas.this, AktifitasActivity.class);
-        intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
-        startActivity(intent);
-        finish();
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onBackPressed(){
-        kembali();
-    }
 }

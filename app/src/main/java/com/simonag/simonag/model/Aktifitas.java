@@ -14,11 +14,12 @@ public class Aktifitas {
     int target;
     int target_revenue;
     int realisasi;
+    double realisasi_persen;
     int realisasi_revenue;
     String duedate;
     String satuan;
     public Aktifitas(){}
-    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan) {
+    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan ,double realisasi_persen) {
         this.no = no;
         this.id = id;
         this.nama = nama;
@@ -29,6 +30,15 @@ public class Aktifitas {
         this.realisasi_revenue = realisasi_revenue;
         this.duedate = duedate;
         this.satuan = satuan;
+        this.realisasi_persen = realisasi_persen;
+    }
+
+    public double getRealisasi_persen() {
+        return realisasi_persen;
+    }
+
+    public void setRealisasi_persen(double realisasi_persen) {
+        this.realisasi_persen = realisasi_persen;
     }
 
     public int getNo() {

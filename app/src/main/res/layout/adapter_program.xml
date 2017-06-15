@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_program"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="@dimen/padding">
+
         <TextView
             android:id="@+id/tv_no"
             android:layout_width="20dp"
@@ -16,13 +21,33 @@
             android:text="1."
             android:textColor="@color/primary" />
 
-        <TextView
-            android:id="@+id/tv_nama"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Penyediaan Jaringan Telekomunikasi "
-            android:textColor="@color/primary" />
+            android:orientation="vertical">
+
+            <TextView
+                fontPath="fonts/Asap-Bold.ttf"
+                android:id="@+id/tv_nama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Penyediaan Jaringan Telekomunikasi "
+                android:textColor="@color/primary" />
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@android:id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                custom:progress_reached_bar_height="3dp"
+                custom:progress_reached_color="@color/colorPrimary"
+                custom:progress_text_color="@color/colorPrimary"
+                custom:progress_text_size="14sp"
+                custom:progress_unreached_bar_height="1dp" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/tv_menu"
@@ -40,7 +65,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="2px"
-        android:background="@color/colorBGLight"/>
+        android:background="@color/colorBGLight" />
 
 
 </LinearLayout>

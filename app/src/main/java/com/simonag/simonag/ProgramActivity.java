@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Program;
 import com.simonag.simonag.utils.Config;
@@ -41,6 +45,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,10 +54,12 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static java.security.AccessController.getContext;
+
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
-    String value;
-    boolean editflag=false;
+    String value, nama_perusahaan, nama_gambar;
+    boolean editflag = false;
     Program temp_progam;
     @BindView(R.id.program)
     EditText program_text;
@@ -75,18 +83,32 @@ public class ProgramActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            value = extras.getString("KEY");
-        }
 
         setContentView(R.layout.activity_data_program);
         LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
-        if(Prefs.getInt(Config.ID_BUMN,0) == Integer.parseInt(value)){
+        TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
+        ImageView gambar_bumn =(ImageView) findViewById(R.id.gambar_bumn);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nama_gambar = extras.getString("GAMBAR_PERUSAHAAN");
+            nama_perusahaan = extras.getString("NAMA_PERUSAHAAN");
+            value = extras.getString("KEY");
+            nama_bumn.setText(extras.getString("NAMA_PERUSAHAAN"));
+            String url = Config.URL_GAMBAR + extras.getString("GAMBAR_PERUSAHAAN");
+
+            Glide.with(gambar_bumn.getContext())
+                    .load(url)
+                    .fitCenter()
+                    .into(gambar_bumn);
+        }
+
+        if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value)) {
             tambah_program.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             tambah_program.setVisibility(View.GONE);
         }
+
         ButterKnife.bind(this);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
@@ -168,7 +190,7 @@ public class ProgramActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Program> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
+        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value, nama_perusahaan, nama_gambar);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(Program program) {
@@ -280,7 +302,8 @@ public class ProgramActivity extends AppCompatActivity {
                     Program d = new Program(
                             i + 1,
                             jObject.getInt("id_program"),
-                            jObject.getString("nama_program")
+                            jObject.getString("nama_program"),
+                            jObject.getDouble("realisasi_persen")
                     );
                     billing.add(d);
                 }
@@ -344,11 +367,11 @@ public class ProgramActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
-                if(editflag) editProgram();
+                if (editflag) editProgram();
                 else tambah_program();
                 break;
             case R.id.edit:
-                editflag=true;
+                editflag = true;
                 program_text.setText(temp_progam.getNama_program());
                 break;
             case R.id.hapus:
@@ -416,6 +439,8 @@ public class ProgramActivity extends AppCompatActivity {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Program> mValues;
+        private String val, nama_per, gambar_per;
+        Activity c;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public ArrayList<Program> mBoundString;
@@ -427,6 +452,8 @@ public class ProgramActivity extends AppCompatActivity {
             TextView tvNama;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
+            @BindView(android.R.id.progress)
+            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -440,10 +467,15 @@ public class ProgramActivity extends AppCompatActivity {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Program> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Program> items, String value, String nama_perusahaan,
+                                               String gambar_perusahaan) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            val = value;
+            nama_per = nama_perusahaan;
+            gambar_per = gambar_perusahaan;
+            this.c = context;
         }
 
         @Override
@@ -456,21 +488,45 @@ public class ProgramActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
+
             holder.tvNama.setText(mValues.get(position).getNama_program());
-            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (callback_variable != null) {
-                        callback_variable.action(mValues.get(position));
+            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
+                holder.tvMenu.setVisibility(View.GONE);
+            } else {
+                holder.tvMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback_variable != null) {
+                            callback_variable.action(mValues.get(position));
+                        }
                     }
+                });
+            }
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
+                                holder.progress.incrementProgressBy(1);
+                            }
+                        }
+                    });
                 }
-            });
+            }, 500, 100);
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, AktifitasActivity.class);
                     intent.putExtra("id_program", mValues.get(position).getId_program());
+                    intent.putExtra("ID_BUMN", val);
+                    intent.putExtra("NAMA_PERUSAHAAN", nama_per);
+                    intent.putExtra("NAMA_PROGRAM", mValues.get(position).getNama_program());
+                    intent.putExtra("GAMBAR_PERUSAHAAN", gambar_per);
                     context.startActivity(intent);
                 }
             });

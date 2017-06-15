@@ -1,80 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_aktivitas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/padding">
-
-
-    <TextView
-        android:id="@+id/tv_no"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
-        android:text="10."
-        android:textColor="@color/primary" />
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/padding">
+
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:text="10."
+            android:textColor="@color/primary" />
 
         <LinearLayout
-            android:id="@+id/view_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_nama"
+            <LinearLayout
+                android:id="@+id/view_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Penyediaan Jaringan Telekomunikasi "
-                android:textColor="@color/primary" />
-
-            <TextView
-                android:id="@+id/tv_duedate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12 SEP 17"
-                android:textColor="@color/primary"
-                android:textSize="9sp" />
-
-
-            <TextView
-                android:id="@+id/tv_target"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0/100 (Line)"
-                android:textColor="@color/primary"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/tv_realisasi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0/100 (%)"
-                android:textColor="@color/primary"
-                android:textSize="10sp" />
-
-        </LinearLayout>
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        fontPath="fonts/Asap-Bold.ttf"
+                        android:layout_weight="1"
+                        android:id="@+id/tv_nama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Penyediaan Jaringan Telekomunikasi "
+                        android:textColor="@color/primary" />
+                    <TextView
+                        android:id="@+id/tv_duedate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12 SEP 17"
+                        android:textColor="@color/colorAbu"
+                        android:textSize="9sp" />
+                </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/tv_menu"
-            android:layout_width="20dp"
-            android:layout_height="match_parent">
 
-            <ImageView
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@android:id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    custom:progress_reached_bar_height="3dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="1dp" />
+
+
+
+
+                <TextView
+                    android:id="@+id/tv_target"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/100 (Line)"
+                    android:textColor="@color/primary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tv_realisasi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/100 (%)"
+                    android:textColor="@color/primary"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/tv_menu"
                 android:layout_width="20dp"
-                android:layout_height="8dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/more" />
-        </LinearLayout>
+                android:layout_height="match_parent">
 
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/colorBGLight"/>
 </LinearLayout>
