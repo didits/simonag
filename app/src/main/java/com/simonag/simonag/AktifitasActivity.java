@@ -212,9 +212,11 @@ public class AktifitasActivity extends AppCompatActivity {
                 bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
                 intent2.putExtras(bundle);
                 startActivity(intent2);
+                setView("hidden");
                 break;
             case R.id.hapus:
                 deleteAktifitas();
+                setView("hidden");
                 break;
         }
     }

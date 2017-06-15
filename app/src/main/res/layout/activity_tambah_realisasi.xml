@@ -33,12 +33,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text"
-            android:paddingBottom="5dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="5dp"
+            android:padding="@dimen/padding"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,12 +51,9 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text"
             android:inputType="number"
-            android:paddingBottom="5dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="5dp"
+            android:padding="@dimen/padding"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,12 +69,9 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/edit_text"
             android:inputType="number"
-            android:paddingBottom="5dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="5dp"
+            android:padding="@dimen/padding"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 

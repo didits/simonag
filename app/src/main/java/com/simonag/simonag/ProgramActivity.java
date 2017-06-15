@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Program;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -87,7 +90,7 @@ public class ProgramActivity extends AppCompatActivity {
         );
 
         setContentView(R.layout.activity_data_program);
-        LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
+        final LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
         TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
         ImageView gambar_bumn =(ImageView) findViewById(R.id.gambar_bumn);
 
@@ -112,6 +115,25 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         ButterKnife.bind(this);
+        tambahProgram.setEnabled(false);
+        tambahProgram.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+        program_text.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!program_text.getText().toString().equals("")) {
+                    tambahProgram.setEnabled(true);
+                    tambahProgram.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    tambahProgram.setEnabled(false);
+                    tambahProgram.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
         getProgram();
@@ -369,14 +391,15 @@ public class ProgramActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
-
                 tambah_program();
                 break;
             case R.id.edit:
                 editProgram();
+                setView("hidden");
                 break;
             case R.id.hapus:
                 deleteProgram();
+                setView("hidden");
                 break;
         }
     }

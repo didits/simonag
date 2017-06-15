@@ -1,6 +1,7 @@
 package com.simonag.simonag;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by diditsepiyanto on 6/14/17.
@@ -55,6 +58,11 @@ public class TambahRealisasi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Asap-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_tambah_realisasi);
         ButterKnife.bind(this);
         avi.hide();
@@ -75,7 +83,7 @@ public class TambahRealisasi extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                kembali();
+                onBackPressed();
                 break;
             default:
                 break;
@@ -140,7 +148,7 @@ public class TambahRealisasi extends AppCompatActivity {
                     if (status.equals("post-success")) {
                         Toast toast = Toast.makeText(TambahRealisasi.this, "Sukses Menambahkan Realisasi", Toast.LENGTH_LONG);
                         toast.show();
-                        kembali();
+                        finish();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(TambahRealisasi.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
                     } else if (status.equals("post-failed")) {
@@ -173,15 +181,9 @@ public class TambahRealisasi extends AppCompatActivity {
         });
     }
 
-    private void kembali() {
-        Intent intent = new Intent(TambahRealisasi.this, AktifitasActivity.class);
-        intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
-        startActivity(intent);
-        finish();
-    }
 
     @Override
-    public void onBackPressed() {
-        kembali();
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding">
 
     <EditText
+        android:padding="@dimen/padding"
+        android:background="@drawable/edit_text"
         android:id="@+id/edit_nama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

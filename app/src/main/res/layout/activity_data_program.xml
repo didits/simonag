@@ -68,6 +68,7 @@
                     android:textSize="@dimen/text" />
 
                 <Button
+                    android:gravity="center"
                     android:id="@+id/tambah_program"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -79,6 +80,10 @@
             </LinearLayout>
 
         </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="3px"
+            android:background="@color/colorBGLight"/>
 
 
         <LinearLayout
