@@ -1,6 +1,7 @@
 package com.simonag.simonag;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,9 +55,11 @@ public class DashboardKapasitasFragment extends Fragment {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Dashboard> mValues;
+        Activity c;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public ArrayList<Dashboard>  mBoundString;
+
 
             public final View mView;
             @BindView(R.id.avatar)
@@ -63,7 +69,7 @@ public class DashboardKapasitasFragment extends Fragment {
             @BindView(android.R.id.text2)
             TextView text2;
             @BindView(android.R.id.progress)
-            ProgressBar progress;
+            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -77,10 +83,11 @@ public class DashboardKapasitasFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Dashboard> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Dashboard> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            this.c = context;
         }
 
         @Override
@@ -96,7 +103,19 @@ public class DashboardKapasitasFragment extends Fragment {
             //holder.mBoundString = mValues.get(position);
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_kapasitas()+" %");
-            holder.progress.setProgress((int)mValues.get(position).getPersentase_kapasitas());
+            //progresssetProgress((int)mValues.get(position).getPersentase_kapasitas());
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.progress.incrementProgressBy(1);
+                        }
+                    });
+                }
+            }, 1000, 100);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

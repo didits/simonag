@@ -62,8 +62,8 @@ public class DashboardKualitasFragment extends Fragment {
             TextView text1;
             @BindView(android.R.id.text2)
             TextView text2;
-            @BindView(android.R.id.progress)
-            ProgressBar progress;
+            //@BindView(android.R.id.progress)
+            //ProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -97,7 +97,7 @@ public class DashboardKualitasFragment extends Fragment {
             //holder.mBoundString = mValues.get(position);
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_komersial() + " %");
-            holder.progress.setProgress((int) mValues.get(position).getPersentase_komersial());
+            //holder.progress.setProgress((int) mValues.get(position).getPersentase_komersial());
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

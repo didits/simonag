@@ -51,4 +51,5 @@ dependencies {
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
     compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 }

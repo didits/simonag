@@ -411,7 +411,7 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            public void action(int id_progam);
+            void action(int id_progam);
         }
     }
 }
