@@ -51,7 +51,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
     String value;
-    int id_progam;
+    boolean editflag=false;
+    Program temp_progam;
     @BindView(R.id.program)
     EditText program_text;
     @BindView(R.id.tambah_program)
@@ -170,8 +171,8 @@ public class ProgramActivity extends AppCompatActivity {
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public void action(int id) {
-                id_progam = id;
+            public void action(Program program) {
+                temp_progam = program;
                 setView("expanded");
             }
         });
@@ -228,7 +229,7 @@ public class ProgramActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_DELETE_PROGRAM_PER + tokena + "/" + id_progam;
+        final String url = Config.URL_DELETE_PROGRAM_PER + tokena + "/" + temp_progam.getId_program();
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -343,14 +344,70 @@ public class ProgramActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
-                tambah_program();
+                if(editflag) editProgram();
+                else tambah_program();
                 break;
             case R.id.edit:
+                editflag=true;
+                program_text.setText(temp_progam.getNama_program());
                 break;
             case R.id.hapus:
                 deleteProgram();
                 break;
         }
+    }
+
+    private void posteditProgram(String program) {
+        avi.show();
+        String token = Prefs.getString(Config.TOKEN_BUMN, "");
+        VolleyClass cek = new VolleyClass(this, true);
+        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                avi.hide();
+                try {
+                    JSONObject jObject = new JSONObject(response);
+                    String status = jObject.getString("status");
+                    if (status.equals("edit-success")) {
+                        program_text.setText("");
+                        Toast toast = Toast.makeText(ProgramActivity.this, "Sukses Mengedit Program", Toast.LENGTH_LONG);
+                        toast.show();
+                        getProgram();
+                    } else if (status.equals("wrong-id")) {
+                        Toast.makeText(ProgramActivity.this, "Program tidak ada", Toast.LENGTH_LONG).show();
+                    } else if (status.equals("edit-failed")) {
+                        Toast.makeText(ProgramActivity.this, "Edit data gagal", Toast.LENGTH_LONG).show();
+                    } else {
+                        GetToken k = new GetToken(ProgramActivity.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                editProgram();
+                            }
+                        });
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError() {
+                avi.hide();
+            }
+        }, Config.URL_EDIT_PROGRAM_PER + token, new String[]{
+                "nama_program" + "|" + program,
+                "keterangan" + "|" + "null",
+                "id_perusahaan" + "|" + Prefs.getInt(Config.ID_BUMN, 0),
+                "id_program" + "|" + temp_progam.getId_program()
+        });
+    }
+
+    private void editProgram() {
+        String program = program_text.getText().toString();
+        posteditProgram(program);
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -404,7 +461,7 @@ public class ProgramActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (callback_variable != null) {
-                        callback_variable.action(mValues.get(position).getId_program());
+                        callback_variable.action(mValues.get(position));
                     }
                 }
             });
@@ -429,7 +486,7 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            void action(int id_progam);
+            public void action(Program temp_progam);
         }
     }
 

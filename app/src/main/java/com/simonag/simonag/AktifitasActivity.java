@@ -147,7 +147,7 @@ public class AktifitasActivity extends AppCompatActivity {
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(Aktifitas aktifitas) {
-                temp_aktivitas=aktifitas;
+                temp_aktivitas = aktifitas;
                 setView("expanded");
             }
         });
@@ -230,14 +230,13 @@ public class AktifitasActivity extends AppCompatActivity {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = Config.URL_GET_TARGET_PROGRAM + tokena + "/" + getIntent().getExtras().getInt("id_program");
-        Log.d("url",url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         avi.hide();
                         try {
-                            Log.d("status",response.getString("status"));
+                            Log.d("status", response.getString("status"));
                             if (response.getString("status").equals("success")) {
                                 setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")));
                             } else if (response.getString("status").equals("invalid-token")) {
@@ -272,7 +271,7 @@ public class AktifitasActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    
+
     public ArrayList<Aktifitas> jsonDecodeAktifitas(String jsonStr) {
         ArrayList<Aktifitas> billing = new ArrayList<>();
         if (jsonStr != null) {
@@ -281,7 +280,7 @@ public class AktifitasActivity extends AppCompatActivity {
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
                     Aktifitas d = new Aktifitas(
-                            i+1,
+                            i + 1,
                             jObject.getInt("id_target"),
                             jObject.getString("nama_aktivitas"),
                             jObject.getString("nama_kategori"),
@@ -321,6 +320,10 @@ public class AktifitasActivity extends AppCompatActivity {
             TextView tvTarget;
             @BindView(R.id.tv_realisasi)
             TextView tvRealisasi;
+            @BindView(R.id.view_detail)
+            LinearLayout viewDetail;
+            @BindView(R.id.tv_menu)
+            LinearLayout tvMenu;
 
             public ViewHolder(View view) {
                 super(view);
@@ -349,12 +352,23 @@ public class AktifitasActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.tvNo.setText(mValues.get(position).getNo()+"");
+            holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
-            holder.tvTarget.setText(mValues.get(position).getTarget()+"");
-            holder.tvRealisasi.setText(mValues.get(position).getRealisasi()+"");
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            holder.tvTarget.setText(mValues.get(position).getTarget() + "");
+            holder.tvRealisasi.setText(mValues.get(position).getRealisasi() + "");
+            holder.viewDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent2 = new Intent(context, TambahRealisasi.class);
+                    intent2.putExtra("id_aktivitas", mValues.get(position).getId());
+                    intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
+                    context.startActivity(intent2);
+                    ((AktifitasActivity) context).finish();
+                }
+            });
+            holder.tvMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (callback_variable != null) {
@@ -378,4 +392,6 @@ public class AktifitasActivity extends AppCompatActivity {
             public void action(Aktifitas aktifitas);
         }
     }
+
+
 }

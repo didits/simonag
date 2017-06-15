@@ -22,6 +22,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/view_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -42,12 +43,7 @@
                 android:text="12 SEP 17"
                 android:textColor="@color/primary"
                 android:textSize="9sp" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_target"
@@ -64,6 +60,20 @@
                 android:text="0/100 (%)"
                 android:textColor="@color/primary"
                 android:textSize="10sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/tv_menu"
+            android:layout_width="20dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/more" />
         </LinearLayout>
 
     </LinearLayout>
