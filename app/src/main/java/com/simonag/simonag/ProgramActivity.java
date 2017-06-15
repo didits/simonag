@@ -348,7 +348,7 @@ public class ProgramActivity extends AppCompatActivity {
                 tambah_program();
                 break;
             case R.id.edit:
-                program_text.setText(temp_progam.getNama_program());
+                editProgram();
                 break;
             case R.id.hapus:
                 deleteProgram();
