@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,7 +52,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
     String value;
-    boolean editflag=false;
     Program temp_progam;
     @BindView(R.id.program)
     EditText program_text;
@@ -65,6 +65,7 @@ public class ProgramActivity extends AppCompatActivity {
     LinearLayout edit;
     @BindView(R.id.hapus)
     LinearLayout hapus;
+    EditText edit_nama;
 
 
     @Override
@@ -344,11 +345,9 @@ public class ProgramActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
-                if(editflag) editProgram();
-                else tambah_program();
+                tambah_program();
                 break;
             case R.id.edit:
-                editflag=true;
                 program_text.setText(temp_progam.getNama_program());
                 break;
             case R.id.hapus:
@@ -406,8 +405,27 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     private void editProgram() {
-        String program = program_text.getText().toString();
-        posteditProgram(program);
+        final AlertDialog dialog = buildDialog("Edit program");
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nama = edit_nama.getText().toString();
+                posteditProgram(nama);
+            }
+        });
+    }
+
+    private AlertDialog buildDialog(String title) {
+        AlertDialog.Builder result = new AlertDialog.Builder(this);
+        View alertView = getLayoutInflater().inflate(R.layout.dialog_edit_program, null);
+        edit_nama = (EditText) alertView.findViewById(R.id.edit_nama);
+        result.setTitle(title)
+                .setView(alertView)
+                .setPositiveButton("Simpan", null)
+                .setNegativeButton("Batal", null);
+        AlertDialog dialog = result.create();
+        dialog.show();
+        return dialog;
     }
 
     public static class SimpleStringRecyclerViewAdapter
