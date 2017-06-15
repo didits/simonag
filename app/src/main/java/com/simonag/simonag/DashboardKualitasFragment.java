@@ -1,12 +1,14 @@
 package com.simonag.simonag;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +57,7 @@ public class DashboardKualitasFragment extends Fragment {
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Dashboard> mValues;
-        Context context;
+        Activity context;
 
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,8 +70,8 @@ public class DashboardKualitasFragment extends Fragment {
             TextView text1;
             @BindView(android.R.id.text2)
             TextView text2;
-            //@BindView(android.R.id.progress)
-            //ProgressBar progress;
+            @BindView(android.R.id.progress)
+            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -77,7 +85,7 @@ public class DashboardKualitasFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Context context, ArrayList<Dashboard> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Dashboard> items) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -93,11 +101,9 @@ public class DashboardKualitasFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            //holder.mBoundString = mValues.get(position);
+        public void onBindViewHolder(final ViewHolder holder,final int position) {
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_komersial() + " %");
-            //holder.progress.setProgress((int) mValues.get(position).getPersentase_komersial());
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -105,11 +111,36 @@ public class DashboardKualitasFragment extends Fragment {
                     context.startActivity(new Intent(context, ProgramActivity.class));
                 }
             });
-            /*
-            Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (holder.progress.getProgress() <= (int) mValues.get(position).getPersentase_kualitas()) {
+                                holder.progress.incrementProgressBy(1);
+                            }
+                        }
+                    });
+                }
+            }, 500, 100);
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mValues.get(position).getId_bumn() == Prefs.getInt(Config.ID_BUMN, 0)) {
+                        Context context = v.getContext();
+                        context.startActivity(new Intent(context, ProgramActivity.class));
+                    }
+                }
+            });
+            String url = Config.URL_GAMBAR + mValues.get(position).getLink_gambar();
+
+            Glide.with(holder.avatar.getContext())
+                    .load(url)
                     .fitCenter()
-                    .into(holder.mImageView);*/
+                    .into(holder.avatar);
         }
 
         @Override

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@color/colorBGDark"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".LoginActivity"
@@ -21,42 +21,27 @@
             android:padding="30dp">
 
             <ImageView
-                android:layout_marginBottom="30dp"
                 android:layout_marginTop="40dp"
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/logo_text" />
+                app:srcCompat="@drawable/logo" />
 
-            <LinearLayout
+            <TextView
+                android:layout_marginTop="20dp"
+                fontPath="fonts/Asap-Bold.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <FrameLayout
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="3px"
-                    android:background="@color/colorBGLight"/>
-                <TextView
-                    fontPath="fonts/Asap-Bold.ttf"
-                    android:layout_margin="6dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="LUPA PASSWORD"/>
-                <FrameLayout
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="3px"
-                    android:background="@color/colorBGLight"/>
-            </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:text="Sistem Informasi\nMonitoring Asian Games 2018"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
 
             <EditText
-                android:id="@+id/ET_email"
+                android:id="@+id/ET_email_verifikasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -69,14 +54,27 @@
                 android:textSize="@dimen/text" />
 
 
+            <EditText
+                android:id="@+id/ET_kode_verifikasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/edit_text"
+                android:hint="Kode Verifikasi pada Email"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
             <Button
-                android:id="@+id/B_reset"
+                android:id="@+id/B_verifikasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/button"
-                android:text="KIRIM KODE RESET"
+                android:text="VERIFIKASI KODE"
                 android:textAlignment="center"
                 android:textColor="@android:color/white" />
 

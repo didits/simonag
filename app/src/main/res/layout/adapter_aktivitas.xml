@@ -1,75 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_aktivitas"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="top"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="@dimen/padding">
+
+
+    <TextView
+        android:id="@+id/tv_no"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:text="10."
+        android:textColor="@color/primary" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding">
-
-
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:text="10."
-            android:textColor="@color/primary" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="Penyediaan Jaringan Telekomunikasi "
+                android:textColor="@color/primary" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Penyediaan Jaringan Telekomunikasi "
-                    android:textColor="@color/primary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12 SEP 17"
-                    android:textColor="@color/primary"
-                    android:textSize="9sp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_duedate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0/100 (Line)"
-                    android:textColor="@color/primary"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0/100 (%)"
-                    android:textColor="@color/primary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
+                android:text="12 SEP 17"
+                android:textColor="@color/primary"
+                android:textSize="9sp" />
         </LinearLayout>
-    </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorBGLight"/>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_target"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/100 (Line)"
+                android:textColor="@color/primary"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tv_realisasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/100 (%)"
+                android:textColor="@color/primary"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

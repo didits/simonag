@@ -3,22 +3,46 @@ package com.simonag.simonag;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
+import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.GetToken;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by diditsepiyanto on 6/13/17.
@@ -26,14 +50,76 @@ import java.util.ArrayList;
 
 public class AktifitasActivity extends AppCompatActivity {
     public static final String EXTRA_NAME = "id_program";
+    public BottomSheetBehavior bottomSheetBehavior;
+    Aktifitas temp_aktivitas;
+    @BindView(R.id.tambah_aktifitas)
+    Button tambahAktifitas;
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView avi;
+    @BindView(R.id.rv_aktifitas)
+    RecyclerView rv;
+    @BindView(R.id.edit)
+    LinearLayout edit;
+    @BindView(R.id.hapus)
+    LinearLayout hapus;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_program);
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv_program);
-        setupRecyclerView(rv);
+        setContentView(R.layout.activity_data_aktifitas);
+        ButterKnife.bind(this);
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
+        getAktifitas();
+    }
+
+    public void setView(@NonNull String state) {
+        switch (state) {
+            case "collapsed":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+            case "expanded":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            case "hidden":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case "settling":
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_SETTLING);
+                break;
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                // Check Logs to see how bottom sheets behaves
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_EXPANDED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        setView("collapsed");
+                        Log.e("Bottom Sheet Behaviour", "STATE_HIDDEN");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_SETTLING");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     private void showActionBar() {
@@ -49,49 +135,202 @@ public class AktifitasActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Aktifitas> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(this,
-                getRandomSublist()));
+        SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p);
+        k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
+            @Override
+            public void action(Aktifitas aktifitas) {
+                temp_aktivitas=aktifitas;
+                setView("expanded");
+            }
+        });
+        recyclerView.setAdapter(k);
     }
 
-    private ArrayList<Aktifitas> getRandomSublist() {
-        ArrayList<Aktifitas> list = new ArrayList<>();
-        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
-        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
-        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
-        list.add(new Aktifitas(0, "Instalasi Line Telepon", "Kapasitas", 100,100, 10, 20, "12 Agustus 2018", "Line"));
-        return list;
+
+    @OnClick({R.id.tambah_aktifitas, R.id.edit, R.id.hapus})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tambah_aktifitas:
+                Intent intent = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.edit:
+                Intent intent2 = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_program", getIntent().getExtras().getInt("id_program"));
+                bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
+                intent2.putExtras(bundle);
+                startActivity(intent2);
+                finish();
+                break;
+            case R.id.hapus:
+                deleteAktifitas();
+                break;
+        }
     }
 
-    public static class SimpleStringRecyclerViewAdapter extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+    private void deleteAktifitas() {
+        avi.show();
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url = Config.URL_DELETE_TARGET_PROGRAM + tokena + "/" + temp_aktivitas.getId();
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        avi.hide();
+                        try {
+                            if (response.getString("status").equals("delete-success")) {
+                                getAktifitas();
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(AktifitasActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getAktifitas();
+                                    }
+                                });
+                            }
 
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivity.this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
+        queue.add(getRequest);
+    }
+
+
+    private void getAktifitas() {
+        avi.show();
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url = Config.URL_GET_TARGET_PROGRAM + tokena + "/" + getIntent().getExtras().getInt("id_program");
+        Log.d("url",url);
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        avi.hide();
+                        try {
+                            Log.d("status",response.getString("status"));
+                            if (response.getString("status").equals("success")) {
+                                setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")));
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(AktifitasActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getAktifitas();
+                                    }
+                                });
+                            }
+
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivity.this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
+        queue.add(getRequest);
+    }
+
+    
+    public ArrayList<Aktifitas> jsonDecodeAktifitas(String jsonStr) {
+        ArrayList<Aktifitas> billing = new ArrayList<>();
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+                    JSONObject jObject = transaksi.getJSONObject(i);
+                    Aktifitas d = new Aktifitas(
+                            i+1,
+                            jObject.getInt("id_target"),
+                            jObject.getString("nama_aktivitas"),
+                            jObject.getString("nama_kategori"),
+                            jObject.getInt("target_nilai"),
+                            jObject.getInt("revenue_target_nilai"),
+                            jObject.getInt("realisasi"),
+                            jObject.getInt("realisasi_revenue"),
+                            jObject.getString("due_date"),
+                            jObject.getString("nama_satuan")
+                    );
+                    billing.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return billing;
+    }
+
+    public static class SimpleStringRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+        private callback callback_variable;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private ArrayList<Aktifitas> mValues;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Aktifitas>  mBoundString;
-
             public final View mView;
-            public final ImageView mImageView;
-            public final TextView mTextView;
+            @BindView(R.id.tv_no)
+            TextView tvNo;
+            @BindView(R.id.tv_nama)
+            TextView tvNama;
+            @BindView(R.id.tv_duedate)
+            TextView tvDuedate;
+            @BindView(R.id.tv_target)
+            TextView tvTarget;
+            @BindView(R.id.tv_realisasi)
+            TextView tvRealisasi;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mImageView = (ImageView) view.findViewById(R.id.avatar);
-                mTextView = (TextView) view.findViewById(android.R.id.text1);
+                ButterKnife.bind(this, view);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mTextView.getText();
+                return super.toString() + " '" + tvNama.getText();
             }
         }
 
@@ -103,37 +342,40 @@ public class AktifitasActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_aktivitas, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_aktivitas, parent, false);
             view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            //holder.mBoundString = mValues.get(position);
-            //holder.mTextView.setText(mValues.get(position).getNama_bumn());
-
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.tvNo.setText(mValues.get(position).getNo()+"");
+            holder.tvNama.setText(mValues.get(position).getNama());
+            holder.tvDuedate.setText(mValues.get(position).getDuedate());
+            holder.tvTarget.setText(mValues.get(position).getTarget()+"");
+            holder.tvRealisasi.setText(mValues.get(position).getRealisasi()+"");
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, AktifitasActivity.class);
-                    intent.putExtra(AktifitasActivity.EXTRA_NAME, holder.mBoundString);
-
-                    context.startActivity(intent);
+                    if (callback_variable != null) {
+                        callback_variable.action(mValues.get(position));
+                    }
                 }
             });
-            /*
-            Glide.with(holder.mImageView.getContext())
-                    .load(Cheeses.getRandomCheeseDrawable())
-                    .fitCenter()
-                    .into(holder.mImageView);*/
+
         }
 
         @Override
         public int getItemCount() {
             return mValues.size();
+        }
+
+        public void setCallback(callback callback) {
+            this.callback_variable = callback;
+        }
+
+        public interface callback {
+            public void action(Aktifitas aktifitas);
         }
     }
 }

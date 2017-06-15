@@ -1,7 +1,8 @@
-package com.simonag.simonag;
+package com.simonag.simonag.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -11,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.simonag.simonag.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +69,7 @@ public class VolleyClass {
                 Map<String, String> params = new HashMap<>();
                 for (String aParam : param) {
                     String[] separated = aParam.split("\\|");
+                    Log.d("sasa",separated[0]+" "+separated[1]);
                     params.put(separated[0], separated[1]);
                 }
                 return params;

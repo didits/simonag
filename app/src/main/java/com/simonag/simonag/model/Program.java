@@ -1,9 +1,11 @@
 package com.simonag.simonag.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by diditsepiyanto on 6/14/17.
  */
-
+@Parcel
 public class Program {
     int no;
     int id_program;
@@ -12,7 +14,7 @@ public class Program {
     Double kualitas_persen;
     Double kuantitas_persen;
     Double komersial_persen;
-
+    public Program(){}
     public Program(int no, int id_program, String nama_program) {
         this.no = no;
         this.id_program = id_program;
