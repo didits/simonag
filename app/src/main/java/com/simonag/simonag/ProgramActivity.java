@@ -411,6 +411,7 @@ public class ProgramActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String nama = edit_nama.getText().toString();
                 posteditProgram(nama);
+                dialog.dismiss();
             }
         });
     }
@@ -419,6 +420,7 @@ public class ProgramActivity extends AppCompatActivity {
         AlertDialog.Builder result = new AlertDialog.Builder(this);
         View alertView = getLayoutInflater().inflate(R.layout.dialog_edit_program, null);
         edit_nama = (EditText) alertView.findViewById(R.id.edit_nama);
+        edit_nama.setText(temp_progam.getNama_program());
         result.setTitle(title)
                 .setView(alertView)
                 .setPositiveButton("Simpan", null)
