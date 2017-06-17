@@ -73,6 +73,8 @@ public class ProgramActivity extends AppCompatActivity {
     RecyclerView rv;
     @BindView(R.id.edit)
     LinearLayout edit;
+    @BindView(R.id.add)
+    LinearLayout add;
     @BindView(R.id.hapus)
     LinearLayout hapus;
     @BindView(R.id.action)
@@ -393,7 +395,7 @@ public class ProgramActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.tambah_program, R.id.edit, R.id.hapus})
+    @OnClick({R.id.tambah_program, R.id.edit, R.id.hapus, R.id.add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
@@ -401,6 +403,12 @@ public class ProgramActivity extends AppCompatActivity {
                 break;
             case R.id.edit:
                 editProgram();
+                setView("hidden");
+                break;
+            case R.id.add:
+                Intent intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                intent.putExtra("id_program", temp_progam.getId_program());
+                startActivity(intent);
                 setView("hidden");
                 break;
             case R.id.hapus:

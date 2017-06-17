@@ -14,8 +14,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -84,6 +89,13 @@ public class MainActivityBuDevy extends AppCompatActivity {
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(Context.MODE_PRIVATE)
+                .setPrefsName(Config.SHARED_USER)
+                .setUseDefaultSharedPreference(true)
+                .build();
+
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
@@ -152,7 +164,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
-        judulTwo.setText("Aktifitas Per Kategori");
+        judulTwo.setText("Aktifitas Per");
         persentaseTwo.setText("Kategori");
         tabLayout.getTabAt(1).setCustomView(tabTwo);
 
@@ -161,7 +173,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
-        judulThree.setText("Aktifitas Per Tanggal");
+        judulThree.setText("Aktifitas Per");
         persentaseThree.setText("Tanggal");
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
@@ -327,6 +339,28 @@ public class MainActivityBuDevy extends AppCompatActivity {
             }
         }
         return billing;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.aktivitas:
+                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                getDashboard();
+                return true;
+            case R.id.biaya:
+                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
+                getDashboard();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bu_devy, menu);
+        return true;
     }
 
 

@@ -117,6 +117,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/content_bottom_sheet" />
+    <include layout="@layout/content_bottom_sheet_aktivitas" />
 
 </android.support.design.widget.CoordinatorLayout>

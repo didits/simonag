@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.model.DashboardBuDevy;
 import com.simonag.simonag.utils.Config;
@@ -51,7 +52,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivityBuDevy) getActivity()).db, 0));
+                ((MainActivityBuDevy) getActivity()).db, Prefs.getInt(Config.FILTER_BU_DEVY, 0)));
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -176,7 +177,6 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
             Glide.with(holder.avatar.getContext())
                     .load(url)
-                    .fitCenter()
                     .into(holder.avatar);
         }
 

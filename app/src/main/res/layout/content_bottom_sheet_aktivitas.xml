@@ -60,33 +60,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/colorPrimary"
-                android:text="Edit program" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="@color/colorBGLight" />
-
-        <LinearLayout
-            android:id="@+id/add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/add" />
-
-            <TextView
-                android:textColor="@color/colorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:text="Tambah aktifitas" />
+                android:text="Edit aktifitas" />
         </LinearLayout>
 
         <FrameLayout
@@ -112,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
-                android:text="Hapus program" />
+                android:text="Hapus aktivitas" />
         </LinearLayout>
     </LinearLayout>
 

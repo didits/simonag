@@ -14,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Kategori;
+import com.simonag.simonag.utils.Config;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
@@ -34,7 +36,7 @@ public class DashboardAktivitasKategoriFragment extends Fragment {
         PieChart mPieChart = (PieChart) v.findViewById(R.id.piechart);
 
         ArrayList<Kategori> kategoris = ((MainActivityBuDevy) getActivity()).db_kategori;
-        int j = 0;
+        int j = Prefs.getInt(Config.FILTER_BU_DEVY, 0);
         if (j == 0) {
             for (Kategori k : kategoris) {
                 if (k.getNama().equals("publikasi"))
