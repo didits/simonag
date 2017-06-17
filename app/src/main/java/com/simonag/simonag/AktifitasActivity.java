@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -64,7 +65,7 @@ public class AktifitasActivity extends AppCompatActivity {
     String value, nama, pic, program;
     Aktifitas temp_aktivitas;
     @BindView(R.id.tambah_aktifitas)
-    Button tambahAktifitas;
+    LinearLayout tambahAktifitas;
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
     @BindView(R.id.rv_aktifitas)
@@ -215,7 +216,15 @@ public class AktifitasActivity extends AppCompatActivity {
                 setView("hidden");
                 break;
             case R.id.hapus:
-                deleteAktifitas();
+                final AlertDialogCustom ad = new AlertDialogCustom(this);
+                ad.konfirmasi("KONFIRMASI", "Apakah anda yakin akan menghapus data?", R.drawable.trash, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteAktifitas();
+                        ad.dismiss();
+                    }
+                }, "YA","TIDAK");
+
                 setView("hidden");
                 break;
         }
@@ -365,6 +374,8 @@ public class AktifitasActivity extends AppCompatActivity {
             TextView tvTarget;
             @BindView(R.id.tv_realisasi)
             TextView tvRealisasi;
+            @BindView(R.id.tv_kategori)
+            TextView tvKategori;
             @BindView(R.id.view_detail)
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
@@ -404,6 +415,7 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
+            holder.tvKategori.setText("Kategori: "+mValues.get(position).getKategori());
             holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + " dari " + mValues.get(position).getTarget() + "");
             holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
                      + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
@@ -435,16 +447,20 @@ public class AktifitasActivity extends AppCompatActivity {
                 }
             }, 500, 100);
 
-            holder.viewDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent2 = new Intent(context, TambahRealisasi.class);
-                    intent2.putExtra("id_aktivitas", mValues.get(position).getId());
-                    intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
-                    context.startActivity(intent2);
-                }
-            });
+            if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val)) {
+                holder.viewDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Context context = v.getContext();
+                        Intent intent2 = new Intent(context, TambahRealisasi.class);
+                        intent2.putExtra("id_aktivitas", mValues.get(position).getId());
+                        intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
+                        context.startActivity(intent2);
+                    }
+                });
+            }
+
 
 
         }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.simonag.simonag.R;
@@ -43,6 +44,34 @@ public class AlertDialogCustom {
                 alert.cancel();
             }
         });
+
+        alert.setView(inputnya);
+        alert.show();
+    }
+
+    public void konfirmasi(String judul, String isi, int gambar, View.OnClickListener l, String ya, String tidak) {
+        LayoutInflater li = LayoutInflater.from(context);
+        View inputnya = li.inflate(R.layout.dialog_simple, null);
+        Button btnYa = (Button) inputnya.findViewById(R.id.ya);
+        Button btnBatal = (Button) inputnya.findViewById(R.id.tidak);
+
+        btnYa.setText(ya);
+        btnBatal.setText(tidak);
+
+        TextView judulTextView = (TextView) inputnya.findViewById(R.id.judul_dialog);
+        TextView isiTextView = (TextView) inputnya.findViewById(R.id.isi);
+        ImageView gambarImg = (ImageView) inputnya.findViewById(R.id.gambar);
+        gambarImg.setBackgroundDrawable(inputnya.getResources().getDrawable(gambar));
+
+        btnBatal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert.cancel();
+            }
+        });
+        judulTextView.setText(judul);
+        isiTextView.setText(isi);
+        btnYa.setOnClickListener(l);
 
         alert.setView(inputnya);
         alert.show();

@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Program;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.RegexInput;
@@ -68,7 +69,7 @@ public class ProgramActivity extends AppCompatActivity {
     @BindView(R.id.program)
     EditText program_text;
     @BindView(R.id.tambah_program)
-    Button tambahProgram;
+    LinearLayout tambahProgram;
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
     @BindView(R.id.rv_program)
@@ -398,7 +399,15 @@ public class ProgramActivity extends AppCompatActivity {
                 setView("hidden");
                 break;
             case R.id.hapus:
-                deleteProgram();
+                final AlertDialogCustom ad = new AlertDialogCustom(this);
+                ad.konfirmasi("KONFIRMASI", "Apakah anda yakin akan menghapus data?", R.drawable.trash, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteProgram();
+                        ad.dismiss();
+                    }
+                }, "YA","TIDAK");
+
                 setView("hidden");
                 break;
         }

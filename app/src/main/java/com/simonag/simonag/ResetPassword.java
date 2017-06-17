@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.simonag.simonag.utils.Config;
+import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 
 import org.json.JSONException;
@@ -47,6 +50,27 @@ public class ResetPassword extends AppCompatActivity {
         setContentView(R.layout.reset_password);
         ButterKnife.bind(this);
         showActionBar();
+        resetButton.setEnabled(false);
+        resetButton.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+
+        email.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                RegexInput regex = new RegexInput();
+                if (regex.EmailValidator(email.getText().toString())) {
+                    resetButton.setEnabled(true);
+                    resetButton.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    resetButton.setEnabled(false);
+                    resetButton.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
 
     }
 

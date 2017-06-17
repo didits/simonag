@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -65,10 +68,76 @@ public class TambahRealisasi extends AppCompatActivity {
         );
         setContentView(R.layout.activity_tambah_realisasi);
         ButterKnife.bind(this);
+        setEditListener();
         avi.hide();
         setTitle("Tambah Realisasi");
         showActionBar();
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
+    }
+
+    private void setEditListener(){
+        button.setEnabled(false);
+        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+
+        tvTanggal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                    button.setEnabled(true);
+                    button.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    button.setEnabled(false);
+                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
+
+        etNilai.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                    button.setEnabled(true);
+                    button.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    button.setEnabled(false);
+                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
+
+
+        etRevenue.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if ( !tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                    button.setEnabled(true);
+                    button.setBackground(getResources().getDrawable(R.drawable.button));
+                } else {
+                    button.setEnabled(false);
+                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                }
+            }
+        });
     }
 
     private void showActionBar() {

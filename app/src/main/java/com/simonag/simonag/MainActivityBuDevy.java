@@ -55,7 +55,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityBuDevy extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_bu_devy);
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivity.this, ProgramActivity.class);
+                                Intent i = new Intent(MainActivityBuDevy.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
                                 startActivity(i);
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                             case 3:
                                 break;
                             case 4:
-                                startActivity(new Intent(MainActivity.this, TentangActivity.class));
+                                startActivity(new Intent(MainActivityBuDevy.this, TentangActivity.class));
                                 break;
                             case 5:
                                 out();
@@ -141,31 +141,33 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
-        judul.setText("KUALITAS");
-        persentase.setText(kualitas + " %");
+        judul.setText("Aktifitas Per");
+        persentase.setText("BUMN");
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
-        judulTwo.setText("KAPASITAS");
-        persentaseTwo.setText(kapasitas + "%");
+        judulTwo.setText("Aktifitas Per Kategori");
+        persentaseTwo.setText("Kategori");
         tabLayout.getTabAt(1).setCustomView(tabTwo);
+
+
 
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
-        judulThree.setText("KOMERSIAL");
-        persentaseThree.setText(komersial + " %");
+        judulThree.setText("Aktifitas Per Tanggal");
+        persentaseThree.setText("Tanggal");
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new DashboardKualitasFragment(), "Kualitas");
-        adapter.addFragment(new DashboardKapasitasFragment(), "Kapasitas");
-        adapter.addFragment(new DashboardKomersialFragment(), "Komersial");
+        adapter.addFragment(new DashboardAktivitasBUMNFragment(), "Kualitas");
+        adapter.addFragment(new DashboardAktivitasKategoriFragment(), "Kapasitas");
+        adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Komersial");
         viewPager.setAdapter(adapter);
     }
 
@@ -176,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Prefs.clear();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivityBuDevy.this, LoginActivity.class));
                 finish();
             }
         });
@@ -240,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                                 jsonDecodePersentaseKategori(response.getString("kategori"));
                                 avi.hide();
                             }else if(response.getString("status").equals("invalid-token")){
-                                GetToken k = new GetToken(MainActivity.this);
+                                GetToken k = new GetToken(MainActivityBuDevy.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityBuDevy.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

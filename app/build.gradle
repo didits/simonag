@@ -52,5 +52,8 @@ dependencies {
     compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    compile 'com.github.blackfizz:eazegraph:1.2.2@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 //    compile project(':calligraphy-2.2.0')
 }

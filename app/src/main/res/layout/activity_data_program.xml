@@ -66,17 +66,18 @@
                     android:padding="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="@dimen/text" />
-
-                <Button
-                    android:gravity="center"
+                <LinearLayout
                     android:id="@+id/tambah_program"
+                    android:layout_marginLeft="6dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="6dp"
-                    android:background="@drawable/button"
-                    android:text="+"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="30sp" />
+                    android:gravity="center"
+                    android:background="@drawable/button">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/plus"/>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
