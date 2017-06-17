@@ -3,14 +3,11 @@ package com.simonag.simonag;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,9 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -41,9 +35,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerUIUtils;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.Config;
@@ -90,42 +82,14 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Pencapaian 3K");
         setSupportActionBar(toolbar);
 
-        //initialize and create the image loader logic
-        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
-            @Override
-            public void set(ImageView imageView, Uri uri, Drawable placeholder, String tag) {
-                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
-            }
-
-            @Override
-            public void cancel(ImageView imageView) {
-                Glide.clear(imageView);
-            }
-
-            @Override
-            public Drawable placeholder(Context ctx, String tag) {
-                //define different placeholders for different imageView targets
-                //default tags are accessible via the DrawerImageLoader.Tags
-                //custom ones can be checked via string. see the CustomUrlBasePrimaryDrawerItem LINE 111
-                if (DrawerImageLoader.Tags.PROFILE.name().equals(tag)) {
-                    return DrawerUIUtils.getPlaceHolder(ctx);
-                } else if (DrawerImageLoader.Tags.ACCOUNT_HEADER.name().equals(tag)) {
-                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(com.mikepenz.materialdrawer.R.color.primary).sizeDp(56);
-                } else if ("customUrlItem".equals(tag)) {
-                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.md_red_500).sizeDp(56);
-                }
-
-                //we use the default one for
-                //DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name()
-
-                return super.placeholder(ctx, tag);
-            }
-        });
+        String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
+        Log.d("ss",url);
+        final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
+                        profile
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();

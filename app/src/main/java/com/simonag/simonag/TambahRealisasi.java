@@ -1,8 +1,6 @@
 package com.simonag.simonag;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,15 +10,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
-import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -28,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -46,17 +41,16 @@ public class TambahRealisasi extends AppCompatActivity {
 
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
-    DatePickerDialog datepicker;
     SimpleDateFormat dateFormatter;
     int id_aktifitas;
-    @BindView(R.id.tv_tanggal)
-    TextView tvTanggal;
     @BindView(R.id.et_nilai)
     EditText etNilai;
     @BindView(R.id.et_revenue)
     EditText etRevenue;
     @BindView(R.id.button)
     Button button;
+    @BindView(R.id.calendarView)
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,32 +69,9 @@ public class TambahRealisasi extends AppCompatActivity {
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
     }
 
-    private void setEditListener(){
+    private void setEditListener() {
         button.setEnabled(false);
         button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-
-        tvTanggal.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
-                    button.setEnabled(true);
-                    button.setBackground(getResources().getDrawable(R.drawable.button));
-                } else {
-                    button.setEnabled(false);
-                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-                }
-            }
-        });
 
         etNilai.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -110,7 +81,7 @@ public class TambahRealisasi extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
                     button.setEnabled(true);
                     button.setBackground(getResources().getDrawable(R.drawable.button));
                 } else {
@@ -129,7 +100,7 @@ public class TambahRealisasi extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ( !tvTanggal.getText().toString().equals("") && !etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
                     button.setEnabled(true);
                     button.setBackground(getResources().getDrawable(R.drawable.button));
                 } else {
@@ -160,42 +131,28 @@ public class TambahRealisasi extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.tv_tanggal, R.id.button})
+    @OnClick({R.id.button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_tanggal:
-                getdate();
-                break;
             case R.id.button:
                 tambah_realisasi();
                 break;
         }
     }
 
-    private void getdate() {
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        Calendar newCalendar = Calendar.getInstance();
-        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                tvTanggal.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        datepicker.show();
-    }
 
     private void tambah_realisasi() {
-        String tanggal_realisasi = tvTanggal.getText().toString();
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        String tanggal_realisasi = dateFormatter.format(calendarView.getDate());
         String keterangan = "cobacoba";
         int realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
         int revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
-            uploadRealisasi(
-                    tanggal_realisasi,
-                    keterangan,
-                    realisasi_nilai,
-                    revenue_realisasi_nilai
-                    );
+        uploadRealisasi(
+                tanggal_realisasi,
+                keterangan,
+                realisasi_nilai,
+                revenue_realisasi_nilai
+        );
     }
 
     private void uploadRealisasi(

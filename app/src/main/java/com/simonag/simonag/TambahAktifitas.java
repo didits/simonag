@@ -1,6 +1,5 @@
 package com.simonag.simonag;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -19,18 +19,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
+import com.simonag.simonag.model.Satuan;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -56,10 +67,7 @@ public class TambahAktifitas extends AppCompatActivity {
     Button button;
     @BindView(R.id.sp_kategori)
     Spinner spKategori;
-    @BindView(R.id.sp_satuan)
-    Spinner spSatuan;
-    HashMap<Integer, String> kategoriMap, satuanMap;
-    DatePickerDialog datepicker;
+    HashMap<String, Integer> satuanMap;
     SimpleDateFormat dateFormatter;
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
@@ -70,6 +78,10 @@ public class TambahAktifitas extends AppCompatActivity {
     TextView tvTargetPresentase;
     @BindView(R.id.calendarView)
     CalendarView calendarView;
+    @BindView(R.id.judul_revenue)
+    TextView judulRevenue;
+    @BindView(R.id.ac_satuan)
+    AutoCompleteTextView acSatuan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +94,11 @@ public class TambahAktifitas extends AppCompatActivity {
         setContentView(R.layout.activity_tambah_aktifitas);
         ButterKnife.bind(this);
         avi.hide();
-        setTitle("Tambah Aktivitas");
         showActionBar();
+        setTitle("Tambah Aktifitas");
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 //        Kategori spinner
         String[] kategoriArray = new String[3];
-        kategoriMap = new HashMap<Integer, String>();
-        kategoriMap.put(0, "Kualitas");
-        kategoriMap.put(1, "Kuantitas");
-        kategoriMap.put(2, "Komersial");
         kategoriArray[0] = "Kualitas";
         kategoriArray[1] = "Kuantitas";
         kategoriArray[2] = "Komersial";
@@ -101,16 +110,24 @@ public class TambahAktifitas extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 int item = spKategori.getSelectedItemPosition();
                 if (item == 0) {
-                    etTarget.setVisibility(View.GONE);
+                    etRevenue.setVisibility(View.GONE);
+                    judulRevenue.setVisibility(View.GONE);
+                    acSatuan.setText("%");
+                    acSatuan.setEnabled(false);
                     tvTargetPresentase.setVisibility(View.VISIBLE);
                     etTarget.setVisibility(View.GONE);
                 } else if (item == 1) {
-                    etTarget.setVisibility(View.VISIBLE);
+                    etRevenue.setVisibility(View.GONE);
+                    judulRevenue.setVisibility(View.GONE);
+                    acSatuan.setEnabled(true);
                     tvTargetPresentase.setVisibility(View.GONE);
-                    etTarget.setVisibility(View.GONE);
+                    etTarget.setVisibility(View.VISIBLE);
                 } else {
-                    etTarget.setVisibility(View.VISIBLE);
+                    etRevenue.setVisibility(View.VISIBLE);
+                    judulRevenue.setVisibility(View.VISIBLE);
+                    acSatuan.setEnabled(true);
                     tvTargetPresentase.setVisibility(View.GONE);
+                    etTarget.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -120,28 +137,23 @@ public class TambahAktifitas extends AppCompatActivity {
             }
 
         });
-//        Satuan Spinner
-        String[] satuanArray = new String[5];
-        satuanMap = new HashMap<Integer, String>();
-        satuanMap.put(0, "Unit");
-        satuanMap.put(1, "Gigabyte");
-        satuanMap.put(2, "Penumpang");
-        satuanMap.put(3, "Pelanggan");
-        satuanMap.put(4, "Orang");
-        satuanArray[0] = "Unit";
-        satuanArray[1] = "Gigabyte";
-        satuanArray[2] = "Penumpang";
-        satuanArray[3] = "Pelanggan";
-        satuanArray[4] = "Orang";
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, satuanArray);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSatuan.setAdapter(adapter2);
+        getSatuan();
         id_program = getIntent().getExtras().getInt("id_program");
         if (getIntent().hasExtra("aktifitas")) {
+            button.setText("Simpan");
+            setTitle("Edit Aktivfitas");
             aktifitas = Parcels.unwrap(getIntent().getParcelableExtra("aktifitas"));
             etNama.setText(aktifitas.getNama());
             etTarget.setText(aktifitas.getTarget() + "");
+            tvTargetPresentase.setText(aktifitas.getTarget() + "");
             etRevenue.setText(aktifitas.getRealisasi() + "");
+            spKategori.setSelection(aktifitas.getIdKategori()-1);
+            acSatuan.setText(aktifitas.getSatuan());
+            try {
+                calendarView.setDate(dateFormatter.parse(aktifitas.getDuedate()).getTime(), true, true);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -205,13 +217,13 @@ public class TambahAktifitas extends AppCompatActivity {
 
     private void tambah_aktifitas() {
         int id_kategori = spKategori.getSelectedItemPosition() + 1;
-        int id_satuan = 0;
-        String nama_satuan = spKategori.getSelectedItem().toString();
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        int id_satuan = satuanMap.get(acSatuan.getText().toString());
+        String nama_satuan = acSatuan.getText().toString();
         String deadline = dateFormatter.format(calendarView.getDate());
         String keterangan = "cobacoba";
         String nama_aktivitas = etNama.getText().toString();
         int target_nilai = Integer.parseInt(etTarget.getText().toString());
+        if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
         int revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
         if (getIntent().hasExtra("aktifitas"))
             editAktifitas(
@@ -365,6 +377,82 @@ public class TambahAktifitas extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    private void getSatuan() {
+        avi.show();
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url = Config.URL_GET_ALL_SATUAN + tokena;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        avi.hide();
+                        try {
+                            if (response.getString("status").equals("success")) {
+                                ArrayList<Satuan> db = jsonDecodeSatuan(response.getString("satuan"));
+                                String[] satuanArray = new String[db.size()];
+                                satuanMap = new HashMap<>();
+                                for (int i = 0; i < db.size(); i++) {
+                                    satuanMap.put(db.get(i).getNama_satuan(), db.get(i).getId_satuan());
+                                    satuanArray[i] = db.get(i).getNama_satuan();
+                                }
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(TambahAktifitas.this, android.R.layout.simple_list_item_1,satuanArray);
+                                acSatuan.setAdapter(adapter);
+                                acSatuan.setThreshold(1);
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(TambahAktifitas.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getSatuan();
+                                    }
+                                });
+                            }
+
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
+        queue.add(getRequest);
+    }
+
+
+    public ArrayList<Satuan> jsonDecodeSatuan(String jsonStr) {
+        ArrayList<Satuan> billing = new ArrayList<>();
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+                    JSONObject jObject = transaksi.getJSONObject(i);
+                    Satuan d = new Satuan(
+                            jObject.getInt("id_satuan"),
+                            jObject.getString("nama_satuan")
+                    );
+                    billing.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return billing;
     }
 
 }

@@ -14,6 +14,9 @@ public class Program {
     double kualitas_persen;
     double kuantitas_persen;
     double komersial_persen;
+
+//    String keterangan;
+
     public Program(){}
     public Program(int no, int id_program, String nama_program, Double realisasi_persen) {
         this.no = no;
