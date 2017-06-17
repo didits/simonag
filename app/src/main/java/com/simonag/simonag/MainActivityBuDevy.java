@@ -38,6 +38,8 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.model.DashboardBuDevy;
+import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -61,7 +63,8 @@ public class MainActivityBuDevy extends AppCompatActivity {
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    ArrayList<Dashboard> db = new ArrayList<>();
+    ArrayList<DashboardBuDevy> db = new ArrayList<>();
+    ArrayList<Kategori> db_kategori = new ArrayList<>();
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.avi)
@@ -133,10 +136,11 @@ public class MainActivityBuDevy extends AppCompatActivity {
                 .build();
 
         //result.setSelection(1, true);
+
         getDashboard();
     }
 
-    private void createTabIcons(Double kualitas, Double kapasitas, Double komersial) {
+    private void createTabIcons() {
 
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
@@ -225,21 +229,22 @@ public class MainActivityBuDevy extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_DASHBOARD + tokena;
+        final String url = Config.URL_GET_DASHBOARD_KOMISARIS + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("respon", response.toString());
+                        Log.d("respons", response.toString());
                         try {
                             if(response.getString("status").equals("success")){
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
+                                db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                                 if (viewPager != null) {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                     setupViewPager(viewPager);
                                 }
                                 tabLayout.setupWithViewPager(viewPager);
-                                jsonDecodePersentaseKategori(response.getString("kategori"));
+                                createTabIcons();
                                 avi.hide();
                             }else if(response.getString("status").equals("invalid-token")){
                                 GetToken k = new GetToken(MainActivityBuDevy.this);
@@ -272,21 +277,21 @@ public class MainActivityBuDevy extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    public ArrayList<Dashboard> jsonDecodeBilling(String jsonStr) {
-        ArrayList<Dashboard> billing = new ArrayList<>();
+
+    public ArrayList<DashboardBuDevy> jsonDecodeBilling(String jsonStr) {
+        ArrayList<DashboardBuDevy> billing = new ArrayList<>();
 
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    Dashboard d = new Dashboard(
-                            i,
+                    DashboardBuDevy d = new DashboardBuDevy(
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
-                            jObject.getDouble("komersial_persen"),
-                            jObject.getDouble("kualitas_persen"),
-                            jObject.getDouble("kapasitas_persen"),
+                            jObject.getString("keterangan"),
+                            jObject.getInt("total_rupiah"),
+                            jObject.getInt("total_aktivitas"),
                             jObject.getString("image")
                     );
                     billing.add(d);
@@ -299,30 +304,31 @@ public class MainActivityBuDevy extends AppCompatActivity {
         return billing;
     }
 
-    public void jsonDecodePersentaseKategori(String jsonStr) {
-        Double kualitas = 0.0, kapasitas = 0.0, komersial = 0.0;
+    public ArrayList<Kategori> jsonDecodeAllKategori(String jsonStr) {
+        ArrayList<Kategori> billing = new ArrayList<>();
 
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    if (jObject.getString("nama_kategori").equals("kualitas")) {
-                        kualitas = jObject.getDouble("realisasi_persen");
-                    } else if (jObject.getString("nama_kategori").equals("kapasitas")) {
-                        kapasitas = jObject.getDouble("realisasi_persen");
-                    } else if (jObject.getString("nama_kategori").equals("komersial")) {
-                        komersial = jObject.getDouble("realisasi_persen");
-                    }
+                    Kategori d = new Kategori(
+                            jObject.getInt("id_kategori"),
+                            jObject.getString("nama_kategori"),
+                            jObject.getInt("status"),
+                            jObject.getInt("total_rupiah"),
+                            jObject.getInt("total_aktivitas")
+                    );
+                    billing.add(d);
                 }
-
-                createTabIcons(kualitas, kapasitas, komersial);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        return billing;
     }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {

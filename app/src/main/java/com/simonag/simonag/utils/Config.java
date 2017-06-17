@@ -6,6 +6,7 @@ package com.simonag.simonag.utils;
 
 public class Config {
     public static final String URL = "http://simonag.owline.org/api/v1/";
+    public static final String URL_2 = "http://simonag.owline.org/api/v2/";
     public static final String URL_GAMBAR = "http://simonag.owline.org/logo/";
     public static final String URL_LOGIN = URL + "login";
     public static final String URL_GET_ALL_PER = URL + "get/allPerusahaan/";
@@ -16,7 +17,7 @@ public class Config {
     public static final String URL_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
     public static final String URL_GET_TARGET_PROGRAM = URL + "get/targetProgram/";
     public static final String URL_GET_TOKEN = URL + "getToken";
-    public static final String URL_POST_PROGRAM_PER= URL + "post/programPerusahaan/";
+    public static final String URL_POST_PROGRAM_PER = URL + "post/programPerusahaan/";
     public static final String URL_POST_TARGET_PROGRAM = URL + "post/targetProgram/";
     public static final String URL_POST_REALISASI_TARGET = URL + "post/realisasiTarget/";
     public static final String URL_EDIT_TARGET_PROGRAM = URL + "edit/targetProgram/";
@@ -26,6 +27,12 @@ public class Config {
     public static final String URL_FORGOT_PASS_REQ = URL + "sendEmailForgotPassword";
     public static final String URL_VERIFY_CODE = URL + "verifyCodeEmail";
     public static final String URL_CHANGE_PASS = URL + "changePassword";
+
+    //----------- USER KOMISARIS --------------//
+    public static final String URL_GET_DASHBOARD_KOMISARIS = URL_2 + "get/Dashboard/";
+    public static final String URL_GET_KATEGORI_KOMISARIS = URL_2 + "get/allKategori/";
+    public static final String FILTER_BU_DEVY = "filter";
+
 
     public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword/";
     public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail/";

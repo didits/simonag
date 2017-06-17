@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.simonag.simonag.model.Kategori;
+
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
@@ -31,10 +33,28 @@ public class DashboardAktivitasKategoriFragment extends Fragment {
         View v = inflater.inflate(R.layout.aktifitas_per_kategori, container, false);
         PieChart mPieChart = (PieChart) v.findViewById(R.id.piechart);
 
-        mPieChart.addPieSlice(new PieModel("Freetime", 15, Color.parseColor("#FE6DA8")));
-        mPieChart.addPieSlice(new PieModel("Sleep", 25, Color.parseColor("#56B7F1")));
-        mPieChart.addPieSlice(new PieModel("Work", 35, Color.parseColor("#CDA67F")));
-        mPieChart.addPieSlice(new PieModel("Eating", 9, Color.parseColor("#FED70E")));
+        ArrayList<Kategori> kategoris = ((MainActivityBuDevy) getActivity()).db_kategori;
+        int j = 0;
+        if (j == 0) {
+            for (Kategori k : kategoris) {
+                if (k.getNama().equals("publikasi"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_aktifitas(), Color.parseColor("#FE6DA8")));
+                if (k.getNama().equals("sponsorship"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_aktifitas(), Color.parseColor("#FE6DA8")));
+                if (k.getNama().equals("hospitality"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_aktifitas(), Color.parseColor("#FE6DA8")));
+            }
+        }else {
+            for (Kategori k : kategoris) {
+                if (k.getNama().equals("publikasi"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_rupiah(), Color.parseColor("#FE6DA8")));
+                if (k.getNama().equals("sponsorship"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_rupiah(), Color.parseColor("#FE6DA8")));
+                if (k.getNama().equals("hospitality"))
+                    mPieChart.addPieSlice(new PieModel(k.getNama(), k.getTotal_rupiah(), Color.parseColor("#FE6DA8")));
+            }
+        }
+
 
         mPieChart.startAnimation();
 

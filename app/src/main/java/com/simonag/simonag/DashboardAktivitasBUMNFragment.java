@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.model.DashboardBuDevy;
 import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static java.lang.String.format;
 
 
 /**
@@ -40,13 +44,14 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_dashboard_list, container, false);
         setupRecyclerView(rv);
+        Log.d("get_data", ((MainActivityBuDevy) getActivity()).db.size()+"");
         return rv;
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivityBuDevy) getActivity()).db));
+                ((MainActivityBuDevy) getActivity()).db, 0));
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -54,11 +59,13 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private ArrayList<Dashboard> mValues;
+        private ArrayList<DashboardBuDevy> mValues;
         Activity c;
+        int nilai_tertinggi=0;
+        int tipe = 0;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Dashboard> mBoundString;
+            public ArrayList<DashboardBuDevy> mBoundString;
 
 
             public final View mView;
@@ -83,11 +90,24 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Dashboard> items) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<DashboardBuDevy> items, int tipe) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
             this.c = context;
+            this.tipe = tipe;
+            if(tipe == 0){
+                for (DashboardBuDevy k:items){
+                    if(nilai_tertinggi<k.getTotal_aktifitas())
+                        nilai_tertinggi = k.getTotal_aktifitas();
+                }
+            }else {
+                for (DashboardBuDevy k:items){
+                    if(nilai_tertinggi<k.getTotal_rupiah())
+                        nilai_tertinggi = k.getTotal_rupiah();
+                }
+            }
+
         }
 
         @Override
@@ -100,8 +120,30 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.text1.setText(mValues.get(position).getNama_bumn());
-            holder.text2.setText(mValues.get(position).getPersentase_kapasitas() + " %");
+            holder.text1.setText(mValues.get(position).getNama_perusahaan());
+            holder.text2.setVisibility(View.VISIBLE);
+
+            int hasil=0;
+            if(tipe==0){
+                try {
+                    hasil = mValues.get(position).getTotal_aktifitas()/nilai_tertinggi*100;
+                }catch (Exception e){
+                    Log.e("bind_error", e.toString());
+                }
+                holder.text2.setText(mValues.get(position).getTotal_aktifitas()+"");
+            }else {
+                try {
+                    hasil = mValues.get(position).getTotal_rupiah()/nilai_tertinggi*100;
+                }catch (Exception e){
+                    Log.e("bind_error", e.toString());
+                }
+                holder.text2.setText("Rp. " + format("%,d", mValues.get(position).getTotal_rupiah()).replace(",", ".")+"");
+            }
+            holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
+
+            final int total = hasil;
+
+            Log.d("hasil", total +"");
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -110,7 +152,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
                     c.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getPersentase_kapasitas()) {
+                            if (holder.progress.getProgress() < total) {
                                 holder.progress.incrementProgressBy(1);
                             }
                         }
@@ -123,14 +165,14 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent i = new Intent(context, ProgramActivity.class);
-                    i.putExtra("KEY", "" + mValues.get(position).getId_bumn());
-                    i.putExtra("NAMA_PERUSAHAAN", "" + mValues.get(position).getNama_bumn());
-                    i.putExtra("GAMBAR_PERUSAHAAN", "" + mValues.get(position).getLink_gambar());
+                    i.putExtra("KEY", "" + mValues.get(position).getId_perusahaan());
+                    i.putExtra("NAMA_PERUSAHAAN", "" + mValues.get(position).getNama_perusahaan());
+                    i.putExtra("GAMBAR_PERUSAHAAN", "" + mValues.get(position).getImage());
                     context.startActivity(i);
 
                 }
             });
-            String url = Config.URL_GAMBAR + mValues.get(position).getLink_gambar();
+            String url = Config.URL_GAMBAR + mValues.get(position).getImage();
 
             Glide.with(holder.avatar.getContext())
                     .load(url)
