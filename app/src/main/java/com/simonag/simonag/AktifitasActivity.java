@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -342,7 +341,10 @@ public class AktifitasActivity extends AppCompatActivity {
                             jObject.getInt("realisasi_revenue"),
                             jObject.getString("due_date"),
                             jObject.getString("nama_satuan"),
-                            jObject.getDouble("realisasi_persen")
+                            jObject.getDouble("realisasi_persen"),
+                            jObject.getInt("status_revenue"),
+                            jObject.getInt("id_kategori"),
+                            jObject.getInt("id_satuan")
                     );
                     billing.add(d);
                 }

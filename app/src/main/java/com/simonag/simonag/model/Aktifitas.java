@@ -18,8 +18,16 @@ public class Aktifitas {
     int realisasi_revenue;
     String duedate;
     String satuan;
+
+    int statusRevenue;
+    int idKategori;
+    int idSatuan;
+
+//    String keterangan;
+//    String koordinat
+
     public Aktifitas(){}
-    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan ,double realisasi_persen) {
+    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan ,double realisasi_persen, int statusRevenue, int idKategori,int idSatuan) {
         this.no = no;
         this.id = id;
         this.nama = nama;
@@ -31,6 +39,33 @@ public class Aktifitas {
         this.duedate = duedate;
         this.satuan = satuan;
         this.realisasi_persen = realisasi_persen;
+        this.statusRevenue=statusRevenue;
+        this.idKategori=idKategori;
+        this.idSatuan=idSatuan;
+    }
+
+    public int getIdKategori() {
+        return idKategori;
+    }
+
+    public int getIdSatuan() {
+        return idSatuan;
+    }
+
+    public int getStatusRevenue() {
+        return statusRevenue;
+    }
+
+    public void setIdKategori(int idKategori) {
+        this.idKategori = idKategori;
+    }
+
+    public void setIdSatuan(int idSatuan) {
+        this.idSatuan = idSatuan;
+    }
+
+    public void setStatusRevenue(int statusRevenue) {
+        this.statusRevenue = statusRevenue;
     }
 
     public double getRealisasi_persen() {
