@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +75,8 @@ public class ProgramActivity extends AppCompatActivity {
     LinearLayout edit;
     @BindView(R.id.hapus)
     LinearLayout hapus;
+    @BindView(R.id.action)
+    RelativeLayout action;
     EditText edit_nama;
 
 
@@ -112,6 +115,12 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         ButterKnife.bind(this);
+        action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setView("hidden");
+            }
+        });
         tambahProgram.setEnabled(false);
         tambahProgram.setBackground(getResources().getDrawable(R.drawable.button_disabled));
         program_text.addTextChangedListener(new TextWatcher() {

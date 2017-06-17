@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -74,6 +75,8 @@ public class AktifitasActivity extends AppCompatActivity {
     LinearLayout edit;
     @BindView(R.id.hapus)
     LinearLayout hapus;
+    @BindView(R.id.action)
+    RelativeLayout action;
 
 
     @Override
@@ -108,6 +111,12 @@ public class AktifitasActivity extends AppCompatActivity {
                 .into(gambar_bumn);
 
         ButterKnife.bind(this);
+        action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setView("hidden");
+            }
+        });
         if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(value)) {
             tambahAktifitas.setVisibility(View.GONE);
             setTitle("Progress Aktifitas");

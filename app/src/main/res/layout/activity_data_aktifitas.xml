@@ -19,6 +19,7 @@
             android:layout_marginBottom="@dimen/padding">
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/nama_bumn"
                 fontPath="fonts/Asap-Bold.ttf"
                 android:layout_width="wrap_content"
@@ -29,9 +30,9 @@
 
             <ImageView
                 android:id="@+id/gambar_bumn"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:src="@drawable/bundar" />
         </RelativeLayout>
 
@@ -55,6 +56,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -65,8 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Program: "
-                        android:textSize="10sp" />
+                        android:text="Program: " />
                 </LinearLayout>
 
                 <LinearLayout

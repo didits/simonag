@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                custom:progress_reached_bar_height="3dp"
+                custom:progress_reached_bar_height="12dp"
                 custom:progress_reached_color="@color/colorPrimary"
                 custom:progress_text_color="@color/colorPrimary"
                 custom:progress_text_size="14sp"

@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         );
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setTitle(getResources().getString(R.string.app_name));
+        setTitle("Pencapaian 3K");
         setSupportActionBar(toolbar);
 
         //initialize and create the image loader logic

@@ -26,6 +26,7 @@
             android:paddingTop="6dp">
 
             <TextView
+                android:visibility="gone"
                 android:id="@android:id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,8 +48,8 @@
                 android:id="@android:id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                custom:progress_reached_bar_height="3dp"
+                android:layout_centerInParent="true"
+                custom:progress_reached_bar_height="12dp"
                 custom:progress_reached_color="@color/colorPrimary"
                 custom:progress_text_color="@color/colorPrimary"
                 custom:progress_text_size="14sp"
