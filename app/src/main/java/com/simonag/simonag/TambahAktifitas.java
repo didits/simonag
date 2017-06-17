@@ -2,17 +2,19 @@ package com.simonag.simonag;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,6 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -53,8 +54,6 @@ public class TambahAktifitas extends AppCompatActivity {
     EditText etRevenue;
     @BindView(R.id.button)
     Button button;
-    @BindView(R.id.tv_duedate)
-    TextView tvDuedate;
     @BindView(R.id.sp_kategori)
     Spinner spKategori;
     @BindView(R.id.sp_satuan)
@@ -66,6 +65,11 @@ public class TambahAktifitas extends AppCompatActivity {
     AVLoadingIndicatorView avi;
     Aktifitas aktifitas;
     int id_program;
+    NumberPicker presentase;
+    @BindView(R.id.tv_target_presentase)
+    TextView tvTargetPresentase;
+    @BindView(R.id.calendarView)
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,30 @@ public class TambahAktifitas extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spKategori.setAdapter(adapter);
+        spKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                int item = spKategori.getSelectedItemPosition();
+                if (item == 0) {
+                    etTarget.setVisibility(View.GONE);
+                    tvTargetPresentase.setVisibility(View.VISIBLE);
+                    etTarget.setVisibility(View.GONE);
+                } else if (item == 1) {
+                    etTarget.setVisibility(View.VISIBLE);
+                    tvTargetPresentase.setVisibility(View.GONE);
+                    etTarget.setVisibility(View.GONE);
+                } else {
+                    etTarget.setVisibility(View.VISIBLE);
+                    tvTargetPresentase.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+
+        });
 //        Satuan Spinner
         String[] satuanArray = new String[5];
         satuanMap = new HashMap<Integer, String>();
@@ -109,13 +137,37 @@ public class TambahAktifitas extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spSatuan.setAdapter(adapter2);
         id_program = getIntent().getExtras().getInt("id_program");
-        if(getIntent().hasExtra("aktifitas")) {
+        if (getIntent().hasExtra("aktifitas")) {
             aktifitas = Parcels.unwrap(getIntent().getParcelableExtra("aktifitas"));
-            tvDuedate.setText(aktifitas.getDuedate());
             etNama.setText(aktifitas.getNama());
-            etTarget.setText(aktifitas.getTarget()+"");
-            etRevenue.setText(aktifitas.getRealisasi()+"");
+            etTarget.setText(aktifitas.getTarget() + "");
+            etRevenue.setText(aktifitas.getRealisasi() + "");
         }
+    }
+
+    private void getpresentase() {
+        final AlertDialog dialog = buildDialog("Targe");
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvTargetPresentase.setText(String.valueOf(presentase.getValue()));
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private AlertDialog buildDialog(String title) {
+        AlertDialog.Builder result = new AlertDialog.Builder(this);
+        View alertView = getLayoutInflater().inflate(R.layout.dialog_presentase, null);
+        presentase = (NumberPicker) alertView.findViewById(R.id.presentase);
+        presentase.setMinValue(0);
+        presentase.setMaxValue(100);
+        result.setTitle(title)
+                .setView(alertView)
+                .setPositiveButton("Simpan", null);
+        AlertDialog dialog = result.create();
+        dialog.show();
+        return dialog;
     }
 
     private void showActionBar() {
@@ -138,41 +190,30 @@ public class TambahAktifitas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.tv_duedate, R.id.button})
+    @OnClick({R.id.button, R.id.tv_target_presentase})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_duedate:
-                getdate();
-                break;
             case R.id.button:
                 tambah_aktifitas();
+                break;
+            case R.id.tv_target_presentase:
+                getpresentase();
                 break;
         }
     }
 
-    private void getdate() {
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        Calendar newCalendar = Calendar.getInstance();
-        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                tvDuedate.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        datepicker.show();
-    }
 
     private void tambah_aktifitas() {
-        int id_kategori = spKategori.getSelectedItemPosition()+1;
+        int id_kategori = spKategori.getSelectedItemPosition() + 1;
         int id_satuan = 0;
         String nama_satuan = spKategori.getSelectedItem().toString();
-        String deadline = tvDuedate.getText().toString();
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        String deadline = dateFormatter.format(calendarView.getDate());
         String keterangan = "cobacoba";
         String nama_aktivitas = etNama.getText().toString();
         int target_nilai = Integer.parseInt(etTarget.getText().toString());
         int revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
-        if(getIntent().hasExtra("aktifitas"))
+        if (getIntent().hasExtra("aktifitas"))
             editAktifitas(
                     aktifitas.getId(),
                     id_program,
@@ -185,16 +226,16 @@ public class TambahAktifitas extends AppCompatActivity {
                     target_nilai,
                     revenue_target_nilai);
         else
-        uploadAktifitas(
-                id_program,
-                id_kategori,
-                id_satuan,
-                nama_satuan,
-                deadline,
-                keterangan,
-                nama_aktivitas,
-                target_nilai,
-                revenue_target_nilai);
+            uploadAktifitas(
+                    id_program,
+                    id_kategori,
+                    id_satuan,
+                    nama_satuan,
+                    deadline,
+                    keterangan,
+                    nama_aktivitas,
+                    target_nilai,
+                    revenue_target_nilai);
     }
 
 

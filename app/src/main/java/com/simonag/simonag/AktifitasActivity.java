@@ -109,6 +109,7 @@ public class AktifitasActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(value)) {
             tambahAktifitas.setVisibility(View.GONE);
+            setTitle("Progress Aktifitas");
         }
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();

@@ -40,7 +40,6 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Program;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
-import com.simonag.simonag.utils.RegexInput;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -58,12 +57,9 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static java.security.AccessController.getContext;
-
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
     String value, nama_perusahaan, nama_gambar;
-    boolean editflag = false;
     Program temp_progam;
     @BindView(R.id.program)
     EditText program_text;
