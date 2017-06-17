@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case 2:
                                 Intent i = new Intent(MainActivity.this, ProgramActivity.class);
-                                i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
-                                i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
+                                i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN, 0));
+                                i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN, "").toUpperCase());
                                 startActivity(i);
                                 break;
                             case 3:
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("respon", response.toString());
                         try {
-                            if(response.getString("status").equals("success")){
+                            if (response.getString("status").equals("success")) {
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
                                 if (viewPager != null) {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                                 tabLayout.setupWithViewPager(viewPager);
                                 jsonDecodePersentaseKategori(response.getString("kategori"));
                                 avi.hide();
-                            }else if(response.getString("status").equals("invalid-token")){
+                            } else if (response.getString("status").equals("invalid-token")) {
                                 GetToken k = new GetToken(MainActivity.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
@@ -317,13 +317,31 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
+                    double komersial = -1;
+                    double kualitas = -1;
+                    double kapasitas = -1;
+                    try {
+                        komersial = jObject.getDouble("komersial_persen");
+                    } catch (Exception e) {
+                    }
+
+                    try {
+                        kualitas = jObject.getDouble("kualitas_persen");
+                    } catch (Exception e) {
+                    }
+
+                    try {
+                        kapasitas = jObject.getDouble("kapasitas_persen");
+                    } catch (Exception e) {
+                    }
+
                     Dashboard d = new Dashboard(
                             i,
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
-                            jObject.getDouble("komersial_persen"),
-                            jObject.getDouble("kualitas_persen"),
-                            jObject.getDouble("kapasitas_persen"),
+                            komersial,
+                            kualitas,
+                            kapasitas,
                             jObject.getString("image")
                     );
                     billing.add(d);
