@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                         Prefs.putString(Config.NAMA_BUMN, jObject.getString("nama"));
                         Prefs.putInt(Config.STATUS_BUMN, jObject.getInt("active"));
                         Prefs.putString(Config.TOKEN_BUMN, jObject.getString("token"));
+                        Prefs.putString(Config.FOTO, jObject.getString("foto"));
                         Prefs.putString(Config.EMAIL_BUMN, loginUsername.getText().toString());
                         Prefs.putString(Config.PASSWORD_BUMN, loginPassword.getText().toString());
                         Prefs.putBoolean(Config.STATUS_LOGIN, true);

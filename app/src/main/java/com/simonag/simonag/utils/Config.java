@@ -34,6 +34,7 @@ public class Config {
     //----------- USER BUMN --------------//
     public static final String SHARED_USER = "user";
     public static final String ID_USER = "id_user";
+    public static final String FOTO = "foto";
     public static final String ID_BUMN = "id_bumn";
     public static final String ID_ROLE = "id_role";
     public static final String NAMA_BUMN = "nama_bumn";

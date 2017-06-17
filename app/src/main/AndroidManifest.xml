@@ -32,8 +32,8 @@
         <activity android:name=".ResetPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".VerifikasiKodeReset" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".GantiPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ProgramActivity" android:theme="@style/AppTheme" android:label="Progress Program" android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".AktifitasActivity" android:theme="@style/AppTheme" android:label="Progress Aktivitas" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ProgramActivity" android:theme="@style/AppTheme" android:label="Input Program" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AktifitasActivity" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TentangActivity" android:theme="@style/AppTheme" android:label="View Program" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahAktifitas" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahRealisasi" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
