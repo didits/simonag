@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,8 +40,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
         Log.d("ss",url);
         final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
-                .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
+                .withEmail(Prefs.getString(Config.EMAIL_BUMN, ""));
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
@@ -342,6 +346,84 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.tanggal:
+                final AlertDialogCustom ad = new AlertDialogCustom(this);
+                ad.tanggal_awal_akhir(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView tanggal_awal = (TextView) view.getRootView().findViewById(R.id.tanggal_awal);
+                        TextView tanggal_akhir = (TextView) view.getRootView().findViewById(R.id.tanggal_akhir);
+                        getDashboardFilter(tanggal_awal.getText().toString(), tanggal_akhir.getText().toString());
+                        ad.dismiss();
+                    }
+                });
+                return true;
+            case R.id.aktivitas:
+                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                getDashboard();
+                return true;
+            case R.id.biaya:
+                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
+                getDashboard();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void getDashboardFilter(String tanggal_awal, String tanggal_akhir) {
+        avi.show();
+        VolleyClass cek = new VolleyClass(this, true);
+        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("get_server", s);
+                try {
+                    JSONObject response = new JSONObject(s);
+                    if (response.getString("status").equals("success")) {
+                        db = jsonDecodeBilling(response.getString("perusahaan"));
+                        if (viewPager != null) {
+                            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                            setupViewPager(viewPager);
+                        }
+                        tabLayout.setupWithViewPager(viewPager);
+                        jsonDecodePersentaseKategori(response.getString("kategori"));
+                        avi.hide();
+                    } else if (response.getString("status").equals("invalid-token")) {
+                        GetToken k = new GetToken(MainActivity.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                getDashboard();
+                            }
+                        });
+                    }
+
+                } catch (JSONException E) {
+                    Log.e("json_error", E.toString());
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        }, Config.URL_GET_DASHBOARD_TANGGAL + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
+                "tanggal_awal" + "|" + tanggal_awal,
+                "tanggal_akhir" + "|" + tanggal_akhir
+        });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_pak_ajs, menu);
+        return true;
     }
 
     @Override

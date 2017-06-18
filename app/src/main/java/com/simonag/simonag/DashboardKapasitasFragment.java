@@ -106,20 +106,6 @@ public class DashboardKapasitasFragment extends Fragment {
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_kapasitas() + " %");
             holder.progress.setProgress((int) mValues.get(position).getPersentase_kapasitas());
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getPersentase_kapasitas()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

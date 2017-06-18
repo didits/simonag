@@ -29,12 +29,12 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/isi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="Tanggal Awal" />
         <TextView
+            android:id="@+id/tanggal_awal"
             android:layout_marginTop="5dp"
             android:padding="@dimen/padding"
             android:layout_width="match_parent"
@@ -55,6 +55,7 @@
             android:gravity="left"
             android:text="Tanggal Akhir" />
         <TextView
+            android:id="@+id/tanggal_akhir"
             android:layout_marginTop="5dp"
             android:padding="@dimen/padding"
             android:layout_width="match_parent"

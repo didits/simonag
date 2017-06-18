@@ -13,6 +13,7 @@ public class Config {
     public static final String URL_GET_ALL_KATEGORI = URL + "get/allKategori/";
     public static final String URL_GET_ALL_SATUAN = URL + "get/allSatuan/";
     public static final String URL_GET_DASHBOARD = URL + "get/Dashboard/";
+    public static final String URL_GET_DASHBOARD_TANGGAL = URL + "post/filterDashboard/";
     public static final String URL_GET_PROGRAM_PER = URL + "get/programPerusahaan/";
     public static final String URL_DELETE_PROGRAM_PER = URL + "delete/programPerusahaan/";
     public static final String URL_GET_TARGET_PROGRAM = URL + "get/targetProgram/";
@@ -30,6 +31,7 @@ public class Config {
 
     //----------- USER KOMISARIS --------------//
     public static final String URL_GET_DASHBOARD_KOMISARIS = URL_2 + "get/Dashboard/";
+    public static final String URL_GET_DASHBOARD_KOMISARIS_TANGGAL = URL_2 + "post/filterDashboard/";
     public static final String URL_GET_KATEGORI_KOMISARIS = URL_2 + "get/allKategori/";
     public static final String FILTER_BU_DEVY = "filter";
 

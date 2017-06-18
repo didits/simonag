@@ -106,20 +106,7 @@ public class DashboardKomersialFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_komersial()+" %");
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getPersentase_komersial()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
+            holder.progress.setProgress((int) mValues.get(position).getPersentase_komersial());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

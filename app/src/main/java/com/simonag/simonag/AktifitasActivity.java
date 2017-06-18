@@ -456,20 +456,7 @@ public class AktifitasActivity extends AppCompatActivity {
                 });
 
             }
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
+            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
 
             if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val)) {
                 holder.viewDetail.setOnClickListener(new View.OnClickListener() {

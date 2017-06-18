@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.DefaultRetryPolicy;
@@ -51,6 +53,7 @@ import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -108,7 +111,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
+                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, ""))
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -116,13 +119,11 @@ public class MainActivityBuDevy extends AppCompatActivity {
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withDrawerWidthDp(200)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Semua").withIcon(FontAwesome.Icon.faw_users),
-                        new PrimaryDrawerItem().withIdentifier(4).withName("BUMN").withIcon(FontAwesome.Icon.faw_user_secret),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
                         new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
@@ -298,6 +299,51 @@ public class MainActivityBuDevy extends AppCompatActivity {
         queue.add(getRequest);
     }
 
+    private void getDashboardFilter(String tanggal_awal, String tanggal_akhir) {
+        avi.show();
+        VolleyClass cek = new VolleyClass(this, true);
+        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("get_server", s);
+                try {
+                    JSONObject response = new JSONObject(s);
+                    if(response.getString("status").equals("success")){
+                        db = jsonDecodeBilling(response.getString("perusahaan"));
+                        db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
+                        db_tanggal = jsonPertanggal(response.getString("pertanggal"));
+                        if (viewPager != null) {
+                            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                            setupViewPager(viewPager);
+                        }
+                        tabLayout.setupWithViewPager(viewPager);
+                        createTabIcons();
+                        avi.hide();
+                    }else if(response.getString("status").equals("invalid-token")){
+                        GetToken k = new GetToken(MainActivityBuDevy.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                getDashboard();
+                            }
+                        });
+                    }
+
+                } catch (JSONException E) {
+                    Log.e("json_error", E.toString());
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        }, Config.URL_GET_DASHBOARD_KOMISARIS_TANGGAL + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
+                "tanggal_awal" + "|" + tanggal_awal,
+                "tanggal_akhir" + "|" + tanggal_akhir
+        });
+    }
+
 
     public ArrayList<DashboardBuDevy> jsonDecodeBilling(String jsonStr) {
         ArrayList<DashboardBuDevy> billing = new ArrayList<>();
@@ -378,11 +424,14 @@ public class MainActivityBuDevy extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tanggal:
-                AlertDialogCustom ad = new AlertDialogCustom(this);
+                final AlertDialogCustom ad = new AlertDialogCustom(this);
                 ad.tanggal_awal_akhir(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getdate();
+                        TextView tanggal_awal = (TextView) view.getRootView().findViewById(R.id.tanggal_awal);
+                        TextView tanggal_akhir = (TextView) view.getRootView().findViewById(R.id.tanggal_akhir);
+                        getDashboardFilter(tanggal_awal.getText().toString(), tanggal_akhir.getText().toString());
+                        ad.dismiss();
                     }
                 });
                 return true;
@@ -399,18 +448,6 @@ public class MainActivityBuDevy extends AppCompatActivity {
         }
     }
 
-    private void getdate() {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        Calendar newCalendar = Calendar.getInstance();
-        DatePickerDialog datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                //tvDuedate.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        datepicker.show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

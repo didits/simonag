@@ -592,62 +592,10 @@ public class ProgramActivity extends AppCompatActivity {
                     }
                 });
             }
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
-
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress_kualitas.getProgress() < (int) mValues.get(position).getKualitas_persen()) {
-                                holder.progress_kualitas.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
-
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress_kapasitas.getProgress() < (int) mValues.get(position).getKuantitas_persen()) {
-                                holder.progress_kapasitas.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
-
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress_komersial.getProgress() < (int) mValues.get(position).getKomersial_persen()) {
-                                holder.progress_komersial.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 10);
+            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
+            holder.progress_kualitas.setProgress((int) mValues.get(position).getKualitas_persen());
+            holder.progress_kapasitas.setProgress((int) mValues.get(position).getKuantitas_persen());
+            holder.progress_komersial.setProgress((int) mValues.get(position).getKomersial_persen());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
