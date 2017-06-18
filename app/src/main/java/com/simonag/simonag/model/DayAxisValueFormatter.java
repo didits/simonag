@@ -1,5 +1,7 @@
 package com.simonag.simonag.model;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
@@ -15,16 +17,16 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
     };
 
     private BarLineChartBase<?> chart;
-
-    public DayAxisValueFormatter(BarLineChartBase<?> chart) {
+    private int pembanding;
+    public DayAxisValueFormatter(BarLineChartBase<?> chart,int pembanding) {
         this.chart = chart;
+        this.pembanding=pembanding;
     }
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
 
-        int days = (int) value;
-
+        int days = (int) value+pembanding;
         int year = determineYear(days);
 
         int month = determineMonth(days);
