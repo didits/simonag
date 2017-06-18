@@ -89,7 +89,16 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
-        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
+        ArrayList<Pertanggal> t = ((MainActivityBuDevy) getActivity()).db_tanggal;
+
+        int tanggal=0;
+        int i = 0;
+        for (Pertanggal k : t) {
+            tanggal = Integer.valueOf(k.getTanggal());
+            break;
+        }
+
+        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart,tanggal);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
