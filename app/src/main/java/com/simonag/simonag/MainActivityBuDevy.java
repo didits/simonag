@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.model.DashboardBuDevy;
 import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.model.Pertanggal;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -54,8 +57,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -372,8 +378,13 @@ public class MainActivityBuDevy extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tanggal:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
-                getDashboard();
+                AlertDialogCustom ad = new AlertDialogCustom(this);
+                ad.tanggal_awal_akhir(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getdate();
+                    }
+                });
                 return true;
             case R.id.aktivitas:
                 Prefs.putInt(Config.FILTER_BU_DEVY, 0);
@@ -386,6 +397,19 @@ public class MainActivityBuDevy extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void getdate() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        Calendar newCalendar = Calendar.getInstance();
+        DatePickerDialog datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                //tvDuedate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datepicker.show();
     }
 
     @Override
