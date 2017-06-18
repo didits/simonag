@@ -44,6 +44,7 @@ public class Config {
     public static final String FOTO = "foto";
     public static final String ID_BUMN = "id_bumn";
     public static final String ID_ROLE = "id_role";
+    public static final String ID_TIPE = "id_tipe";
     public static final String NAMA_BUMN = "nama_bumn";
     public static final String STATUS_BUMN = "status_daftar";
     public static final String TOKEN_BUMN = "token_bumn";

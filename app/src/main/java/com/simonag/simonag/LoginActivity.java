@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         if (Prefs.getBoolean(Config.STATUS_LOGIN, false)) {
-            move();
+            move(0, Prefs.getInt(Config.ID_TIPE, 1));
         }
 
         loginButton.setEnabled(false);
@@ -102,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @OnClick({R.id.login_button, R.id.login_lupa})
@@ -118,9 +117,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void move() {
-        Intent i = new Intent(LoginActivity.this, MainActivityBuDevy.class);
-        startActivity(i);
+    private void move(int id_role, int id_tipe) {
+        if (id_tipe == 1) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+        }else if(id_tipe == 2){
+            Intent i = new Intent(LoginActivity.this, MainActivityBuDevy.class);
+            startActivity(i);
+        }
         finish();
     }
 
@@ -134,8 +138,13 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("success")) {
-                        Prefs.putInt(Config.ID_BUMN, jObject.getInt("id_perusahaan"));
+                        if(jObject.getInt("id_role") == 3){
+                            Prefs.putInt(Config.ID_BUMN, -1);
+                        }else {
+                            Prefs.putInt(Config.ID_BUMN, jObject.getInt("id_perusahaan"));
+                        }
                         Prefs.putInt(Config.ID_ROLE, jObject.getInt("id_role"));
+                        Prefs.putInt(Config.ID_TIPE, jObject.getInt("id_tipe"));
                         Prefs.putString(Config.NAMA_BUMN, jObject.getString("nama"));
                         Prefs.putInt(Config.STATUS_BUMN, jObject.getInt("active"));
                         Prefs.putString(Config.TOKEN_BUMN, jObject.getString("token"));
@@ -143,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                         Prefs.putString(Config.EMAIL_BUMN, loginUsername.getText().toString());
                         Prefs.putString(Config.PASSWORD_BUMN, loginPassword.getText().toString());
                         Prefs.putBoolean(Config.STATUS_LOGIN, true);
-                        move();
+                        move(0, jObject.getInt("id_tipe"));
                     } else if (status.equals("failed")) {
                         Toast.makeText(LoginActivity.this, "username / pass salah", Toast.LENGTH_LONG).show();
                     } else {

@@ -45,6 +45,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.model.DashboardBuDevy;
 import com.simonag.simonag.model.Kategori;
+import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -70,6 +71,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
     public Drawer result;
     ArrayList<DashboardBuDevy> db = new ArrayList<>();
     ArrayList<Kategori> db_kategori = new ArrayList<>();
+    ArrayList<Pertanggal> db_tanggal = new ArrayList<>();
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.avi)
@@ -251,6 +253,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                             if(response.getString("status").equals("success")){
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
                                 db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
+                                db_tanggal = jsonPertanggal(response.getString("pertanggal"));
                                 if (viewPager != null) {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                     setupViewPager(viewPager);
@@ -316,6 +319,30 @@ public class MainActivityBuDevy extends AppCompatActivity {
         return billing;
     }
 
+    public ArrayList<Pertanggal> jsonPertanggal(String jsonStr) {
+        ArrayList<Pertanggal> billing = new ArrayList<>();
+
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+                    JSONObject jObject = transaksi.getJSONObject(i);
+                    Pertanggal d = new Pertanggal(
+                            i,
+                            jObject.getString("tanggal"),
+                            jObject.getInt("total_aktivitas"),
+                            jObject.getInt("total_biaya")
+                    );
+                    billing.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return billing;
+    }
+
     public ArrayList<Kategori> jsonDecodeAllKategori(String jsonStr) {
         ArrayList<Kategori> billing = new ArrayList<>();
 
@@ -344,6 +371,10 @@ public class MainActivityBuDevy extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.tanggal:
+                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                getDashboard();
+                return true;
             case R.id.aktivitas:
                 Prefs.putInt(Config.FILTER_BU_DEVY, 0);
                 getDashboard();

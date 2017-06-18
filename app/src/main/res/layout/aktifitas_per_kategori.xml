@@ -11,6 +11,7 @@
         android:padding="8dp"
         app:egLegendTextSize="18sp"
         app:egUsePieRotation="true"
-        app:egValueTextSize="36sp"/>
+        app:egValueTextSize="0sp"
+        app:egValueTextColor="@color/colorWhite"/>
 
 </RelativeLayout>

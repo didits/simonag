@@ -53,10 +53,8 @@
                         android:layout_height="wrap_content"
                         android:text="12 SEP 17"
                         android:textColor="@color/colorAbu"
-                        android:textSize="9sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
-
-
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@android:id/progress"
@@ -72,14 +70,13 @@
 
 
 
-
                 <TextView
                     android:id="@+id/tv_target"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0/100 (Line)"
                     android:textColor="@color/primary"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_realisasi"
@@ -87,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:text="0/100 (%)"
                     android:textColor="@color/primary"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_kategori"
@@ -95,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:text="Kategori"
                     android:textColor="@color/primary"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

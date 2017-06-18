@@ -114,6 +114,26 @@
                     app:indicatorColor="@color/primary"
                     app:indicatorName="BallPulseIndicator" />
 
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/info_program"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/info"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Belum terdapat aktivitas"/>
+                </LinearLayout>
+
+
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_program"
                     android:layout_width="match_parent"

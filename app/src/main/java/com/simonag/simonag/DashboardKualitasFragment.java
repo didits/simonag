@@ -124,7 +124,7 @@ public class DashboardKualitasFragment extends Fragment {
                         }
                     });
                 }
-            }, 500, 100);
+            }, 500, 10);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

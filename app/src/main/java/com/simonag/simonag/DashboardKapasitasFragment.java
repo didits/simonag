@@ -105,6 +105,7 @@ public class DashboardKapasitasFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_kapasitas() + " %");
+            holder.progress.setProgress((int) mValues.get(position).getPersentase_kapasitas());
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -118,7 +119,7 @@ public class DashboardKapasitasFragment extends Fragment {
                         }
                     });
                 }
-            }, 500, 100);
+            }, 500, 10);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

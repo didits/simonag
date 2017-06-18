@@ -17,12 +17,52 @@ public class Program {
 
 //    String keterangan;
 
+
+    public void setRealisasi_persen(double realisasi_persen) {
+        this.realisasi_persen = realisasi_persen;
+    }
+
+    public double getKualitas_persen() {
+        return kualitas_persen;
+    }
+
+    public void setKualitas_persen(double kualitas_persen) {
+        this.kualitas_persen = kualitas_persen;
+    }
+
+    public double getKuantitas_persen() {
+        return kuantitas_persen;
+    }
+
+    public void setKuantitas_persen(double kuantitas_persen) {
+        this.kuantitas_persen = kuantitas_persen;
+    }
+
+    public double getKomersial_persen() {
+        return komersial_persen;
+    }
+
+    public void setKomersial_persen(double komersial_persen) {
+        this.komersial_persen = komersial_persen;
+    }
+
     public Program(){}
     public Program(int no, int id_program, String nama_program, Double realisasi_persen) {
         this.no = no;
         this.id_program = id_program;
         this.nama_program = nama_program;
         this.realisasi_persen = realisasi_persen;
+    }
+
+    public Program(int no, int id_program, String nama_program, double realisasi_persen,
+                   double kualitas_persen, double kuantitas_persen, double komersial_persen) {
+        this.no = no;
+        this.id_program = id_program;
+        this.nama_program = nama_program;
+        this.realisasi_persen = realisasi_persen;
+        this.kualitas_persen = kualitas_persen;
+        this.kuantitas_persen = kuantitas_persen;
+        this.komersial_persen = komersial_persen;
     }
 
     public int getNo() {
