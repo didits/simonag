@@ -58,7 +58,8 @@
                 android:layout_weight="1"
                 android:layout_marginBottom="@dimen/padding"
                 android:background="@drawable/edit_text"
-                android:padding="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 

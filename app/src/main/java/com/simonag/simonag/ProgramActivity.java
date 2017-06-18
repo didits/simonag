@@ -379,6 +379,8 @@ public class ProgramActivity extends AppCompatActivity {
                         program_text.setText("");
                         Toast toast = Toast.makeText(ProgramActivity.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
                         toast.show();
+                        LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+                        info.setVisibility(View.GONE);
                         getProgram();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(ProgramActivity.this, "Perusahaan tidak ada", Toast.LENGTH_LONG).show();
