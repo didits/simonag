@@ -1,5 +1,10 @@
 package com.simonag.simonag.model;
+import org.parceler.Parcel;
 
+/**
+ * Created by Zaki on 13/06/2017.
+ */
+@Parcel
 public class AktifitasKomisaris{
 	int no;
 	private int idKategori;
@@ -13,6 +18,9 @@ public class AktifitasKomisaris{
 	private String url;
 	private int idAktivitas;
 	private String keterangan;
+	private String nama_kategori;
+
+    public AktifitasKomisaris(){}
 
 	public AktifitasKomisaris(int no,int idKategori,
 			String jenisMedia,
@@ -24,7 +32,7 @@ public class AktifitasKomisaris{
 			int nilaiRupiah,
 			String url,
 			int idAktivitas,
-							  String keterangan){
+							  String keterangan, String nama_kategori){
 		this.no = no;
 		this.idKategori=idKategori;
 		this.jenisMedia=jenisMedia;
@@ -37,9 +45,18 @@ public class AktifitasKomisaris{
 		this.url=url;
 		this.idAktivitas=idAktivitas;
 		this.keterangan=keterangan;
+		this.nama_kategori = nama_kategori;
 	}
 
-	public String getKeterangan() {
+    public String getNama_kategori() {
+        return nama_kategori;
+    }
+
+    public void setNama_kategori(String nama_kategori) {
+        this.nama_kategori = nama_kategori;
+    }
+
+    public String getKeterangan() {
 		return keterangan;
 	}
 

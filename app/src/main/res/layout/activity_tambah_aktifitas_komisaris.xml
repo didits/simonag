@@ -56,7 +56,8 @@
                 android:layout_weight="1"
                 android:layout_marginBottom="@dimen/padding"
                 android:background="@drawable/edit_text"
-                android:padding="16dp"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 
@@ -74,7 +75,8 @@
                 android:layout_weight="1"
                 android:layout_marginBottom="@dimen/padding"
                 android:background="@drawable/edit_text"
-                android:padding="16dp"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 

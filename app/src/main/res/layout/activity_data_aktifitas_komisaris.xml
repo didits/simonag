@@ -6,17 +6,17 @@
     android:layout_height="match_parent"
     tools:ignore="MissingPrefix">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:layout_marginRight="@dimen/padding"
-            android:layout_marginTop="@dimen/padding">
+            android:layout_marginBottom="@dimen/padding">
 
             <TextView
                 android:visibility="gone"
@@ -29,73 +29,65 @@
                 android:textSize="16sp" />
 
             <ImageView
-                android:layout_centerInParent="true"
                 android:id="@+id/gambar_bumn"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:src="@drawable/bundar" />
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/tambah_program_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/padding">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Input Program" />
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_text"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/program"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_text"
-                    android:hint="ex: Penyediaan Jaringan Telekomunikasi"
-                    android:inputType="text"
-                    android:padding="16dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textSize="@dimen/text" />
                 <LinearLayout
-                    android:id="@+id/tambah_program"
-                    android:layout_marginLeft="6dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Daftar Aktifitas" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/nama_program"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Program: " />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/tambah_aktifitas"
+                    android:layout_margin="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:gravity="center"
                     android:background="@drawable/button">
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:background="@drawable/plus"/>
                 </LinearLayout>
+
+
+
             </LinearLayout>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:background="@drawable/edit_text"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/padding"
-                android:text="Daftar Program" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -115,40 +107,34 @@
                     app:indicatorName="BallPulseIndicator" />
 
                 <LinearLayout
+                    android:visibility="invisible"
                     android:id="@+id/info_program"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="invisible">
-
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/info" />
-
+                        android:background="@drawable/info"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Belum terdapat aktivitas" />
+                        android:text="Belum terdapat program"/>
                 </LinearLayout>
 
-
-
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_program"
+                    android:id="@+id/rv_aktifitas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
-
         </LinearLayout>
-
 
     </LinearLayout>
 
-    <include layout="@layout/content_bottom_sheet" />
+    <include layout="@layout/content_bottom_sheet_aktivitas" />
 
 </android.support.design.widget.CoordinatorLayout>

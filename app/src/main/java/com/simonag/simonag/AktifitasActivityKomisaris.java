@@ -50,6 +50,8 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static java.lang.String.format;
+
 /**
  * Created by diditsepiyanto on 6/13/17.
  */
@@ -81,7 +83,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.activity_data_aktifitas);
+        setContentView(R.layout.activity_data_aktifitas_komisaris);
         TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
         TextView nama_program = (TextView) findViewById(R.id.nama_program);
         ImageView gambar_bumn = (ImageView) findViewById(R.id.gambar_bumn);
@@ -92,7 +94,6 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
             program = extras.getString("NAMA_PROGRAM");
             pic = extras.getString("GAMBAR_PERUSAHAAN");
         }
-
 
 
         nama_bumn.setText(nama);
@@ -117,7 +118,6 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
         }
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
-        getAktifitas();
 
     }
 
@@ -191,6 +191,10 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<AktifitasKomisaris> p, String value) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value);
+        if (p.size() == 0) {
+            LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+            info.setVisibility(View.VISIBLE);
+        }
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(AktifitasKomisaris aktifitas) {
@@ -227,7 +231,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                         deleteAktifitas();
                         ad.dismiss();
                     }
-                }, "YA","TIDAK");
+                }, "YA", "TIDAK");
 
                 setView("hidden");
                 break;
@@ -256,11 +260,9 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                                     }
                                 });
                             }
-
                         } catch (JSONException E) {
                             Log.e("json_error", E.toString());
                         }
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -284,7 +286,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_TARGET_PROGRAM_2 + tokena + "/" + getIntent().getExtras().getInt("id_program");
+        final String url = Config.URL_GET_TARGET_PROGRAM_2 + tokena + "/" + value;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -293,7 +295,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                         try {
                             Log.d("statuss", response.toString());
                             if (response.getString("status").equals("success")) {
-                                setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")), value);
+                                setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("aktivitas")), value);
                             } else if (response.getString("status").equals("invalid-token")) {
                                 GetToken k = new GetToken(AktifitasActivityKomisaris.this);
                                 k.setCallback(new GetToken.callback() {
@@ -346,7 +348,8 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                             jObject.getInt("nilai_rupiah"),
                             jObject.getString("url"),
                             jObject.getInt("id_aktivitas"),
-                            jObject.getString("keterangan")
+                            jObject.getString("keterangan"),
+                            jObject.getString("nama_kategori")
                     );
                     billing.add(d);
                 }
@@ -385,6 +388,8 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
+            @BindView(R.id.tv_kategori_media_nama_media)
+            TextView tvKategoriDanNama;
 
             public ViewHolder(View view) {
                 super(view);
@@ -415,12 +420,25 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.setIsRecyclable(false);
             holder.tvNo.setText(mValues.get(position).getNo() + "");
-            holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
+
             holder.tvDuedate.setText(mValues.get(position).getAkhirPelaksanaan());
-            holder.tvKategori.setText("Kategori: "+mValues.get(position).getStatusKategori() );
-            holder.tvNilai.setText("Rp. " +mValues.get(position).getNilaiRupiah());
-            holder.tvRentang.setText(mValues.get(position).getAwalPelaksanaan() +" - "+ mValues.get(position).getAkhirPelaksanaan());
+            holder.tvKategori.setText("Kategori: " + mValues.get(position).getNama_kategori());
+            holder.tvNilai.setText("Rp. " + format("%,d", mValues.get(position).getNilaiRupiah()).replace(",", "."));
+
+            if (mValues.get(position).getNama_kategori().equals("publikasi")) {
+                holder.tvNama.setText(mValues.get(position).getNamaAktivitas() + " (" + mValues.get(position).getJenisMedia() + ")");
+                holder.tvKategoriDanNama.setVisibility(View.VISIBLE);
+                holder.tvKategoriDanNama.setText(mValues.get(position).getUrl());
+                holder.tvRentang.setText("Pelaksanaan: " + mValues.get(position).getAwalPelaksanaan() + " - " + mValues.get(position).getAkhirPelaksanaan());
+            } else if (mValues.get(position).getNama_kategori().equals("sponsorship")) {
+                holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
+                holder.tvRentang.setText("Pelaksanaan: " + mValues.get(position).getAwalPelaksanaan());
+            }else if(mValues.get(position).getNama_kategori().equals("hospitality")){
+                holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
+                holder.tvRentang.setText("Pelaksanaan: " + mValues.get(position).getAwalPelaksanaan());
+            }
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {
