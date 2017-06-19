@@ -32,20 +32,98 @@
                 android:id="@+id/tv_nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:text="Penyediaan Jaringan Telekomunikasi "
                 android:textColor="@color/primary" />
-
-            <com.daimajia.numberprogressbar.NumberProgressBar
-                android:id="@android:id/progress"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                custom:progress_reached_bar_height="12dp"
-                custom:progress_reached_color="@color/colorPrimary"
-                custom:progress_text_color="@color/colorPrimary"
-                custom:progress_text_size="14sp"
-                custom:progress_unreached_bar_height="1dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:textColor="@color/primary"
+                    android:layout_weight="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Realisasi"/>
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:layout_weight="2"
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:progress_reached_bar_height="12dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="1dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:textColor="@color/primary"
+                    android:layout_weight="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kualitas"/>
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:layout_weight="2"
+                    android:id="@+id/progress_kualitas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:progress_reached_bar_height="12dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="1dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:textColor="@color/primary"
+                    android:layout_weight="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kapasitas"/>
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:layout_weight="2"
+                    android:id="@+id/progress_kapasitas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:progress_reached_bar_height="12dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="1dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:textColor="@color/primary"
+                    android:layout_weight="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Komersial"/>
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:layout_weight="2"
+                    android:id="@+id/progress_komersial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    custom:progress_reached_bar_height="12dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="1dp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

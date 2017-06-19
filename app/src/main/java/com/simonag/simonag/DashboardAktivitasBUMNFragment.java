@@ -140,25 +140,9 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
                 holder.text2.setText("Rp. " + format("%,d", mValues.get(position).getTotal_rupiah()).replace(",", ".")+"");
             }
             holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
-
+            holder.progress.setProgress(hasil);
             final int total = hasil;
 
-            Log.d("hasil", total +"");
-
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < total) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 100);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

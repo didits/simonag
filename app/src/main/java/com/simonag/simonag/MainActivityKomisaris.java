@@ -1,24 +1,32 @@
 package com.simonag.simonag;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.DefaultRetryPolicy;
@@ -37,20 +45,26 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.DashboardKomisaris;
+import com.simonag.simonag.model.Dashboard;
+import com.simonag.simonag.model.DashboardBuDevy;
 import com.simonag.simonag.model.Kategori;
+import com.simonag.simonag.model.Pertanggal;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,14 +72,15 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MainActivityKomisaris extends AppCompatActivity {
+public class MainActivityBuDevy extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    ArrayList<DashboardKomisaris> db = new ArrayList<>();
+    ArrayList<DashboardBuDevy> db = new ArrayList<>();
     ArrayList<Kategori> db_kategori = new ArrayList<>();
+    ArrayList<Pertanggal> db_tanggal = new ArrayList<>();
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.avi)
@@ -81,19 +96,22 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.activity_main_komisaris);
+        setContentView(R.layout.activity_main_bu_devy);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-
         setTitle(getResources().getString(R.string.app_name));
-        String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
-        final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
+        setSupportActionBar(toolbar);
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(Context.MODE_PRIVATE)
+                .setPrefsName(Config.SHARED_USER)
+                .setUseDefaultSharedPreference(true)
+                .build();
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
-                        profile
+                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, ""))
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -101,15 +119,14 @@ public class MainActivityKomisaris extends AppCompatActivity {
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
-                .withSliderBackgroundColorRes(R.color.colorWhiteTrans)
                 .withDrawerWidthDp(200)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
-                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Aktifitas").withIcon(FontAwesome.Icon.faw_plus),
+                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
                         new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
-                        new PrimaryDrawerItem().withIdentifier(4).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
+                        new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -118,15 +135,19 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivityKomisaris.this, ProgramActivity.class);
+                                Intent i = new Intent(MainActivityBuDevy.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
                                 startActivity(i);
                                 break;
                             case 3:
-                                startActivity(new Intent(MainActivityKomisaris.this, TentangActivity.class));
                                 break;
                             case 4:
+                                startActivity(new Intent(MainActivityBuDevy.this, TentangActivity.class));
+                                break;
+                            case 5:
+                                out();
+                            case 6:
                                 out();
                                 break;
                         }
@@ -182,7 +203,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Prefs.clear();
-                startActivity(new Intent(MainActivityKomisaris.this, LoginActivity.class));
+                startActivity(new Intent(MainActivityBuDevy.this, LoginActivity.class));
                 finish();
             }
         });
@@ -229,7 +250,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_DASHBOARD_2 + tokena;
+        final String url = Config.URL_GET_DASHBOARD_KOMISARIS + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -239,6 +260,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             if(response.getString("status").equals("success")){
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
                                 db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
+                                db_tanggal = jsonPertanggal(response.getString("pertanggal"));
                                 if (viewPager != null) {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                     setupViewPager(viewPager);
@@ -247,7 +269,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                                 createTabIcons();
                                 avi.hide();
                             }else if(response.getString("status").equals("invalid-token")){
-                                GetToken k = new GetToken(MainActivityKomisaris.this);
+                                GetToken k = new GetToken(MainActivityBuDevy.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -268,7 +290,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityKomisaris.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityBuDevy.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -277,22 +299,91 @@ public class MainActivityKomisaris extends AppCompatActivity {
         queue.add(getRequest);
     }
 
+    private void getDashboardFilter(String tanggal_awal, String tanggal_akhir) {
+        avi.show();
+        VolleyClass cek = new VolleyClass(this, true);
+        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("get_server", s);
+                try {
+                    JSONObject response = new JSONObject(s);
+                    if(response.getString("status").equals("success")){
+                        db = jsonDecodeBilling(response.getString("perusahaan"));
+                        db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
+                        db_tanggal = jsonPertanggal(response.getString("pertanggal"));
+                        if (viewPager != null) {
+                            viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
+                            setupViewPager(viewPager);
+                        }
+                        tabLayout.setupWithViewPager(viewPager);
+                        createTabIcons();
+                        avi.hide();
+                    }else if(response.getString("status").equals("invalid-token")){
+                        GetToken k = new GetToken(MainActivityBuDevy.this);
+                        k.setCallback(new GetToken.callback() {
+                            @Override
+                            public void action(boolean success) {
+                                getDashboard();
+                            }
+                        });
+                    }
 
-    public ArrayList<DashboardKomisaris> jsonDecodeBilling(String jsonStr) {
-        ArrayList<DashboardKomisaris> billing = new ArrayList<>();
+                } catch (JSONException E) {
+                    Log.e("json_error", E.toString());
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        }, Config.URL_GET_DASHBOARD_KOMISARIS_TANGGAL + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
+                "tanggal_awal" + "|" + tanggal_awal,
+                "tanggal_akhir" + "|" + tanggal_akhir
+        });
+    }
+
+
+    public ArrayList<DashboardBuDevy> jsonDecodeBilling(String jsonStr) {
+        ArrayList<DashboardBuDevy> billing = new ArrayList<>();
 
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    DashboardKomisaris d = new DashboardKomisaris(
+                    DashboardBuDevy d = new DashboardBuDevy(
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
                             jObject.getString("keterangan"),
                             jObject.getInt("total_rupiah"),
                             jObject.getInt("total_aktivitas"),
                             jObject.getString("image")
+                    );
+                    billing.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return billing;
+    }
+
+    public ArrayList<Pertanggal> jsonPertanggal(String jsonStr) {
+        ArrayList<Pertanggal> billing = new ArrayList<>();
+
+        if (jsonStr != null) {
+            try {
+                JSONArray transaksi = new JSONArray(jsonStr);
+                for (int i = 0; i < transaksi.length(); i++) {
+                    JSONObject jObject = transaksi.getJSONObject(i);
+                    Pertanggal d = new Pertanggal(
+                            i,
+                            jObject.getString("tanggal"),
+                            jObject.getInt("total_aktivitas"),
+                            jObject.getInt("total_biaya")
                     );
                     billing.add(d);
                 }
@@ -332,18 +423,31 @@ public class MainActivityKomisaris extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.tanggal:
+                final AlertDialogCustom ad = new AlertDialogCustom(this);
+                ad.tanggal_awal_akhir(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView tanggal_awal = (TextView) view.getRootView().findViewById(R.id.tanggal_awal);
+                        TextView tanggal_akhir = (TextView) view.getRootView().findViewById(R.id.tanggal_akhir);
+                        getDashboardFilter(tanggal_awal.getText().toString(), tanggal_akhir.getText().toString());
+                        ad.dismiss();
+                    }
+                });
+                return true;
             case R.id.aktivitas:
-                Prefs.putInt(Config.URL_FILTER_2, 0);
+                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
                 getDashboard();
                 return true;
             case R.id.biaya:
-                Prefs.putInt(Config.URL_FILTER_2, 1);
+                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
                 getDashboard();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

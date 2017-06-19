@@ -23,12 +23,17 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
+import com.pixplicity.easyprefs.library.Prefs;
+import com.simonag.simonag.model.DayAxisValueFormatter;
+import com.simonag.simonag.model.Pertanggal;
+import com.simonag.simonag.utils.Config;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.charts.StackedBarChart;
@@ -45,25 +50,13 @@ import java.util.ArrayList;
 public class DashboardAktivitasTanggalFragment extends Fragment implements SeekBar.OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
     private LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX, tvY;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.aktifitas_per_tanggal, container, false);
 
-        tvX = (TextView) v.findViewById(R.id.tvXMax);
-        tvY = (TextView) v.findViewById(R.id.tvYMax);
-
-        mSeekBarX = (SeekBar) v.findViewById(R.id.seekBar1);
-        mSeekBarY = (SeekBar) v.findViewById(R.id.seekBar2);
-
-        mSeekBarX.setProgress(45);
-        mSeekBarY.setProgress(100);
-
-        mSeekBarY.setOnSeekBarChangeListener(this);
-        mSeekBarX.setOnSeekBarChangeListener(this);
 
         mChart = (LineChart) v.findViewById(R.id.chart1);
         mChart.setOnChartGestureListener(this);
@@ -96,16 +89,29 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
+        ArrayList<Pertanggal> t = ((MainActivityBuDevy) getActivity()).db_tanggal;
+
+        int tanggal=0;
+        int i = 0;
+        for (Pertanggal k : t) {
+            tanggal = Integer.valueOf(k.getTanggal());
+            break;
+        }
+
+        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart,tanggal);
+
         XAxis xAxis = mChart.getXAxis();
-        xAxis.enableGridDashedLine(10f, 10f, 0f);
-        //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
-        //xAxis.addLimitLine(llXAxis); // add x-axis limit line
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        xAxis.setValueFormatter(xAxisFormatter);
 
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-        leftAxis.setAxisMaximum(200f);
-        leftAxis.setAxisMinimum(-50f);
+        //leftAxis.setAxisMaximum(200f);
+        //leftAxis.setAxisMinimum(-5f);
         //leftAxis.setYOffset(20f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
@@ -144,11 +150,6 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        tvX.setText("" + (mSeekBarX.getProgress() + 1));
-        tvY.setText("" + (mSeekBarY.getProgress()));
-
-        setData(mSeekBarX.getProgress() + 1, mSeekBarY.getProgress());
-
         // redraw
         mChart.invalidate();
     }
@@ -167,22 +168,33 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
     private void setData(int count, float range) {
 
+        ArrayList<Pertanggal> t = ((MainActivityBuDevy) getActivity()).db_tanggal;
+
         ArrayList<Entry> values = new ArrayList<Entry>();
 
-        for (int i = 0; i < count; i++) {
-
-            float val = (float) (Math.random() * range) + 3;
-            values.add(new Entry(i, val, getResources().getDrawable(R.drawable.logo)));
+        int i = 0;
+        if(Prefs.getInt(Config.FILTER_BU_DEVY, 0)==0){
+            for (Pertanggal k : t) {
+                values.add(new Entry(i, k.getTotal_aktivitas(), getResources().getDrawable(R.drawable.logo)));
+                i = i + 1;
+            }
+        }else {
+            for (Pertanggal k : t) {
+                values.add(new Entry(i, k.getTotal_biaya(), getResources().getDrawable(R.drawable.logo)));
+                i = i + 1;
+            }
         }
+
 
         LineDataSet set1;
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
+            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(values);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
+            mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
         } else {
             // create a dataset and give it a type
             set1 = new LineDataSet(values, "DataSet 1");
@@ -207,8 +219,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
                 // fill drawable only supported on api level 18 and above
                 //--Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
                 //--set1.setFillDrawable(drawable);
-            }
-            else {
+            } else {
                 set1.setFillColor(Color.BLACK);
             }
 
@@ -233,7 +244,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
 
         // un-highlight values after the gesture is finished and no single-tap
-        if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
+        if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
             mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
     }
 

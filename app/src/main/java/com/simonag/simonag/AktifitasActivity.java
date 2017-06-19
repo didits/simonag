@@ -122,8 +122,6 @@ public class AktifitasActivity extends AppCompatActivity {
         }
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
-        getAktifitas();
-
     }
 
     public void setView(@NonNull String state) {
@@ -195,6 +193,10 @@ public class AktifitasActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Aktifitas> p, String value) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        if(p.size()==0){
+            LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+            info.setVisibility(View.VISIBLE);
+        }
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
@@ -428,9 +430,19 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.tvNama.setText(mValues.get(position).getNama());
             holder.tvDuedate.setText(mValues.get(position).getDuedate());
             holder.tvKategori.setText("Kategori: "+mValues.get(position).getKategori());
-            holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + " dari " + mValues.get(position).getTarget() + "");
-            holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
-                     + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
+            if(mValues.get(position).getKategori().equals("kualitas")){
+                holder.tvRealisasi.setVisibility(View.GONE);
+                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
+            }else if(mValues.get(position).getKategori().equals("kapasitas")){
+                holder.tvRealisasi.setVisibility(View.GONE);
+                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
+            }else if(mValues.get(position).getKategori().equals("komersial")){
+                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
+                holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
+                        + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
+            }
+
+
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {
@@ -444,20 +456,7 @@ public class AktifitasActivity extends AppCompatActivity {
                 });
 
             }
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 100);
+            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
 
 
             holder.viewDetail.setOnClickListener(new View.OnClickListener() {

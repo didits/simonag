@@ -111,20 +111,7 @@ public class DashboardKualitasFragment extends Fragment {
                     context.startActivity(new Intent(context, ProgramActivity.class));
                 }
             });
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    context.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getPersentase_kualitas()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 100);
+            holder.progress.setProgress((int) mValues.get(position).getPersentase_kualitas());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

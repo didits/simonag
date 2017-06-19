@@ -94,7 +94,7 @@ public class ProgramActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         final LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
         TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
-        ImageView gambar_bumn =(ImageView) findViewById(R.id.gambar_bumn);
+        ImageView gambar_bumn = (ImageView) findViewById(R.id.gambar_bumn);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -147,7 +147,6 @@ public class ProgramActivity extends AppCompatActivity {
         });
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
-        getProgram();
     }
 
 
@@ -225,6 +224,10 @@ public class ProgramActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Program> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        if (p.size() == 0) {
+            LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+            info.setVisibility(View.VISIBLE);
+        }
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value, nama_perusahaan, nama_gambar);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
@@ -246,6 +249,7 @@ public class ProgramActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("respon_program", response.toString());
                         avi.hide();
                         try {
                             if (response.getString("status").equals("success")) {
@@ -327,6 +331,15 @@ public class ProgramActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
+    private double convert(String data) {
+        try {
+            return Double.parseDouble(data);
+        } catch (Exception e) {
+            return -1;
+        }
+
+    }
+
     public ArrayList<Program> jsonDecodeProgram(String jsonStr) {
         ArrayList<Program> billing = new ArrayList<>();
         if (jsonStr != null) {
@@ -334,11 +347,15 @@ public class ProgramActivity extends AppCompatActivity {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
+
                     Program d = new Program(
                             i + 1,
                             jObject.getInt("id_program"),
                             jObject.getString("nama_program"),
-                            jObject.getDouble("realisasi_persen")
+                            convert(jObject.getString("realisasi_persen")),
+                            convert(jObject.getString("kualitas_persen")),
+                            convert(jObject.getString("kapasitas_persen")),
+                            convert(jObject.getString("komersial_persen"))
                     );
                     billing.add(d);
                 }
@@ -365,6 +382,8 @@ public class ProgramActivity extends AppCompatActivity {
                         program_text.setText("");
                         Toast toast = Toast.makeText(ProgramActivity.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
                         toast.show();
+                        LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+                        info.setVisibility(View.GONE);
                         getProgram();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(ProgramActivity.this, "Perusahaan tidak ada", Toast.LENGTH_LONG).show();
@@ -427,7 +446,7 @@ public class ProgramActivity extends AppCompatActivity {
                         deleteProgram();
                         ad.dismiss();
                     }
-                }, "YA","TIDAK");
+                }, "YA", "TIDAK");
 
                 setView("hidden");
                 break;
@@ -527,8 +546,14 @@ public class ProgramActivity extends AppCompatActivity {
             TextView tvNama;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
-            @BindView(android.R.id.progress)
+            @BindView(R.id.progress)
             NumberProgressBar progress;
+            @BindView(R.id.progress_kualitas)
+            NumberProgressBar progress_kualitas;
+            @BindView(R.id.progress_kapasitas)
+            NumberProgressBar progress_kapasitas;
+            @BindView(R.id.progress_komersial)
+            NumberProgressBar progress_komersial;
 
             public ViewHolder(View view) {
                 super(view);
@@ -577,20 +602,10 @@ public class ProgramActivity extends AppCompatActivity {
                     }
                 });
             }
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (holder.progress.getProgress() < (int) mValues.get(position).getRealisasi_persen()) {
-                                holder.progress.incrementProgressBy(1);
-                            }
-                        }
-                    });
-                }
-            }, 500, 100);
+            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
+            holder.progress_kualitas.setProgress((int) mValues.get(position).getKualitas_persen());
+            holder.progress_kapasitas.setProgress((int) mValues.get(position).getKuantitas_persen());
+            holder.progress_komersial.setProgress((int) mValues.get(position).getKomersial_persen());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -629,5 +644,11 @@ public class ProgramActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getProgram();
     }
 }

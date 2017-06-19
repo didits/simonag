@@ -171,7 +171,7 @@ public class TambahAktifitas extends AppCompatActivity {
     }
 
     private void getpresentase() {
-        final AlertDialog dialog = buildDialog("Targe");
+        final AlertDialog dialog = buildDialog("Target");
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
