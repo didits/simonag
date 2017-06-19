@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.flyco.tablayout.SegmentTabLayout;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -43,6 +44,7 @@ import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
+import com.simonag.simonag.utils.ViewFindUtils;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -145,12 +147,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createTabIcons(Double kualitas, Double kapasitas, Double komersial) {
-
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
         judul.setText("KUALITAS");
-        persentase.setText(kualitas + " %");
+        persentase.setText(kualitas + "%");
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
         judulThree.setText("KOMERSIAL");
-        persentaseThree.setText(komersial + " %");
+        persentaseThree.setText(komersial + "%");
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
     }
@@ -244,6 +245,10 @@ public class MainActivity extends AppCompatActivity {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                     setupViewPager(viewPager);
                                 }
+                                TextView keterangan = (TextView) findViewById(R.id.jumlah_bumn);
+                                keterangan.setVisibility(View.VISIBLE);
+                                keterangan.setText("Jumlah BUMN: " + response.getString("jumlah_perusahaan")
+                                        +" | Jumlah Program: " + response.getString("jumlah_program"));
                                 tabLayout.setupWithViewPager(viewPager);
                                 jsonDecodePersentaseKategori(response.getString("kategori"));
                                 avi.hide();

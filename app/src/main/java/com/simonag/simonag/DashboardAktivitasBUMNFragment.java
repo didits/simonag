@@ -121,6 +121,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.setIsRecyclable(false);
             holder.text1.setText(mValues.get(position).getNama_perusahaan());
             holder.text2.setVisibility(View.VISIBLE);
 

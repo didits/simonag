@@ -222,9 +222,21 @@ public class TambahAktifitas extends AppCompatActivity {
         String deadline = dateFormatter.format(calendarView.getDate());
         String keterangan = "cobacoba";
         String nama_aktivitas = etNama.getText().toString();
-        int target_nilai = Integer.parseInt(etTarget.getText().toString());
-        if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
-        int revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
+        int target_nilai = 0;
+        try {
+            target_nilai = Integer.parseInt(etTarget.getText().toString());
+        }catch (Exception e){
+
+        }
+
+        int revenue_target_nilai=0;
+        try{
+            if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
+            revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
+        }catch (Exception e){
+
+        }
+
         if (getIntent().hasExtra("aktifitas"))
             editAktifitas(
                     aktifitas.getId(),

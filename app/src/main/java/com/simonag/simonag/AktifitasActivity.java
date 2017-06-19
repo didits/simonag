@@ -339,6 +339,10 @@ public class AktifitasActivity extends AppCompatActivity {
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
+                if(transaksi.length()!=0){
+                    LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
+                    info.setVisibility(View.GONE);
+                }
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
                     Aktifitas d = new Aktifitas(

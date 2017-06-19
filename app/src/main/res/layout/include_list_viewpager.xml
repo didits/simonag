@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -18,12 +21,55 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_scrollFlags="scroll|enterAlways|snap" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+        <LinearLayout
+            android:gravity="center"
+            android:background="@color/colorAbuAbu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                fontPath="fonts/Asap-Bold.ttf"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center_horizontal"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sistem Informasi Monitoring\nProgram Kerja BUMN untuk Asian Games"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="5dp"
+            android:gravity="center_horizontal"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:visibility="gone"
+                android:textSize="10sp"
+                android:id="@+id/jumlah_bumn"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jumlah BUMN | Jumlah Program"/>
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TabLayout
+                android:layout_marginRight="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding"
+                app:tabIndicatorColor="@color/primary"
+                app:tabIndicatorHeight="3dp"
+                app:tabBackground="@color/colorWhite"
+                android:id="@+id/tabs"
+                app:tabMode="fixed"
+                app:tabGravity="fill"
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
 
     </android.support.design.widget.AppBarLayout>
 

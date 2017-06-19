@@ -144,9 +144,20 @@ public class TambahRealisasi extends AppCompatActivity {
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         String tanggal_realisasi = dateFormatter.format(calendarView.getDate());
-        String keterangan = "cobacoba";
-        int realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
-        int revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
+        String keterangan = "";
+        int realisasi_nilai = 0;
+        try {
+            realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
+        } catch (Exception e) {
+
+        }
+        int revenue_realisasi_nilai = 0;
+        try {
+            revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
+        } catch (Exception e) {
+
+        }
+
         uploadRealisasi(
                 tanggal_realisasi,
                 keterangan,

@@ -48,6 +48,7 @@ public class DashboardKualitasFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(), ((MainActivity) getActivity()).db));
+
     }
 
 
@@ -72,6 +73,8 @@ public class DashboardKualitasFragment extends Fragment {
             TextView text2;
             @BindView(android.R.id.progress)
             NumberProgressBar progress;
+            @BindView(R.id.progress_nilai)
+            NumberProgressBar progress_nilai;
 
             public ViewHolder(View view) {
                 super(view);
@@ -111,7 +114,12 @@ public class DashboardKualitasFragment extends Fragment {
                     context.startActivity(new Intent(context, ProgramActivity.class));
                 }
             });
+            holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
             holder.progress.setProgress((int) mValues.get(position).getPersentase_kualitas());
+            if((int) mValues.get(position).getPersentase_kualitas()<0)
+                holder.progress_nilai.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
+            holder.progress_nilai.setProgress((int) mValues.get(position).getPersentase_kualitas());
+            holder.setIsRecyclable(false);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

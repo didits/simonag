@@ -35,6 +35,7 @@
                 android:text="Penyediaan Jaringan Telekomunikasi "
                 android:textColor="@color/primary" />
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -57,6 +58,7 @@
                     custom:progress_unreached_bar_height="1dp" />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -79,6 +81,7 @@
                     custom:progress_unreached_bar_height="1dp" />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -101,6 +104,7 @@
                     custom:progress_unreached_bar_height="1dp" />
             </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -130,8 +134,8 @@
         <LinearLayout
             android:gravity="right"
             android:id="@+id/tv_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_width="20dp"
+            android:layout_height="20dp">
 
             <ImageView
                 android:layout_width="20dp"

@@ -73,6 +73,8 @@ public class DashboardKapasitasFragment extends Fragment {
             TextView text2;
             @BindView(android.R.id.progress)
             NumberProgressBar progress;
+            @BindView(R.id.progress_nilai)
+            NumberProgressBar progress_nilai;
 
             public ViewHolder(View view) {
                 super(view);
@@ -103,9 +105,14 @@ public class DashboardKapasitasFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.setIsRecyclable(false);
             holder.text1.setText(mValues.get(position).getNama_bumn());
             holder.text2.setText(mValues.get(position).getPersentase_kapasitas() + " %");
+            holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
             holder.progress.setProgress((int) mValues.get(position).getPersentase_kapasitas());
+            if((int) mValues.get(position).getPersentase_kapasitas()<0)
+                holder.progress_nilai.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
+            holder.progress_nilai.setProgress((int) mValues.get(position).getPersentase_kapasitas());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

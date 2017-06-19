@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/padding">
+        android:padding="3dp">
 
         <ImageView
             android:id="@+id/avatar"
@@ -43,24 +43,36 @@
                 android:text="10%"
                 android:textSize="12sp"
                 android:visibility="gone" />
-
-            <com.daimajia.numberprogressbar.NumberProgressBar
-                android:id="@android:id/progress"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                custom:progress_reached_bar_height="12dp"
-                custom:progress_reached_color="@color/colorPrimary"
-                custom:progress_text_color="@color/colorPrimary"
-                custom:progress_text_size="14sp"
-                custom:progress_unreached_bar_height="1dp" />
+                android:orientation="vertical">
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/progress_nilai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    custom:progress_reached_bar_height="0dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="0dp" />
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@android:id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    custom:progress_reached_bar_height="8dp"
+                    custom:progress_reached_color="@color/colorPrimary"
+                    custom:progress_text_color="@color/colorPrimary"
+                    custom:progress_text_size="14sp"
+                    custom:progress_unreached_bar_height="8dp"
+                    custom:progress_unreached_color="@color/colorAbuAbu"/>
+            </LinearLayout>
+
+
 
         </RelativeLayout>
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_marginLeft="82dp"
-        android:background="@color/colorBGLight" />
 </LinearLayout>

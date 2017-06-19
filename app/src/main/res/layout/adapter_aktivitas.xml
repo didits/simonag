@@ -66,6 +66,7 @@
                     custom:progress_reached_color="@color/colorPrimary"
                     custom:progress_text_color="@color/colorPrimary"
                     custom:progress_text_size="14sp"
+                    custom:progress_unreached_color="@color/colorWhite"
                     custom:progress_unreached_bar_height="1dp" />
 
 
