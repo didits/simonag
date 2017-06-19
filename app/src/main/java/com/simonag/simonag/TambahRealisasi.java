@@ -48,6 +48,7 @@ public class TambahRealisasi extends AppCompatActivity {
     AVLoadingIndicatorView avi;
     SimpleDateFormat dateFormatter;
     int id_aktifitas;
+    int id_kategori;
     @BindView(R.id.et_nilai)
     EditText etNilai;
     @BindView(R.id.et_revenue)
@@ -73,6 +74,10 @@ public class TambahRealisasi extends AppCompatActivity {
         setTitle("Tambah Realisasi");
         showActionBar();
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
+        id_kategori = getIntent().getExtras().getInt("id_kategori");
+        if(id_kategori!=3){
+            etRevenue.setVisibility(View.GONE);
+        }
     }
 
     private void setEditListener() {
@@ -174,12 +179,14 @@ public class TambahRealisasi extends AppCompatActivity {
 
         }
         int revenue_realisasi_nilai = 0;
-        try {
-            revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
-        } catch (Exception e) {
+        if(id_kategori!=3){
+            try {
+                revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
+            } catch (Exception e) {
+
+            }
 
         }
-
         if (tanggal_realisasi.equals("")) {
             AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
             ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
