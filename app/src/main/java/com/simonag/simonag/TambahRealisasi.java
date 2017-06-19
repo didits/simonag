@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -10,8 +11,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
@@ -24,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -31,6 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.simonag.simonag.R.id.calendarView;
 
 /**
  * Created by diditsepiyanto on 6/14/17.
@@ -49,8 +54,9 @@ public class TambahRealisasi extends AppCompatActivity {
     EditText etRevenue;
     @BindView(R.id.button)
     Button button;
-    @BindView(R.id.calendarView)
-    CalendarView calendarView;
+    DatePickerDialog datepicker;
+    @BindView(R.id.tv_tanggal)
+    TextView tvTanggal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,19 @@ public class TambahRealisasi extends AppCompatActivity {
         });
     }
 
+    private void getdate() {
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        Calendar newCalendar = Calendar.getInstance();
+        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                tvTanggal.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datepicker.show();
+    }
+
     private void showActionBar() {
         ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
@@ -131,11 +150,14 @@ public class TambahRealisasi extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.button})
+    @OnClick({R.id.button,R.id.tv_tanggal})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button:
                 tambah_realisasi();
+                break;
+            case R.id.tv_tanggal:
+                getdate();
                 break;
         }
     }
@@ -143,7 +165,7 @@ public class TambahRealisasi extends AppCompatActivity {
 
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String tanggal_realisasi = dateFormatter.format(calendarView.getDate());
+        String tanggal_realisasi = dateFormatter.format(calendarView);
         String keterangan = "";
         int realisasi_nilai = 0;
         try {
@@ -157,6 +179,7 @@ public class TambahRealisasi extends AppCompatActivity {
         } catch (Exception e) {
 
         }
+
 
         uploadRealisasi(
                 tanggal_realisasi,

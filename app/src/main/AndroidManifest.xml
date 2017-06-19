@@ -28,15 +28,17 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity android:name=".MainActivity" android:label="Pencapaian 3K" android:theme="@style/Login"/>
-        <activity android:name=".MainActivityBuDevy" android:theme="@style/Login"/>
+        <activity android:name=".MainActivityKomisaris" android:theme="@style/Login"/>
         <activity android:name=".LoginActivity" android:theme="@style/Login" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ResetPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".VerifikasiKodeReset" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".GantiPassword" android:theme="@style/AppTheme" android:label="Reset Password" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ProgramActivity" android:theme="@style/AppTheme" android:label="Input Program" android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".AktifitasActivity" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".AktifitasActivityKomisaris" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TentangActivity" android:theme="@style/AppTheme" android:label="View Program" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahAktifitas" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".TambahAktifitasKomisaris" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahRealisasi" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SplashActivity" android:screenOrientation="portrait" >
             <intent-filter>

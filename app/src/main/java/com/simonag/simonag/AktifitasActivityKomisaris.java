@@ -30,9 +30,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Aktifitas;
+import com.simonag.simonag.model.AktifitasKomisaris;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
@@ -44,8 +43,6 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,17 +50,15 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static java.lang.String.format;
-
 /**
  * Created by diditsepiyanto on 6/13/17.
  */
 
-public class AktifitasActivity extends AppCompatActivity {
+public class AktifitasActivityKomisaris extends AppCompatActivity {
     public static final String EXTRA_NAME = "id_program";
     public BottomSheetBehavior bottomSheetBehavior;
     String value, nama, pic, program;
-    Aktifitas temp_aktivitas;
+    AktifitasKomisaris temp_aktivitas;
     @BindView(R.id.tambah_aktifitas)
     LinearLayout tambahAktifitas;
     @BindView(R.id.avi)
@@ -122,6 +117,8 @@ public class AktifitasActivity extends AppCompatActivity {
         }
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
         showActionBar();
+        getAktifitas();
+
     }
 
     public void setView(@NonNull String state) {
@@ -191,16 +188,12 @@ public class AktifitasActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Aktifitas> p, String value) {
+    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<AktifitasKomisaris> p, String value) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        if(p.size()==0){
-            LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
-            info.setVisibility(View.VISIBLE);
-        }
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public void action(Aktifitas aktifitas) {
+            public void action(AktifitasKomisaris aktifitas) {
                 temp_aktivitas = aktifitas;
                 setView("expanded");
             }
@@ -213,12 +206,12 @@ public class AktifitasActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_aktifitas:
-                Intent intent = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                Intent intent = new Intent(AktifitasActivityKomisaris.this, TambahAktifitasKomisaris.class);
                 intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
                 startActivity(intent);
                 break;
             case R.id.edit:
-                Intent intent2 = new Intent(AktifitasActivity.this, TambahAktifitas.class);
+                Intent intent2 = new Intent(AktifitasActivityKomisaris.this, TambahAktifitasKomisaris.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("id_program", getIntent().getExtras().getInt("id_program"));
                 bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
@@ -245,7 +238,7 @@ public class AktifitasActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_DELETE_TARGET_PROGRAM + tokena + "/" + temp_aktivitas.getId();
+        final String url = Config.URL_DELETE_TARGET_PROGRAM_2 + tokena + "/" + temp_aktivitas.getIdAktivitas();
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -255,7 +248,7 @@ public class AktifitasActivity extends AppCompatActivity {
                             if (response.getString("status").equals("delete-success")) {
                                 getAktifitas();
                             } else if (response.getString("status").equals("invalid-token")) {
-                                GetToken k = new GetToken(AktifitasActivity.this);
+                                GetToken k = new GetToken(AktifitasActivityKomisaris.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -277,7 +270,7 @@ public class AktifitasActivity extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivityKomisaris.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -291,7 +284,7 @@ public class AktifitasActivity extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_TARGET_PROGRAM + tokena + "/" + getIntent().getExtras().getInt("id_program");
+        final String url = Config.URL_GET_TARGET_PROGRAM_2 + tokena + "/" + getIntent().getExtras().getInt("id_program");
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -302,7 +295,7 @@ public class AktifitasActivity extends AppCompatActivity {
                             if (response.getString("status").equals("success")) {
                                 setupRecyclerView(rv, jsonDecodeAktifitas(response.getString("target")), value);
                             } else if (response.getString("status").equals("invalid-token")) {
-                                GetToken k = new GetToken(AktifitasActivity.this);
+                                GetToken k = new GetToken(AktifitasActivityKomisaris.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -324,7 +317,7 @@ public class AktifitasActivity extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(AktifitasActivityKomisaris.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -334,32 +327,26 @@ public class AktifitasActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Aktifitas> jsonDecodeAktifitas(String jsonStr) {
-        ArrayList<Aktifitas> billing = new ArrayList<>();
+    public ArrayList<AktifitasKomisaris> jsonDecodeAktifitas(String jsonStr) {
+        ArrayList<AktifitasKomisaris> billing = new ArrayList<>();
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
-                if(transaksi.length()!=0){
-                    LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
-                    info.setVisibility(View.GONE);
-                }
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    Aktifitas d = new Aktifitas(
+                    AktifitasKomisaris d = new AktifitasKomisaris(
                             i + 1,
-                            jObject.getInt("id_target"),
-                            jObject.getString("nama_aktivitas"),
-                            jObject.getString("nama_kategori"),
-                            jObject.getInt("target_nilai"),
-                            jObject.getInt("revenue_target_nilai"),
-                            jObject.getInt("realisasi"),
-                            jObject.getInt("realisasi_revenue"),
-                            jObject.getString("due_date"),
-                            jObject.getString("nama_satuan"),
-                            jObject.getDouble("realisasi_persen"),
-                            jObject.getInt("status_revenue"),
                             jObject.getInt("id_kategori"),
-                            jObject.getInt("id_satuan")
+                            jObject.getString("jenis_media"),
+                            jObject.getString("nama_aktivitas"),
+                            jObject.getString("akhir_pelaksanaan"),
+                            jObject.getString("capture"),
+                            jObject.getInt("status_kategori"),
+                            jObject.getString("awal_pelaksanaan"),
+                            jObject.getInt("nilai_rupiah"),
+                            jObject.getString("url"),
+                            jObject.getInt("id_aktivitas"),
+                            jObject.getString("keterangan")
                     );
                     billing.add(d);
                 }
@@ -376,7 +363,7 @@ public class AktifitasActivity extends AppCompatActivity {
         private callback callback_variable;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private ArrayList<Aktifitas> mValues;
+        private ArrayList<AktifitasKomisaris> mValues;
         private String val;
         Activity c;
 
@@ -388,18 +375,16 @@ public class AktifitasActivity extends AppCompatActivity {
             TextView tvNama;
             @BindView(R.id.tv_duedate)
             TextView tvDuedate;
-            @BindView(R.id.tv_target)
-            TextView tvTarget;
-            @BindView(R.id.tv_realisasi)
-            TextView tvRealisasi;
+            @BindView(R.id.tv_nilai)
+            TextView tvNilai;
+            @BindView(R.id.tv_rentang)
+            TextView tvRentang;
             @BindView(R.id.tv_kategori)
             TextView tvKategori;
             @BindView(R.id.view_detail)
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
-            @BindView(android.R.id.progress)
-            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -413,7 +398,7 @@ public class AktifitasActivity extends AppCompatActivity {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Aktifitas> items, String value) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<AktifitasKomisaris> items, String value) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
@@ -423,7 +408,7 @@ public class AktifitasActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_aktivitas, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_aktivitas_komisaris, parent, false);
             view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
@@ -431,22 +416,11 @@ public class AktifitasActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
-            holder.tvNama.setText(mValues.get(position).getNama());
-            holder.tvDuedate.setText(mValues.get(position).getDuedate());
-            holder.tvKategori.setText("Kategori: "+mValues.get(position).getKategori());
-            if(mValues.get(position).getKategori().equals("kualitas")){
-                holder.tvRealisasi.setVisibility(View.GONE);
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
-            }else if(mValues.get(position).getKategori().equals("kapasitas")){
-                holder.tvRealisasi.setVisibility(View.GONE);
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
-            }else if(mValues.get(position).getKategori().equals("komersial")){
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
-                holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
-                        + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
-            }
-
-
+            holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
+            holder.tvDuedate.setText(mValues.get(position).getAkhirPelaksanaan());
+            holder.tvKategori.setText("Kategori: "+mValues.get(position).getStatusKategori() );
+            holder.tvNilai.setText("Rp. " +mValues.get(position).getNilaiRupiah());
+            holder.tvRentang.setText(mValues.get(position).getAwalPelaksanaan() +" - "+ mValues.get(position).getAkhirPelaksanaan());
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {
@@ -460,22 +434,6 @@ public class AktifitasActivity extends AppCompatActivity {
                 });
 
             }
-            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
-
-
-            holder.viewDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
-                        Context context = v.getContext();
-                        Intent intent2 = new Intent(context, TambahRealisasi.class);
-                        intent2.putExtra("id_aktivitas", mValues.get(position).getId());
-                        intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
-                        context.startActivity(intent2);
-                    }
-                }
-            });
-
 
         }
 
@@ -489,7 +447,7 @@ public class AktifitasActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            public void action(Aktifitas aktifitas);
+            public void action(AktifitasKomisaris aktifitas);
         }
     }
 

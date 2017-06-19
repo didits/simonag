@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
         }else if(id_tipe == 2){
-            Intent i = new Intent(LoginActivity.this, MainActivityBuDevy.class);
+            Intent i = new Intent(LoginActivity.this, MainActivityKomisaris.class);
             startActivity(i);
         }
         finish();

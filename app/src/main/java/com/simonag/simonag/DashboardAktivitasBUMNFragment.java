@@ -19,13 +19,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Dashboard;
-import com.simonag.simonag.model.DashboardBuDevy;
+import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,14 +42,14 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_dashboard_list, container, false);
         setupRecyclerView(rv);
-        Log.d("get_data", ((MainActivityBuDevy) getActivity()).db.size()+"");
+        Log.d("get_data", ((MainActivityKomisaris) getActivity()).db.size()+"");
         return rv;
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivityBuDevy) getActivity()).db, Prefs.getInt(Config.FILTER_BU_DEVY, 0)));
+                ((MainActivityKomisaris) getActivity()).db, Prefs.getInt(Config.FILTER_KOMISARIS, 0)));
     }
 
     public static class SimpleStringRecyclerViewAdapter
@@ -60,13 +57,13 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private ArrayList<DashboardBuDevy> mValues;
+        private ArrayList<DashboardKomisaris> mValues;
         Activity c;
         int nilai_tertinggi=0;
         int tipe = 0;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<DashboardBuDevy> mBoundString;
+            public ArrayList<DashboardKomisaris> mBoundString;
 
 
             public final View mView;
@@ -91,19 +88,19 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<DashboardBuDevy> items, int tipe) {
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<DashboardKomisaris> items, int tipe) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
             this.c = context;
             this.tipe = tipe;
             if(tipe == 0){
-                for (DashboardBuDevy k:items){
+                for (DashboardKomisaris k:items){
                     if(nilai_tertinggi<k.getTotal_aktifitas())
                         nilai_tertinggi = k.getTotal_aktifitas();
                 }
             }else {
-                for (DashboardBuDevy k:items){
+                for (DashboardKomisaris k:items){
                     if(nilai_tertinggi<k.getTotal_rupiah())
                         nilai_tertinggi = k.getTotal_rupiah();
                 }

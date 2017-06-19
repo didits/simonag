@@ -4,7 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:indicatorColor="@color/primary"
+        app:indicatorName="BallPulseIndicator" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -181,16 +187,11 @@
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Target Revenue" />
 
             <Button
                 android:id="@+id/button"

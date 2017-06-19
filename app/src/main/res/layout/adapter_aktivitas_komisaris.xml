@@ -58,7 +58,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_target"
+                    android:id="@+id/tv_kategori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Kategori: Sosialisasi"
@@ -66,7 +66,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/tv_realisasi"
+                    android:id="@+id/tv_rentang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12 Sep 2018 - 12 Okto 2018"
@@ -74,7 +74,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/tv_kategori"
+                    android:id="@+id/tv_nilai"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rp. 10.000"

@@ -1,32 +1,24 @@
 package com.simonag.simonag;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.android.volley.DefaultRetryPolicy;
@@ -46,8 +38,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Dashboard;
-import com.simonag.simonag.model.DashboardBuDevy;
+import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.AlertDialogCustom;
@@ -60,11 +51,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,13 +60,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MainActivityBuDevy extends AppCompatActivity {
+public class MainActivityKomisaris extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    ArrayList<DashboardBuDevy> db = new ArrayList<>();
+    ArrayList<DashboardKomisaris> db = new ArrayList<>();
     ArrayList<Kategori> db_kategori = new ArrayList<>();
     ArrayList<Pertanggal> db_tanggal = new ArrayList<>();
     @BindView(R.id.tabs)
@@ -96,7 +84,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.activity_main_bu_devy);
+        setContentView(R.layout.activity_main_komisaris);
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
@@ -135,7 +123,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivityBuDevy.this, ProgramActivity.class);
+                                Intent i = new Intent(MainActivityKomisaris.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
                                 startActivity(i);
@@ -143,7 +131,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                             case 3:
                                 break;
                             case 4:
-                                startActivity(new Intent(MainActivityBuDevy.this, TentangActivity.class));
+                                startActivity(new Intent(MainActivityKomisaris.this, TentangActivity.class));
                                 break;
                             case 5:
                                 out();
@@ -203,7 +191,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Prefs.clear();
-                startActivity(new Intent(MainActivityBuDevy.this, LoginActivity.class));
+                startActivity(new Intent(MainActivityKomisaris.this, LoginActivity.class));
                 finish();
             }
         });
@@ -250,7 +238,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_DASHBOARD_KOMISARIS + tokena;
+        final String url = Config.URL_GET_DASHBOARD_2 + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -269,7 +257,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                                 createTabIcons();
                                 avi.hide();
                             }else if(response.getString("status").equals("invalid-token")){
-                                GetToken k = new GetToken(MainActivityBuDevy.this);
+                                GetToken k = new GetToken(MainActivityKomisaris.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -290,7 +278,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityBuDevy.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityKomisaris.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -320,7 +308,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                         createTabIcons();
                         avi.hide();
                     }else if(response.getString("status").equals("invalid-token")){
-                        GetToken k = new GetToken(MainActivityBuDevy.this);
+                        GetToken k = new GetToken(MainActivityKomisaris.this);
                         k.setCallback(new GetToken.callback() {
                             @Override
                             public void action(boolean success) {
@@ -338,22 +326,22 @@ public class MainActivityBuDevy extends AppCompatActivity {
             public void onError() {
 
             }
-        }, Config.URL_GET_DASHBOARD_KOMISARIS_TANGGAL + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
+        }, Config.URL_FILTER_2 + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
                 "tanggal_awal" + "|" + tanggal_awal,
                 "tanggal_akhir" + "|" + tanggal_akhir
         });
     }
 
 
-    public ArrayList<DashboardBuDevy> jsonDecodeBilling(String jsonStr) {
-        ArrayList<DashboardBuDevy> billing = new ArrayList<>();
+    public ArrayList<DashboardKomisaris> jsonDecodeBilling(String jsonStr) {
+        ArrayList<DashboardKomisaris> billing = new ArrayList<>();
 
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    DashboardBuDevy d = new DashboardBuDevy(
+                    DashboardKomisaris d = new DashboardKomisaris(
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
                             jObject.getString("keterangan"),
@@ -436,11 +424,11 @@ public class MainActivityBuDevy extends AppCompatActivity {
                 });
                 return true;
             case R.id.aktivitas:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 0);
                 getDashboard();
                 return true;
             case R.id.biaya:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 1);
                 getDashboard();
                 return true;
             default:

@@ -1,5 +1,6 @@
 package com.simonag.simonag;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -39,9 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -76,12 +77,15 @@ public class TambahAktifitas extends AppCompatActivity {
     NumberPicker presentase;
     @BindView(R.id.tv_target_presentase)
     TextView tvTargetPresentase;
-    @BindView(R.id.calendarView)
-    CalendarView calendarView;
+
     @BindView(R.id.judul_revenue)
     TextView judulRevenue;
     @BindView(R.id.ac_satuan)
     AutoCompleteTextView acSatuan;
+    @BindView(R.id.tv_duedate)
+    TextView tvDuedate;
+
+    DatePickerDialog datepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,12 +153,21 @@ public class TambahAktifitas extends AppCompatActivity {
             etRevenue.setText(aktifitas.getRealisasi() + "");
             spKategori.setSelection(aktifitas.getIdKategori()-1);
             acSatuan.setText(aktifitas.getSatuan());
-            try {
-                calendarView.setDate(dateFormatter.parse(aktifitas.getDuedate()).getTime(), true, true);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            tvDuedate.setText(aktifitas.getDuedate());
         }
+    }
+
+    private void getdate() {
+        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        Calendar newCalendar = Calendar.getInstance();
+        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                tvDuedate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datepicker.show();
     }
 
     private void getpresentase() {
@@ -202,7 +215,7 @@ public class TambahAktifitas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.button, R.id.tv_target_presentase})
+    @OnClick({R.id.button, R.id.tv_target_presentase,R.id.tv_duedate})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button:
@@ -210,6 +223,9 @@ public class TambahAktifitas extends AppCompatActivity {
                 break;
             case R.id.tv_target_presentase:
                 getpresentase();
+                break;
+            case R.id.tv_duedate:
+                getdate();
                 break;
         }
     }
@@ -219,7 +235,7 @@ public class TambahAktifitas extends AppCompatActivity {
         int id_kategori = spKategori.getSelectedItemPosition() + 1;
         int id_satuan = satuanMap.get(acSatuan.getText().toString());
         String nama_satuan = acSatuan.getText().toString();
-        String deadline = dateFormatter.format(calendarView.getDate());
+        String deadline = tvDuedate.getText().toString();
         String keterangan = "cobacoba";
         String nama_aktivitas = etNama.getText().toString();
         int target_nilai = 0;

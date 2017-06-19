@@ -2,18 +2,14 @@ package com.simonag.simonag;
 
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -34,12 +30,6 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.DayAxisValueFormatter;
 import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.Config;
-
-import org.eazegraph.lib.charts.PieChart;
-import org.eazegraph.lib.charts.StackedBarChart;
-import org.eazegraph.lib.models.BarModel;
-import org.eazegraph.lib.models.PieModel;
-import org.eazegraph.lib.models.StackedBarModel;
 
 import java.util.ArrayList;
 
@@ -89,7 +79,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
-        ArrayList<Pertanggal> t = ((MainActivityBuDevy) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
 
         int tanggal=0;
         int i = 0;
@@ -168,12 +158,12 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
     private void setData(int count, float range) {
 
-        ArrayList<Pertanggal> t = ((MainActivityBuDevy) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
 
         ArrayList<Entry> values = new ArrayList<Entry>();
 
         int i = 0;
-        if(Prefs.getInt(Config.FILTER_BU_DEVY, 0)==0){
+        if(Prefs.getInt(Config.FILTER_KOMISARIS, 0)==0){
             for (Pertanggal k : t) {
                 values.add(new Entry(i, k.getTotal_aktivitas(), getResources().getDrawable(R.drawable.logo)));
                 i = i + 1;
