@@ -79,11 +79,10 @@ public class MainActivity extends AppCompatActivity {
         );
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setTitle("Pencapaian 3K");
         setSupportActionBar(toolbar);
+        setTitle("Pencapaian 3K");
 
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
-        Log.d("ss",url);
         final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -104,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
                         new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
-                        new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
+                        new PrimaryDrawerItem().withIdentifier(4).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -120,13 +119,9 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(i);
                                 break;
                             case 3:
-                                break;
-                            case 4:
                                 startActivity(new Intent(MainActivity.this, TentangActivity.class));
                                 break;
-                            case 5:
-                                out();
-                            case 6:
+                            case 4:
                                 out();
                                 break;
                         }

@@ -4,7 +4,7 @@ package com.simonag.simonag.model;
  * Created by diditsepiyanto on 6/17/17.
  */
 
-public class DashboardBuDevy {
+public class DashboardKomisaris {
     int id_perusahaan;
     String nama_perusahaan;
     String keterangan;
@@ -12,7 +12,7 @@ public class DashboardBuDevy {
     int total_aktifitas;
     String image;
 
-    public DashboardBuDevy(int id_perusahaan, String nama_perusahaan, String keterangan, int total_rupiah, int total_aktifitas, String image) {
+    public DashboardKomisaris(int id_perusahaan, String nama_perusahaan, String keterangan, int total_rupiah, int total_aktifitas, String image) {
         this.id_perusahaan = id_perusahaan;
         this.nama_perusahaan = nama_perusahaan;
         this.keterangan = keterangan;

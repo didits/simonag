@@ -8,19 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,9 +37,9 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Dashboard;
-import com.simonag.simonag.model.DashboardBuDevy;
+import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
@@ -62,13 +58,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MainActivityBuDevy extends AppCompatActivity {
+public class MainActivityKomisaris extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    ArrayList<DashboardBuDevy> db = new ArrayList<>();
+    ArrayList<DashboardKomisaris> db = new ArrayList<>();
     ArrayList<Kategori> db_kategori = new ArrayList<>();
     @BindView(R.id.tabs)
     TabLayout tabLayout;
@@ -85,22 +81,19 @@ public class MainActivityBuDevy extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        setContentView(R.layout.activity_main_bu_devy);
+        setContentView(R.layout.activity_main_komisaris);
         ButterKnife.bind(this);
-        setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        new Prefs.Builder()
-                .setContext(this)
-                .setMode(Context.MODE_PRIVATE)
-                .setPrefsName(Config.SHARED_USER)
-                .setUseDefaultSharedPreference(true)
-                .build();
+
+        setTitle(getResources().getString(R.string.app_name));
+        String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
+        final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(ContextCompat.getDrawable(this, R.drawable.p1))
+                        profile
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -108,16 +101,15 @@ public class MainActivityBuDevy extends AppCompatActivity {
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withSliderBackgroundColorRes(R.color.colorWhiteTrans)
+                .withDrawerWidthDp(200)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
-                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
+                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Aktifitas").withIcon(FontAwesome.Icon.faw_plus),
                         new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Semua").withIcon(FontAwesome.Icon.faw_users),
-                        new PrimaryDrawerItem().withIdentifier(4).withName("BUMN").withIcon(FontAwesome.Icon.faw_user_secret),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
-                        new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
+                        new PrimaryDrawerItem().withIdentifier(4).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -126,19 +118,15 @@ public class MainActivityBuDevy extends AppCompatActivity {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivityBuDevy.this, ProgramActivity.class);
+                                Intent i = new Intent(MainActivityKomisaris.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
                                 startActivity(i);
                                 break;
                             case 3:
+                                startActivity(new Intent(MainActivityKomisaris.this, TentangActivity.class));
                                 break;
                             case 4:
-                                startActivity(new Intent(MainActivityBuDevy.this, TentangActivity.class));
-                                break;
-                            case 5:
-                                out();
-                            case 6:
                                 out();
                                 break;
                         }
@@ -194,7 +182,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Prefs.clear();
-                startActivity(new Intent(MainActivityBuDevy.this, LoginActivity.class));
+                startActivity(new Intent(MainActivityKomisaris.this, LoginActivity.class));
                 finish();
             }
         });
@@ -241,7 +229,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = Config.URL_GET_DASHBOARD_KOMISARIS + tokena;
+        final String url = Config.URL_GET_DASHBOARD_2 + tokena;
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -259,7 +247,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                                 createTabIcons();
                                 avi.hide();
                             }else if(response.getString("status").equals("invalid-token")){
-                                GetToken k = new GetToken(MainActivityBuDevy.this);
+                                GetToken k = new GetToken(MainActivityKomisaris.this);
                                 k.setCallback(new GetToken.callback() {
                                     @Override
                                     public void action(boolean success) {
@@ -280,7 +268,7 @@ public class MainActivityBuDevy extends AppCompatActivity {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityBuDevy.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivityKomisaris.this);
         getRequest.setRetryPolicy(new DefaultRetryPolicy(
                 50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -290,15 +278,15 @@ public class MainActivityBuDevy extends AppCompatActivity {
     }
 
 
-    public ArrayList<DashboardBuDevy> jsonDecodeBilling(String jsonStr) {
-        ArrayList<DashboardBuDevy> billing = new ArrayList<>();
+    public ArrayList<DashboardKomisaris> jsonDecodeBilling(String jsonStr) {
+        ArrayList<DashboardKomisaris> billing = new ArrayList<>();
 
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-                    DashboardBuDevy d = new DashboardBuDevy(
+                    DashboardKomisaris d = new DashboardKomisaris(
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
                             jObject.getString("keterangan"),
@@ -345,11 +333,11 @@ public class MainActivityBuDevy extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.aktivitas:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                Prefs.putInt(Config.URL_FILTER_2, 0);
                 getDashboard();
                 return true;
             case R.id.biaya:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
+                Prefs.putInt(Config.URL_FILTER_2, 1);
                 getDashboard();
                 return true;
             default:

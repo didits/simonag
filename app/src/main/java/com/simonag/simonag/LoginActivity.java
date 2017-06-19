@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void move() {
-        Intent i = new Intent(LoginActivity.this, MainActivityBuDevy.class);
+        Intent i = new Intent(LoginActivity.this, MainActivityKomisaris.class);
         startActivity(i);
         finish();
     }

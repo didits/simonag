@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,6 +91,7 @@ public class ProgramActivity extends AppCompatActivity {
         );
 
         setContentView(R.layout.activity_data_program);
+        ButterKnife.bind(this);
         final LinearLayout tambah_program = (LinearLayout) findViewById(R.id.tambah_program_layout);
         TextView nama_bumn = (TextView) findViewById(R.id.nama_bumn);
         ImageView gambar_bumn =(ImageView) findViewById(R.id.gambar_bumn);
@@ -110,13 +110,16 @@ public class ProgramActivity extends AppCompatActivity {
                     .into(gambar_bumn);
         }
 
-        if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value)) {
+        Log.d("cobacoba",Prefs.getInt(Config.ID_ROLE, 0)+"");
+        if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
             tambah_program.setVisibility(View.VISIBLE);
         } else {
+            setTitle("Daftar Program");
             tambah_program.setVisibility(View.GONE);
+            edit.setVisibility(View.GONE);
+            hapus.setVisibility(View.GONE);
         }
 
-        ButterKnife.bind(this);
         action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -406,7 +409,12 @@ public class ProgramActivity extends AppCompatActivity {
                 setView("hidden");
                 break;
             case R.id.add:
-                Intent intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                Intent intent;
+                if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
+                    intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                }else{
+                    intent = new Intent(ProgramActivity.this, TambahAktifitasKomisaris.class);
+                }
                 intent.putExtra("id_program", temp_progam.getId_program());
                 startActivity(intent);
                 setView("hidden");
@@ -557,7 +565,7 @@ public class ProgramActivity extends AppCompatActivity {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
 
             holder.tvNama.setText(mValues.get(position).getNama_program());
-            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
+            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val) || Prefs.getInt(Config.ID_ROLE, 0) != 1) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {
                 holder.tvMenu.setOnClickListener(new View.OnClickListener() {
@@ -588,7 +596,12 @@ public class ProgramActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, AktifitasActivity.class);
+                    Intent intent;
+                    if (Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
+                        intent = new Intent(context, AktifitasActivity.class);
+                    }else{
+                        intent = new Intent(context, AktifitasActivityKomisaris.class);
+                    }
                     intent.putExtra("id_program", mValues.get(position).getId_program());
                     intent.putExtra("ID_BUMN", val);
                     intent.putExtra("NAMA_PERUSAHAAN", nama_per);
