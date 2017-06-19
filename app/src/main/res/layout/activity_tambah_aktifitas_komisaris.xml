@@ -65,63 +65,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Jenis Media" />
-
-            <Spinner
-                android:id="@+id/sp_jenis_media"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:layout_marginBottom="@dimen/padding"
-                android:background="@drawable/edit_text"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="URL" />
-
-            <EditText
-                android:id="@+id/et_url"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Capture" />
-
-
-            <TextView
-                android:id="@+id/tv_capture"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:text="Tanggal Mulai" />
 
 
@@ -193,6 +136,68 @@
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Jenis Media" />
+
+            <Spinner
+                android:id="@+id/sp_jenis_media"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/padding"
+                android:background="@drawable/edit_text"
+                android:paddingTop="@dimen/padding"
+                android:paddingBottom="@dimen/padding"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="URL" />
+
+            <EditText
+                android:id="@+id/et_url"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:inputType="text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Capture" />
+
+            <Button
+                android:text="Pilih File"
+                android:id="@+id/b_capture"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="@dimen/text" />
+
+            <ImageView
+                android:id="@+id/IV_capture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
             <Button

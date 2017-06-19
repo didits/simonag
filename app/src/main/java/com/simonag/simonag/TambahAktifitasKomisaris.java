@@ -1,10 +1,23 @@
 package com.simonag.simonag;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +25,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.AktifitasKomisaris;
 import com.simonag.simonag.utils.Config;
@@ -28,6 +43,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -59,8 +79,8 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     Spinner spJenisMedia;
     @BindView(R.id.et_url)
     EditText etUrl;
-    @BindView(R.id.tv_capture)
-    TextView tvCapture;
+    @BindView(R.id.b_capture)
+    Button bCapture;
     @BindView(R.id.tv_tanggal_mulai)
     TextView tvTanggalMulai;
     @BindView(R.id.tv_tanggal_selesai)
@@ -69,11 +89,26 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     EditText etNilai;
     @BindView(R.id.et_keterangan)
     EditText etKeterangan;
+    @BindView(R.id.IV_capture)
+    ImageView IVcapture;
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
     HashMap<String, Integer> satuanMap;
 
+    //Image request code
+    private int PICK_IMAGE_REQUEST = 1;
+
+    //storage permission code
+    private static final int STORAGE_PERMISSION_CODE = 123;
+
+    //Bitmap to get image from gallery
+    private Bitmap bitmap=null;
+
+    //Uri to store the image uri
+    private Uri filePath;
+
+    String capture = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +136,58 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             if(aktifitas.getJenisMedia().contentEquals("Offline"))spJenisMedia.setSelection(0);
             else if(aktifitas.getJenisMedia().contentEquals("Online"))spJenisMedia.setSelection(1);
             else spJenisMedia.setSelection(2);
+
             etUrl.setText(aktifitas.getUrl());
-            tvCapture.setText(aktifitas.getCapture());
             tvTanggalMulai.setText(aktifitas.getAwalPelaksanaan());
             tvTanggalSelesai.setText(aktifitas.getAkhirPelaksanaan());
             etNilai.setText(aktifitas.getNilaiRupiah()+"");
             etKeterangan.setText(aktifitas.getKeterangan());
+            etKeterangan.setText(aktifitas.getKeterangan());
+            capture=aktifitas.getCapture();
+            if(capture!=null){
+                new DownloadImageTask(IVcapture).execute(Config.URL_CAPTURE+capture);
+            }
+//                String url = Config.URL_CAPTURE+capture;
+//                Log.d("[DEBUG]",url);
+//                Glide.with(IVcapture.getContext())
+//                        .load(url)
+//                        .into(IVcapture);
+//            }
+        }
+        //Requesting storage permission
+        requestStoragePermission();
+    }
+
+    class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            bmImage.setImageBitmap(result);
         }
     }
 
@@ -194,20 +275,26 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         int id_perusahaan=Prefs.getInt(Config.ID_BUMN,0);
         String jenis_media=spJenisMedia.getSelectedItem().toString();
         String url=etUrl.getText().toString();
-        String capture=tvCapture.getText().toString();
-        if (getIntent().hasExtra("aktifitas"))
+        String isi_capture = "";
+        if(bitmap!=null){
+            isi_capture = getStringImage(bitmap);
+            capture = String.valueOf(filePath);
+        }
+
+        if (getIntent().hasExtra("aktifitas")){
             editAktifitas(
-                    nama_aktivitas,awal_pelaksanaan,akhir_pelaksanaan,keterangan,nilai_rupiah,id_kategori2,id_perusahaan,jenis_media,url,capture
+                    nama_aktivitas,awal_pelaksanaan,akhir_pelaksanaan,keterangan,nilai_rupiah,id_kategori2,id_perusahaan,jenis_media,url,capture, isi_capture
             );
+        }
         else
             uploadAktifitas(
-                    nama_aktivitas,awal_pelaksanaan,akhir_pelaksanaan,keterangan,nilai_rupiah,id_kategori2,id_perusahaan,jenis_media,url,capture
+                    nama_aktivitas,awal_pelaksanaan,akhir_pelaksanaan,keterangan,nilai_rupiah,id_kategori2,id_perusahaan,jenis_media,url,capture, isi_capture
             );
     }
 
 
     private void editAktifitas(
-            String nama_aktivitas,String awal_pelaksanaan,String akhir_pelaksanaan,String keterangan,int nilai_rupiah,int id_kategori2,int id_perusahaan,String jenis_media,String url,String capture
+            String nama_aktivitas,String awal_pelaksanaan,String akhir_pelaksanaan,String keterangan,int nilai_rupiah,int id_kategori2,int id_perusahaan,String jenis_media,String url,String capture, String isi_capture
     ) {
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
@@ -222,6 +309,9 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         params.put("jenis_media", jenis_media+"");
         params.put("url", url+"");
         params.put("capture", capture+"");
+        params.put("isi_capture", isi_capture+"");
+        params.put("id_aktivitas",aktifitas.getIdAktivitas()+"");
+        Log.d("[DEBUG]",String.valueOf(params));
         VolleyClass2 cek = new VolleyClass2(this, true);
         cek.get_data_from_server(new VolleyClass2.VolleyCallback() {
             @Override
@@ -261,7 +351,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     }
 
     private void uploadAktifitas(
-            String nama_aktivitas,String awal_pelaksanaan,String akhir_pelaksanaan,String keterangan,int nilai_rupiah,int id_kategori2,int id_perusahaan,String jenis_media,String url,String capture
+            String nama_aktivitas,String awal_pelaksanaan,String akhir_pelaksanaan,String keterangan,int nilai_rupiah,int id_kategori2,int id_perusahaan,String jenis_media,String url,String capture, String isi_capture
     ) {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
@@ -278,6 +368,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         params.put("jenis_media", jenis_media+"");
         params.put("url", url+"");
         params.put("capture", capture+"");
+        params.put("isi_capture", isi_capture+"");
         cek.get_data_from_server(new VolleyClass2.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
@@ -324,7 +415,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
 
 
 
-    @OnClick({R.id.tv_tanggal_mulai, R.id.tv_tanggal_selesai, R.id.button})
+    @OnClick({R.id.tv_tanggal_mulai, R.id.tv_tanggal_selesai, R.id.button, R.id.b_capture})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_tanggal_mulai:
@@ -336,6 +427,77 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             case R.id.button:
                 tambah_aktifitas();
                 break;
+            case R.id.b_capture:
+                showFileChooser();
+                break;
         }
     }
+
+    //method to show file chooser
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    //handling the image chooser activity result
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                IVcapture.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //Requesting permission
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            //If the user has denied the permission previously your code will come to this block
+            //Here you can explain why you need this permission
+            //Explain here why you need this permission
+        }
+        //And finally ask for the permission
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
+
+
+    //This method will be called when the user will tap on allow or deny
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Checking the request code of our request
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+
+            //If permission is granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Displaying a toast
+                Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
+            } else {
+                //Displaying another toast if permission is not granted
+                Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
 }
