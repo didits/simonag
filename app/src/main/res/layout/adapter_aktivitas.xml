@@ -13,14 +13,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/padding">
+        android:padding="6dp">
+        <RelativeLayout
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:gravity="center_horizontal"
+                android:id="@+id/tv_no"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:text="10."
+                android:textColor="@color/primary" />
+            <ImageView
+                android:layout_marginBottom="2dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/gambar_kategori"
+                android:layout_alignParentBottom="true"
+                android:layout_width="12dp"
+                android:layout_height="12dp"/>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_no"
-            android:layout_width="25dp"
-            android:layout_height="20dp"
-            android:text="10."
-            android:textColor="@color/primary" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +53,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
+                        android:layout_marginRight="10dp"
                         fontPath="fonts/Asap-Bold.ttf"
                         android:layout_weight="1"
                         android:id="@+id/tv_nama"

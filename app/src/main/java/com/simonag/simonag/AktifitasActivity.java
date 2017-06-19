@@ -402,6 +402,8 @@ public class AktifitasActivity extends AppCompatActivity {
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
+            @BindView(R.id.gambar_kategori)
+            ImageView imgGambarKategori;
 
             public ViewHolder(View view) {
                 super(view);
@@ -437,6 +439,7 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.tvPersen.setText((int)mValues.get(position).getRealisasi_persen()+"%");
             SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             SimpleDateFormat format2 = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+
             try {
                 holder.tvDuedate.setText("Due Date: "+format2.format(format1.parse(mValues.get(position).getDuedate())));
             } catch (ParseException e) {
@@ -444,12 +447,15 @@ public class AktifitasActivity extends AppCompatActivity {
             }
             holder.tvKategori.setText("Kategori: "+mValues.get(position).getKategori());
             if(mValues.get(position).getKategori().equals("kualitas")){
+                holder.imgGambarKategori.setImageResource(R.drawable.percentage);
                 holder.tvRealisasi.setVisibility(View.GONE);
                 holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() + "/" + mValues.get(position).getTarget() + " (%)");
             }else if(mValues.get(position).getKategori().equals("kapasitas")){
+                holder.imgGambarKategori.setImageResource(R.drawable.warehouse);
                 holder.tvRealisasi.setVisibility(View.GONE);
                 holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() +"/" + mValues.get(position).getTarget() +" ("+ mValues.get(position).getSatuan()+")");
             }else if(mValues.get(position).getKategori().equals("komersial")){
+                holder.imgGambarKategori.setImageResource(R.drawable.coin);
                 holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() +"/"+ mValues.get(position).getTarget() +" ("+ mValues.get(position).getSatuan()+")");
                 holder.tvRealisasi.setText("Revenue: " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")
                         + "/" + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")+" (Rupiah)");
