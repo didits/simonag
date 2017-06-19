@@ -24,7 +24,7 @@ public class Config {
     public static final String URL_EDIT_PROGRAM_PER = URL + "edit/programPerusahaan/";
     public static final String URL_DELETE_TARGET_PROGRAM = URL + "delete/targetProgram/";
     public static final String URL_DELETE_REAL_TARGET = URL + "delete/realisasiTarget/";
-    public static final String URL_FILTER_1 = URL + "post/filterDasboard/";
+    public static final String URL_FILTER_1 = URL + "post/filterDashboard/";
 
     public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword/";
     public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail/";
@@ -39,7 +39,7 @@ public class Config {
     public static final String URL_POST_TARGET_PROGRAM_2 = URL_2 + "post/aktivitasPerusahaan/";
     public static final String URL_EDIT_TARGET_PROGRAM_2 = URL_2 + "edit/aktivitasPerusahaan/";
     public static final String URL_DELETE_TARGET_PROGRAM_2 = URL_2 + "delete/aktivitasPerusahaan/";
-    public static final String URL_FILTER_2 = URL_2 + "post/filterDasboard/";
+    public static final String URL_FILTER_2 = URL_2 + "post/filterDashboard/";
 
     public static final String FILTER_KOMISARIS = "filter";
 
