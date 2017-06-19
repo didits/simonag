@@ -37,6 +37,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.model.Kategori;
@@ -89,18 +90,14 @@ public class MainActivityKomisaris extends AppCompatActivity {
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        new Prefs.Builder()
-                .setContext(this)
-                .setMode(Context.MODE_PRIVATE)
-                .setPrefsName(Config.SHARED_USER)
-                .setUseDefaultSharedPreference(true)
-                .build();
-
+        String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
+        final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
+                .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, "")).withEmail(Prefs.getString(Config.EMAIL_BUMN, ""))
+                        profile
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
@@ -108,6 +105,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withSliderBackgroundColorRes(R.color.colorWhiteTrans)
                 .withDrawerWidthDp(200)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(

@@ -28,7 +28,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.flyco.tablayout.SegmentTabLayout;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -44,7 +43,6 @@ import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
-import com.simonag.simonag.utils.ViewFindUtils;
 import com.simonag.simonag.utils.VolleyClass;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -90,9 +88,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
-        Log.d("ss",url);
         final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
-                .withEmail(Prefs.getString(Config.EMAIL_BUMN, ""));
+                .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.latar)
@@ -106,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withSliderBackgroundColorRes(R.color.colorWhiteTrans)
-                .withAccountHeader(headerResult)
                 .withDrawerWidthDp(200)
+                .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
