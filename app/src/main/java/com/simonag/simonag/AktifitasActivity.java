@@ -31,7 +31,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
 import com.simonag.simonag.utils.AlertDialogCustom;
@@ -44,9 +43,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -388,6 +388,8 @@ public class AktifitasActivity extends AppCompatActivity {
             TextView tvNo;
             @BindView(R.id.tv_nama)
             TextView tvNama;
+            @BindView(R.id.tv_persen)
+            TextView tvPersen;
             @BindView(R.id.tv_duedate)
             TextView tvDuedate;
             @BindView(R.id.tv_target)
@@ -400,8 +402,6 @@ public class AktifitasActivity extends AppCompatActivity {
             LinearLayout viewDetail;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
-            @BindView(android.R.id.progress)
-            NumberProgressBar progress;
 
             public ViewHolder(View view) {
                 super(view);
@@ -434,18 +434,25 @@ public class AktifitasActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvNama.setText(mValues.get(position).getNama());
-            holder.tvDuedate.setText(mValues.get(position).getDuedate());
+            holder.tvPersen.setText((int)mValues.get(position).getRealisasi_persen()+"%");
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            SimpleDateFormat format2 = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+            try {
+                holder.tvDuedate.setText("Due Date: "+format2.format(format1.parse(mValues.get(position).getDuedate())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             holder.tvKategori.setText("Kategori: "+mValues.get(position).getKategori());
             if(mValues.get(position).getKategori().equals("kualitas")){
                 holder.tvRealisasi.setVisibility(View.GONE);
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
+                holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() + "/" + mValues.get(position).getTarget() + " (%)");
             }else if(mValues.get(position).getKategori().equals("kapasitas")){
                 holder.tvRealisasi.setVisibility(View.GONE);
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
+                holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() +"/" + mValues.get(position).getTarget() +" ("+ mValues.get(position).getSatuan()+")");
             }else if(mValues.get(position).getKategori().equals("komersial")){
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
-                holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")
-                        + " dari " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".") );
+                holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() +"/"+ mValues.get(position).getTarget() +" ("+ mValues.get(position).getSatuan()+")");
+                holder.tvRealisasi.setText("Revenue: " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")
+                        + "/" + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")+" (Rupiah)");
             }
 
 
@@ -462,8 +469,6 @@ public class AktifitasActivity extends AppCompatActivity {
                 });
 
             }
-            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
-
 
             holder.viewDetail.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -49,8 +49,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,7 +112,7 @@ public class ProgramActivity extends AppCompatActivity {
         if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value)) {
             tambah_program.setVisibility(View.VISIBLE);
         } else {
-            setTitle("Daftar Program");
+            setTitle("Progress Program");
             tambah_program.setVisibility(View.GONE);
             edit.setVisibility(View.GONE);
             hapus.setVisibility(View.GONE);
