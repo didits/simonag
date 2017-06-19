@@ -111,7 +111,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
-                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
+                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Aktivitas").withIcon(FontAwesome.Icon.faw_plus),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
                         new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
@@ -123,8 +123,8 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivityKomisaris.this, ProgramActivity.class);
-                                i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN,0));
+                                Intent i = new Intent(MainActivityKomisaris.this, AktifitasActivityKomisaris.class);
+                                i.putExtra("ID_BUMN", "" + Prefs.getInt(Config.ID_BUMN,0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
                                 startActivity(i);
                                 break;

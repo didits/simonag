@@ -75,6 +75,8 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             TextView text2;
             @BindView(android.R.id.progress)
             NumberProgressBar progress;
+            @BindView(R.id.progress_nilai)
+            NumberProgressBar progress_nilai;
 
             public ViewHolder(View view) {
                 super(view);
@@ -138,6 +140,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
                 }
                 holder.text2.setText("Rp. " + format("%,d", mValues.get(position).getTotal_rupiah()).replace(",", ".")+"");
             }
+            holder.progress_nilai.setVisibility(View.INVISIBLE);
             holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
             holder.progress.setProgress(hasil);
             final int total = hasil;
@@ -147,9 +150,10 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent i = new Intent(context, ProgramActivity.class);
+                    Intent i = new Intent(context, AktifitasActivityKomisaris.class);
                     i.putExtra("KEY", "" + mValues.get(position).getId_perusahaan());
                     i.putExtra("NAMA_PERUSAHAAN", "" + mValues.get(position).getNama_perusahaan());
+                    i.putExtra("ID_BUMN", "" + mValues.get(position).getId_perusahaan());
                     i.putExtra("GAMBAR_PERUSAHAAN", "" + mValues.get(position).getImage());
                     context.startActivity(i);
 

@@ -48,6 +48,7 @@
                         android:text="Penyediaan Jaringan Telekomunikasi "
                         android:textColor="@color/primary" />
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tv_duedate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -59,6 +60,14 @@
 
                 <TextView
                     android:id="@+id/tv_kategori"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kategori: Sosialisasi"
+                    android:textColor="@color/primary"
+                    android:textSize="10sp" />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_kategori_media_nama_media"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Kategori: Sosialisasi"

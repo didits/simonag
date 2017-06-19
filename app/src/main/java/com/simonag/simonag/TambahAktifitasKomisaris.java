@@ -21,6 +21,7 @@ import com.simonag.simonag.model.AktifitasKomisaris;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
+import com.simonag.simonag.utils.VolleyClass2;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -182,7 +184,12 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         String awal_pelaksanaan=tvTanggalMulai.getText().toString();
         String akhir_pelaksanaan=tvTanggalSelesai.getText().toString();
         String keterangan=etKeterangan.getText().toString();
-        int nilai_rupiah=Integer.parseInt(etNilai.getText().toString());
+        int nilai_rupiah = 0;
+        try {
+             nilai_rupiah=Integer.parseInt(etNilai.getText().toString());
+        }catch (Exception e){
+
+        }
         int id_kategori2=spKategori.getSelectedItemPosition()+1;
         int id_perusahaan=Prefs.getInt(Config.ID_BUMN,0);
         String jenis_media=spJenisMedia.getSelectedItem().toString();
@@ -204,8 +211,19 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     ) {
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
-        VolleyClass cek = new VolleyClass(this, true);
-        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+        Map<String, String> params = new HashMap<>();
+        params.put("nama_aktivitas", nama_aktivitas);
+        params.put("awal_pelaksanaan", awal_pelaksanaan);
+        params.put("akhir_pelaksanaan", akhir_pelaksanaan);
+        params.put("keterangan", keterangan);
+        params.put("nilai_rupiah", nilai_rupiah+"");
+        params.put("id_kategori2", id_kategori2+"");
+        params.put("id_perusahaan", id_perusahaan+"");
+        params.put("jenis_media", jenis_media+"");
+        params.put("url", url+"");
+        params.put("capture", capture+"");
+        VolleyClass2 cek = new VolleyClass2(this, true);
+        cek.get_data_from_server(new VolleyClass2.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
                 avi.hide();
@@ -239,19 +257,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             public void onError() {
                 avi.hide();
             }
-        }, Config.URL_EDIT_TARGET_PROGRAM_2 + token, new String[]{
-                "id_aktivitas" + "|" + aktifitas.getIdAktivitas(),
-                "nama_aktivitas" + "|" + nama_aktivitas,
-                "awal_pelaksanaan" + "|" + awal_pelaksanaan,
-                "akhir_pelaksanaan" + "|" + akhir_pelaksanaan,
-                "keterangan" + "|" + keterangan,
-                "nilai_rupiah" + "|" + nilai_rupiah,
-                "id_kategori2" + "|" + id_kategori2,
-                "id_perusahaan" + "|" + id_perusahaan,
-                "jenis_media" + "|" + jenis_media,
-                "url" + "|" + url,
-                "capture" + "|" + capture
-        });
+        }, Config.URL_EDIT_TARGET_PROGRAM_2 + token, params);
     }
 
     private void uploadAktifitas(
@@ -260,8 +266,19 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         Log.d("ffww",Config.URL_POST_TARGET_PROGRAM_2 + tokena);
-        VolleyClass cek = new VolleyClass(this, true);
-        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+        VolleyClass2 cek = new VolleyClass2(this, true);
+        Map<String, String> params = new HashMap<>();
+        params.put("nama_aktivitas", nama_aktivitas);
+        params.put("awal_pelaksanaan", awal_pelaksanaan);
+        params.put("akhir_pelaksanaan", akhir_pelaksanaan);
+        params.put("keterangan", keterangan);
+        params.put("nilai_rupiah", nilai_rupiah+"");
+        params.put("id_kategori2", id_kategori2+"");
+        params.put("id_perusahaan", id_perusahaan+"");
+        params.put("jenis_media", jenis_media+"");
+        params.put("url", url+"");
+        params.put("capture", capture+"");
+        cek.get_data_from_server(new VolleyClass2.VolleyCallback() {
             @Override
             public void onSuccess(String response) {
                 avi.hide();
@@ -270,7 +287,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("post-success")) {
-                        Toast toast = Toast.makeText(TambahAktifitasKomisaris.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(TambahAktifitasKomisaris.this, "Sukses Menambahkan Aktivitas", Toast.LENGTH_LONG);
                         toast.show();
                         onBackPressed();
                     } else if (status.equals("wrong-id")) {
@@ -296,18 +313,8 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             public void onError() {
                 avi.hide();
             }
-        }, Config.URL_POST_TARGET_PROGRAM_2 + tokena, new String[]{
-                "nama_aktivitas" + "|" + nama_aktivitas,
-                "awal_pelaksanaan" + "|" + awal_pelaksanaan,
-                "akhir_pelaksanaan" + "|" + akhir_pelaksanaan,
-                "keterangan" + "|" + keterangan,
-                "nilai_rupiah" + "|" + nilai_rupiah,
-                "id_kategori2" + "|" + id_kategori2,
-                "id_perusahaan" + "|" + id_perusahaan,
-                "jenis_media" + "|" + jenis_media,
-                "url" + "|" + url,
-                "capture" + "|" + capture
-        });
+        }, Config.URL_POST_TARGET_PROGRAM_2 + tokena,params
+        );
     }
 
     @Override
