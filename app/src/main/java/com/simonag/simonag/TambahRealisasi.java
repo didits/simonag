@@ -53,6 +53,8 @@ public class TambahRealisasi extends AppCompatActivity {
     EditText etNilai;
     @BindView(R.id.et_revenue)
     EditText etRevenue;
+    @BindView(R.id.tv_revenueRealisasi)
+    TextView tvRevenueRealisasi;
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
@@ -77,49 +79,70 @@ public class TambahRealisasi extends AppCompatActivity {
         id_kategori = getIntent().getExtras().getInt("id_kategori");
         if(id_kategori!=3){
             etRevenue.setVisibility(View.GONE);
+            tvRevenueRealisasi.setVisibility(View.GONE);
         }
     }
 
     private void setEditListener() {
         button.setEnabled(false);
         button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-
-        etNilai.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
-                    button.setEnabled(true);
-                    button.setBackground(getResources().getDrawable(R.drawable.button));
-                } else {
-                    button.setEnabled(false);
-                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+        if(id_kategori!=3){
+            etNilai.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
                 }
-            }
-        });
 
-
-        etRevenue.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
-                    button.setEnabled(true);
-                    button.setBackground(getResources().getDrawable(R.drawable.button));
-                } else {
-                    button.setEnabled(false);
-                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-            }
-        });
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+        }else{
+            etNilai.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+
+
+            etRevenue.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+        }
+
     }
 
     private void getdate() {
