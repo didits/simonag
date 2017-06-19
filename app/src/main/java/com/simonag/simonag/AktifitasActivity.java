@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -254,6 +255,7 @@ public class AktifitasActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("delete-success")) {
                                 getAktifitas();
+                                Toast.makeText(AktifitasActivity.this, "Aktivitas sukses terhapus", Toast.LENGTH_LONG).show();
                             } else if (response.getString("status").equals("invalid-token")) {
                                 GetToken k = new GetToken(AktifitasActivity.this);
                                 k.setCallback(new GetToken.callback() {
@@ -466,7 +468,7 @@ public class AktifitasActivity extends AppCompatActivity {
             holder.viewDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
+                    if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val)) {
                         Context context = v.getContext();
                         Intent intent2 = new Intent(context, TambahRealisasi.class);
                         intent2.putExtra("id_aktivitas", mValues.get(position).getId());

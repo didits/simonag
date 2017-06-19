@@ -30,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Aktifitas;
 import com.simonag.simonag.model.Satuan;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
@@ -151,7 +152,7 @@ public class TambahAktifitas extends AppCompatActivity {
             etTarget.setText(aktifitas.getTarget() + "");
             tvTargetPresentase.setText(aktifitas.getTarget() + "");
             etRevenue.setText(aktifitas.getRealisasi() + "");
-            spKategori.setSelection(aktifitas.getIdKategori()-1);
+            spKategori.setSelection(aktifitas.getIdKategori() - 1);
             acSatuan.setText(aktifitas.getSatuan());
             tvDuedate.setText(aktifitas.getDuedate());
         }
@@ -215,7 +216,7 @@ public class TambahAktifitas extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.button, R.id.tv_target_presentase,R.id.tv_duedate})
+    @OnClick({R.id.button, R.id.tv_target_presentase, R.id.tv_duedate})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button:
@@ -236,21 +237,39 @@ public class TambahAktifitas extends AppCompatActivity {
         int id_satuan = satuanMap.get(acSatuan.getText().toString());
         String nama_satuan = acSatuan.getText().toString();
         String deadline = tvDuedate.getText().toString();
-        String keterangan = "cobacoba";
+        String keterangan = "null";
         String nama_aktivitas = etNama.getText().toString();
         int target_nilai = 0;
         try {
             target_nilai = Integer.parseInt(etTarget.getText().toString());
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
-        int revenue_target_nilai=0;
-        try{
+        int revenue_target_nilai = 0;
+        try {
             if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
             revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
-        }catch (Exception e){
+        } catch (Exception e) {
 
+        }
+        AlertDialogCustom ad = new AlertDialogCustom(this);
+
+        if (id_kategori == 1) {
+            if (nama_aktivitas.equals("") || deadline.equals("")) {
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
+        } else if (id_kategori == 2) {
+            if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
+        }else if(id_kategori == 3){
+            if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
         }
 
         if (getIntent().hasExtra("aktifitas"))
@@ -351,6 +370,7 @@ public class TambahAktifitas extends AppCompatActivity {
             String nama_aktivitas,
             int target_nilai,
             int revenue_target_nilai) {
+
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
         VolleyClass cek = new VolleyClass(this, true);
@@ -426,7 +446,7 @@ public class TambahAktifitas extends AppCompatActivity {
                                     satuanMap.put(db.get(i).getNama_satuan(), db.get(i).getId_satuan());
                                     satuanArray[i] = db.get(i).getNama_satuan();
                                 }
-                                ArrayAdapter<String> adapter = new ArrayAdapter<>(TambahAktifitas.this, android.R.layout.simple_list_item_1,satuanArray);
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(TambahAktifitas.this, android.R.layout.simple_list_item_1, satuanArray);
                                 acSatuan.setAdapter(adapter);
                                 acSatuan.setThreshold(1);
                             } else if (response.getString("status").equals("invalid-token")) {

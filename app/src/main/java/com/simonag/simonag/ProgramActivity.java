@@ -110,8 +110,8 @@ public class ProgramActivity extends AppCompatActivity {
                     .into(gambar_bumn);
         }
 
-        Log.d("cobacoba",Prefs.getInt(Config.ID_ROLE, 0)+"");
-        if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
+        Log.d("cobacoba", Prefs.getInt(Config.ID_ROLE, 0) + "");
+        if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value)) {
             tambah_program.setVisibility(View.VISIBLE);
         } else {
             setTitle("Daftar Program");
@@ -429,11 +429,7 @@ public class ProgramActivity extends AppCompatActivity {
                 break;
             case R.id.add:
                 Intent intent;
-                if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value) && Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
-                    intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
-                }else{
-                    intent = new Intent(ProgramActivity.this, TambahAktifitasKomisaris.class);
-                }
+                intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
                 intent.putExtra("id_program", temp_progam.getId_program());
                 startActivity(intent);
                 setView("hidden");
@@ -447,7 +443,6 @@ public class ProgramActivity extends AppCompatActivity {
                         ad.dismiss();
                     }
                 }, "YA", "TIDAK");
-
                 setView("hidden");
                 break;
         }
@@ -587,10 +582,11 @@ public class ProgramActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            holder.setIsRecyclable(false);
             holder.tvNo.setText(mValues.get(position).getNo() + "");
 
             holder.tvNama.setText(mValues.get(position).getNama_program());
-            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val) || Prefs.getInt(Config.ID_ROLE, 0) != 1) {
+            if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {
                 holder.tvMenu.setOnClickListener(new View.OnClickListener() {
@@ -612,11 +608,7 @@ public class ProgramActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent;
-                    if (Prefs.getInt(Config.ID_ROLE, 0) == 1 ) {
-                        intent = new Intent(context, AktifitasActivity.class);
-                    }else{
-                        intent = new Intent(context, AktifitasActivityKomisaris.class);
-                    }
+                    intent = new Intent(context, AktifitasActivity.class);
                     intent.putExtra("id_program", mValues.get(position).getId_program());
                     intent.putExtra("ID_BUMN", val);
                     intent.putExtra("NAMA_PERUSAHAAN", nama_per);

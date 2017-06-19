@@ -67,6 +67,7 @@ public class VolleyClass {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+                Log.d("sasas", params.toString());
                 for (String aParam : param) {
                     String[] separated = aParam.split("\\|");
                     Log.d("sasa",separated[0]+" "+separated[1]);

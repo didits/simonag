@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
@@ -35,7 +36,6 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.simonag.simonag.R.id.calendarView;
 
 /**
  * Created by diditsepiyanto on 6/14/17.
@@ -150,7 +150,7 @@ public class TambahRealisasi extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.button,R.id.tv_tanggal})
+    @OnClick({R.id.button, R.id.tv_tanggal})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button:
@@ -165,8 +165,8 @@ public class TambahRealisasi extends AppCompatActivity {
 
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String tanggal_realisasi = dateFormatter.format(calendarView);
-        String keterangan = "";
+        String tanggal_realisasi = tvTanggal.getText().toString();
+        String keterangan = "null";
         int realisasi_nilai = 0;
         try {
             realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
@@ -178,6 +178,12 @@ public class TambahRealisasi extends AppCompatActivity {
             revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
 
+        }
+
+        if (tanggal_realisasi.equals("")) {
+            AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+            ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+            return;
         }
 
 
