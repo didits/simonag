@@ -75,6 +75,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
     AVLoadingIndicatorView avi;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+    int tab_selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,31 +150,48 @@ public class MainActivityKomisaris extends AppCompatActivity {
         getDashboard();
     }
 
+    private void getTabSelected(){
+        if(tabLayout.getTabAt(0).isSelected()){
+            tab_selected=0;
+        }else if(tabLayout.getTabAt(1).isSelected()){
+            tab_selected=1;
+        }else if(tabLayout.getTabAt(2).isSelected()){
+            tab_selected=2;
+        }
+    }
+
     private void createTabIcons() {
+
 
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
-        judul.setText("Aktifitas Per");
+        judul.setText("Aktivitas Per");
         persentase.setText("BUMN");
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
-        judulTwo.setText("Aktifitas Per");
+        judulTwo.setText("Aktivitas Per");
         persentaseTwo.setText("Kategori");
         tabLayout.getTabAt(1).setCustomView(tabTwo);
-
 
 
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
-        judulThree.setText("Aktifitas Per");
+        judulThree.setText("Aktivitas Per");
         persentaseThree.setText("Tanggal");
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
+        if(tab_selected==0){
+            tabLayout.getTabAt(0).select();
+        }else if(tab_selected==1){
+            tabLayout.getTabAt(1).select();
+        }else if(tab_selected==2){
+            tabLayout.getTabAt(2).select();
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -249,6 +267,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
                                 db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                                 db_tanggal = jsonPertanggal(response.getString("pertanggal"));
+
                                 if (viewPager != null) {
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
                                     setupViewPager(viewPager);
@@ -287,7 +306,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void getDashboardFilter(String tanggal_awal, String tanggal_akhir) {
+    private void getDashboardFilter(final String tanggal_awal, final  String tanggal_akhir) {
         avi.show();
         VolleyClass cek = new VolleyClass(this, true);
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
@@ -312,7 +331,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                         k.setCallback(new GetToken.callback() {
                             @Override
                             public void action(boolean success) {
-                                getDashboard();
+                                getDashboardFilter(tanggal_awal, tanggal_akhir);
                             }
                         });
                     }
@@ -412,6 +431,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tanggal:
+                getTabSelected();
                 final AlertDialogCustom ad = new AlertDialogCustom(this);
                 ad.tanggal_awal_akhir(new View.OnClickListener() {
                     @Override
@@ -425,10 +445,16 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 return true;
             case R.id.aktivitas:
                 Prefs.putInt(Config.FILTER_KOMISARIS, 0);
+                getTabSelected();
                 getDashboard();
                 return true;
             case R.id.biaya:
                 Prefs.putInt(Config.FILTER_KOMISARIS, 1);
+                getTabSelected();
+                getDashboard();
+                return true;
+            case R.id.refresh:
+                getTabSelected();
                 getDashboard();
                 return true;
             default:
@@ -452,6 +478,5 @@ public class MainActivityKomisaris extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getDashboard();
     }
 }

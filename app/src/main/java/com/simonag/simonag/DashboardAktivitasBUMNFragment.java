@@ -143,8 +143,6 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             holder.progress_nilai.setVisibility(View.INVISIBLE);
             holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
             holder.progress.setProgress(hasil);
-            final int total = hasil;
-
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,6 +161,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
 
             Glide.with(holder.avatar.getContext())
                     .load(url)
+                    .fitCenter()
                     .into(holder.avatar);
         }
 

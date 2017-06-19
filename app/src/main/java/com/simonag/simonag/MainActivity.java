@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     AVLoadingIndicatorView avi;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+    int tab_selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,14 @@ public class MainActivity extends AppCompatActivity {
         judulThree.setText("KOMERSIAL");
         persentaseThree.setText(komersial + "%");
         tabLayout.getTabAt(2).setCustomView(tabThree);
+
+        if(tab_selected==0){
+            tabLayout.getTabAt(0).select();
+        }else if(tab_selected==1){
+            tabLayout.getTabAt(1).select();
+        }else if(tab_selected==2){
+            tabLayout.getTabAt(2).select();
+        }
 
     }
 
@@ -357,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tanggal:
+                getTabSelected();
                 final AlertDialogCustom ad = new AlertDialogCustom(this);
                 ad.tanggal_awal_akhir(new View.OnClickListener() {
                     @Override
@@ -368,16 +378,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 return true;
-            case R.id.aktivitas:
-                Prefs.putInt(Config.FILTER_KOMISARIS, 0);
-                getDashboard();
-                return true;
-            case R.id.biaya:
-                Prefs.putInt(Config.FILTER_KOMISARIS, 1);
+            case R.id.refresh:
+                getTabSelected();
                 getDashboard();
                 return true;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    private void getTabSelected(){
+        if(tabLayout.getTabAt(0).isSelected()){
+            tab_selected=0;
+        }else if(tabLayout.getTabAt(1).isSelected()){
+            tab_selected=1;
+        }else if(tabLayout.getTabAt(2).isSelected()){
+            tab_selected=2;
         }
     }
 
