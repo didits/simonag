@@ -443,9 +443,9 @@ public class AktifitasActivity extends AppCompatActivity {
                 holder.tvRealisasi.setVisibility(View.GONE);
                 holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
             }else if(mValues.get(position).getKategori().equals("komersial")){
-                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() + "% dari " + mValues.get(position).getTarget() + "%");
-                holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
-                        + " dari " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".") );
+                holder.tvTarget.setText("Terealisasi: " + mValues.get(position).getRealisasi() +" "+mValues.get(position).getSatuan() +" dari " + mValues.get(position).getTarget() +" "+ mValues.get(position).getSatuan());
+                holder.tvRealisasi.setText("Revenue: " + "Rp. " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")
+                        + " dari " + "Rp. " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".") );
             }
 
 
@@ -472,6 +472,7 @@ public class AktifitasActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent2 = new Intent(context, TambahRealisasi.class);
                         intent2.putExtra("id_aktivitas", mValues.get(position).getId());
+                        intent2.putExtra("id_kategori", mValues.get(position).getIdKategori());
                         intent2.putExtra("id_program", ((AktifitasActivity) context).getIntent().getExtras().getInt("id_program"));
                         context.startActivity(intent2);
                     }
