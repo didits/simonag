@@ -2,8 +2,10 @@ package com.simonag.simonag;
 
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -82,7 +84,6 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
 
         int tanggal=0;
-        int i = 0;
         for (Pertanggal k : t) {
             tanggal = Integer.valueOf(k.getTanggal());
             break;
@@ -187,30 +188,30 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
             mChart.getData().setHighlightEnabled(!mChart.getData().isHighlightEnabled());
         } else {
             // create a dataset and give it a type
-            set1 = new LineDataSet(values, "DataSet 1");
+            set1 = new LineDataSet(values, "");
 
             set1.setDrawIcons(false);
 
             // set the line to be drawn like this "- - - - - -"
-            set1.enableDashedLine(10f, 5f, 0f);
+            //set1.enableDashedLine(10f, 5f, 0f);
             set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.BLACK);
-            set1.setCircleColor(Color.BLACK);
+            set1.setColor(getResources().getColor(R.color.colorPrimary));
+            set1.setCircleColor(getResources().getColor(R.color.colorPrimary));
             set1.setLineWidth(1f);
             set1.setCircleRadius(3f);
             set1.setDrawCircleHole(false);
             set1.setValueTextSize(9f);
-            set1.setDrawFilled(true);
+            set1.setDrawFilled(false);
             set1.setFormLineWidth(1f);
             set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
             set1.setFormSize(15.f);
 
             if (Utils.getSDKInt() >= 18) {
                 // fill drawable only supported on api level 18 and above
-                //--Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
-                //--set1.setFillDrawable(drawable);
+                Drawable drawable = ContextCompat.getDrawable(getActivity(), R.color.colorWhite);
+                set1.setFillDrawable(drawable);
             } else {
-                set1.setFillColor(Color.BLACK);
+                //set1.setFillColor(getResources().getColor(R.color.colorPrimary));
             }
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();

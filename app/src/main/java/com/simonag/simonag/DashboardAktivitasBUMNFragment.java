@@ -124,17 +124,17 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             holder.text1.setText(mValues.get(position).getNama_perusahaan());
             holder.text2.setVisibility(View.VISIBLE);
 
-            int hasil=0;
+            double hasil=0;
             if(tipe==0){
                 try {
-                    hasil = mValues.get(position).getTotal_aktifitas()/nilai_tertinggi*100;
+                    hasil = (double) mValues.get(position).getTotal_aktifitas()/(double) nilai_tertinggi*100.0;
                 }catch (Exception e){
                     Log.e("bind_error", e.toString());
                 }
                 holder.text2.setText(mValues.get(position).getTotal_aktifitas()+"");
             }else {
                 try {
-                    hasil = mValues.get(position).getTotal_rupiah()/nilai_tertinggi*100;
+                    hasil = (double)mValues.get(position).getTotal_rupiah()/(double)nilai_tertinggi*100.0;
                 }catch (Exception e){
                     Log.e("bind_error", e.toString());
                 }
@@ -142,7 +142,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             }
             holder.progress_nilai.setVisibility(View.INVISIBLE);
             holder.progress.setProgressTextVisibility(NumberProgressBar.ProgressTextVisibility.Invisible);
-            holder.progress.setProgress(hasil);
+            holder.progress.setProgress((int)hasil);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

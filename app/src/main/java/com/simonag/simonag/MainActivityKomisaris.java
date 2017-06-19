@@ -151,13 +151,18 @@ public class MainActivityKomisaris extends AppCompatActivity {
     }
 
     private void getTabSelected(){
-        if(tabLayout.getTabAt(0).isSelected()){
-            tab_selected=0;
-        }else if(tabLayout.getTabAt(1).isSelected()){
-            tab_selected=1;
-        }else if(tabLayout.getTabAt(2).isSelected()){
-            tab_selected=2;
+        try {
+            if(tabLayout.getTabAt(0).isSelected()){
+                tab_selected=0;
+            }else if(tabLayout.getTabAt(1).isSelected()){
+                tab_selected=1;
+            }else if(tabLayout.getTabAt(2).isSelected()){
+                tab_selected=2;
+            }
+        }catch (Exception ignore){
+
         }
+
     }
 
     private void createTabIcons() {
@@ -197,7 +202,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new DashboardAktivitasBUMNFragment(), "Kualitas");
-        adapter.addFragment(new DashboardAktivitasKategoriFragment(), "Kapasitas");
+        adapter.addFragment(new DashboardAktivitasKategoriFragmentCoba(), "Kapasitas");
         adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Komersial");
         viewPager.setAdapter(adapter);
     }
