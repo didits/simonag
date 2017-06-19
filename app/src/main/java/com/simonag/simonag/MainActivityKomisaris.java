@@ -424,11 +424,11 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 });
                 return true;
             case R.id.aktivitas:
-                Prefs.putInt(Config.URL_FILTER_2, 0);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 0);
                 getDashboard();
                 return true;
             case R.id.biaya:
-                Prefs.putInt(Config.URL_FILTER_2, 1);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 1);
                 getDashboard();
                 return true;
             default:

@@ -40,10 +40,12 @@ public class Config {
     public static final String URL_DELETE_TARGET_PROGRAM_2 = URL_2 + "delete/aktivitasPerusahaan/";
     public static final String URL_FILTER_2 = URL_2 + "post/filterDasboard/";
 
+    public static final String FILTER_KOMISARIS = "filter";
 
     //----------- USER BUMN --------------//
     public static final String SHARED_USER = "user";
     public static final String ID_USER = "id_user";
+    public static final String ID_TIPE = "id_tipe";
     public static final String FOTO = "foto";
     public static final String ID_BUMN = "id_bumn";
     public static final String ID_ROLE = "id_role";
@@ -53,4 +55,5 @@ public class Config {
     public static final String EMAIL_BUMN = "email_bumn";
     public static final String PASSWORD_BUMN = "password_bumn";
     public static final String STATUS_LOGIN = "status_login";
+
 }

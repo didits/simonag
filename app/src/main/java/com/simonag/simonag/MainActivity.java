@@ -364,11 +364,11 @@ public class MainActivity extends AppCompatActivity {
                 });
                 return true;
             case R.id.aktivitas:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 0);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 0);
                 getDashboard();
                 return true;
             case R.id.biaya:
-                Prefs.putInt(Config.FILTER_BU_DEVY, 1);
+                Prefs.putInt(Config.FILTER_KOMISARIS, 1);
                 getDashboard();
                 return true;
             default:
@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError() {
 
             }
-        }, Config.URL_GET_DASHBOARD_TANGGAL + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
+        }, Config.URL_FILTER_1 + Prefs.getString(Config.TOKEN_BUMN, ""), new String[]{
                 "tanggal_awal" + "|" + tanggal_awal,
                 "tanggal_akhir" + "|" + tanggal_akhir
         });

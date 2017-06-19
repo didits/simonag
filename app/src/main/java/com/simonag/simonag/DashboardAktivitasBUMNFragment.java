@@ -23,8 +23,6 @@ import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +49,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivityKomisaris) getActivity()).db, Prefs.getInt(Config.URL_FILTER_2, 0)));
+                ((MainActivityKomisaris) getActivity()).db, Prefs.getInt(Config.FILTER_KOMISARIS, 0)));
     }
 
     public static class SimpleStringRecyclerViewAdapter

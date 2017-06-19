@@ -1,9 +1,8 @@
 package com.simonag.simonag;
 
 import android.graphics.Color;
-import android.os.Debug;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,7 @@ public class DashboardAktivitasKategoriFragment extends Fragment {
         PieChart mPieChart = (PieChart) v.findViewById(R.id.piechart);
 
         ArrayList<Kategori> kategoris = ((MainActivityKomisaris) getActivity()).db_kategori;
-        int j = Prefs.getInt(Config.URL_FILTER_2, 0);
+        int j = Prefs.getInt(Config.FILTER_KOMISARIS, 0);
         if (j == 0) {
             Log.d("kategori", kategoris.size()+"");
             for (Kategori k : kategoris) {
