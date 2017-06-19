@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent i = new Intent(MainActivity.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN, 0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN, "").toUpperCase());
+                                i.putExtra("GAMBAR_PERUSAHAAN", "" + Prefs.getString(Config.FOTO, ""));
                                 startActivity(i);
                                 break;
                             case 3:

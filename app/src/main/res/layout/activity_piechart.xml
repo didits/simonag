@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
     <LinearLayout
+        android:padding="@dimen/padding"
+        android:background="@drawable/edit_text"
         android:layout_margin="@dimen/padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +16,7 @@
             android:orientation="horizontal">
             <TextView
                 android:textColor="@color/primary"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Publikasi"/>
@@ -32,7 +34,7 @@
             android:orientation="horizontal">
             <TextView
                 android:textColor="@color/primary"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sponsorship"/>
@@ -50,7 +52,7 @@
             android:orientation="horizontal">
             <TextView
                 android:textColor="@color/primary"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hospitality"/>
