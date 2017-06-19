@@ -47,29 +47,23 @@
                         android:layout_height="wrap_content"
                         android:text="Penyediaan Jaringan Telekomunikasi "
                         android:textColor="@color/primary" />
+
                     <TextView
-                        android:id="@+id/tv_duedate"
+                        android:id="@+id/tv_persen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12 SEP 17"
+                        android:text="10%"
                         android:textColor="@color/colorAbu"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <com.daimajia.numberprogressbar.NumberProgressBar
-                    android:id="@android:id/progress"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_duedate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    custom:progress_reached_bar_height="12dp"
-                    custom:progress_reached_color="@color/colorPrimary"
-                    custom:progress_text_color="@color/colorPrimary"
-                    custom:progress_text_size="14sp"
-                    custom:progress_unreached_color="@color/colorWhite"
-                    custom:progress_unreached_bar_height="1dp" />
-
-
+                    android:text="01/01/2018"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_target"
