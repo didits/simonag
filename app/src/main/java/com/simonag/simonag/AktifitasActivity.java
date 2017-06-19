@@ -104,7 +104,7 @@ public class AktifitasActivity extends AppCompatActivity {
         nama_bumn.setText(nama);
         nama_program.setText("Program: " + program);
         String url = Config.URL_GAMBAR + pic;
-
+        Log.d("urlnih",url);
         Glide.with(gambar_bumn.getContext())
                 .load(url)
                 .fitCenter()

@@ -33,7 +33,7 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
         String monthName = mMonths[month % mMonths.length];
         String yearName = String.valueOf(year);
 
-        if (chart.getVisibleXRange() > 30 * 6) {
+        if (chart.getVisibleXRange() > 30 * 2) {
 
             return monthName + " " + yearName;
         } else {
@@ -66,7 +66,7 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
                     break;
             }
 
-            return dayOfMonth == 0 ? "" : dayOfMonth + appendix + " " + monthName;
+            return dayOfMonth == 0 ? "" : ("00" + String.valueOf(dayOfMonth)).substring(String.valueOf(dayOfMonth).length()) + " " + monthName+" "+yearName.substring(yearName.length() - 2);
         }
     }
 
