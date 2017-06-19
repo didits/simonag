@@ -170,29 +170,21 @@ public class TambahRealisasi extends AppCompatActivity {
 
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String tanggal_realisasi = tvTanggal.getText().toString();
-        String keterangan = "null";
-        int realisasi_nilai = 0;
+        String tanggal_realisasi="",keterangan = "null";
+        int realisasi_nilai = 0,revenue_realisasi_nilai = 0;
         try {
+            tanggal_realisasi = tvTanggal.getText().toString();
             realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
+            if(id_kategori!=3)revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
 
         }
-        int revenue_realisasi_nilai = 0;
-        if(id_kategori!=3){
-            try {
-                revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
-            } catch (Exception e) {
 
-            }
-
-        }
         if (tanggal_realisasi.equals("")) {
             AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
             ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
             return;
         }
-
 
         uploadRealisasi(
                 tanggal_realisasi,
