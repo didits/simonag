@@ -457,8 +457,8 @@ public class AktifitasActivity extends AppCompatActivity {
             }else if(mValues.get(position).getKategori().equals("komersial")){
                 holder.imgGambarKategori.setImageResource(R.drawable.coin);
                 holder.tvTarget.setText("Realisasi: " + mValues.get(position).getRealisasi() +"/"+ mValues.get(position).getTarget() +" ("+ mValues.get(position).getSatuan()+")");
-                holder.tvRealisasi.setText("Revenue: " + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")
-                        + "/" + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")+" (Rupiah)");
+                holder.tvRealisasi.setText("Revenue: " + format("%,d", mValues.get(position).getRealisasi_revenue()).replace(",", ".")
+                        + "/" + format("%,d", mValues.get(position).getTarget_revenue()).replace(",", ".")+" (Rupiah)");
             }
 
 

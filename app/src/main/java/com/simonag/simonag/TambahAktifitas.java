@@ -151,7 +151,7 @@ public class TambahAktifitas extends AppCompatActivity {
             etNama.setText(aktifitas.getNama());
             etTarget.setText(aktifitas.getTarget() + "");
             tvTargetPresentase.setText(aktifitas.getTarget() + "");
-            etRevenue.setText(aktifitas.getRealisasi() + "");
+            etRevenue.setText(aktifitas.getTarget_revenue() + "");
             spKategori.setSelection(aktifitas.getIdKategori() - 1);
             acSatuan.setText(aktifitas.getSatuan());
             tvDuedate.setText(aktifitas.getDuedate());

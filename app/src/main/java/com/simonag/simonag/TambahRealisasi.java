@@ -53,6 +53,8 @@ public class TambahRealisasi extends AppCompatActivity {
     EditText etNilai;
     @BindView(R.id.et_revenue)
     EditText etRevenue;
+    @BindView(R.id.tvrevenue)
+    TextView tvRevenue;
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
@@ -69,58 +71,17 @@ public class TambahRealisasi extends AppCompatActivity {
         );
         setContentView(R.layout.activity_tambah_realisasi);
         ButterKnife.bind(this);
-        setEditListener();
         avi.hide();
         setTitle("Tambah Realisasi");
         showActionBar();
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
         id_kategori = getIntent().getExtras().getInt("id_kategori");
-        if(id_kategori!=3){
+        if (id_kategori != 3) {
             etRevenue.setVisibility(View.GONE);
+            tvRevenue.setVisibility(View.GONE);
         }
     }
 
-    private void setEditListener() {
-        button.setEnabled(false);
-        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-
-        etNilai.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
-                    button.setEnabled(true);
-                    button.setBackground(getResources().getDrawable(R.drawable.button));
-                } else {
-                    button.setEnabled(false);
-                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-                }
-            }
-        });
-
-
-        etRevenue.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
-                    button.setEnabled(true);
-                    button.setBackground(getResources().getDrawable(R.drawable.button));
-                } else {
-                    button.setEnabled(false);
-                    button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-                }
-            }
-        });
-    }
 
     private void getdate() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
@@ -179,7 +140,19 @@ public class TambahRealisasi extends AppCompatActivity {
 
         }
         int revenue_realisasi_nilai = 0;
-        if(id_kategori!=3){
+        if(id_kategori == 1 || id_kategori == 2){
+            if (tanggal_realisasi.equals("") || etNilai.getText().toString().equals("")) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
+        }
+        if (id_kategori == 3) {
+            if (tanggal_realisasi.equals("") || etRevenue.getText().toString().equals("") || etNilai.getText().toString().equals("")) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
             try {
                 revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
             } catch (Exception e) {
@@ -207,6 +180,7 @@ public class TambahRealisasi extends AppCompatActivity {
             String keterangan,
             int realisasi_nilai,
             int revenue_realisasi_nilai) {
+        Log.d("revenue", revenue_realisasi_nilai + "");
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
         VolleyClass cek = new VolleyClass(this, true);
