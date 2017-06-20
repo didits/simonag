@@ -233,26 +233,23 @@ public class TambahAktifitas extends AppCompatActivity {
 
 
     private void tambah_aktifitas() {
-        int id_kategori = spKategori.getSelectedItemPosition() + 1;
-        int id_satuan = satuanMap.get(acSatuan.getText().toString());
-        String nama_satuan = acSatuan.getText().toString();
-        String deadline = tvDuedate.getText().toString();
         String keterangan = "null";
-        String nama_aktivitas = etNama.getText().toString();
-        int target_nilai = 0;
+        int target_nilai = 0,id_satuan = 0,revenue_target_nilai = 0;
+        String nama_satuan= "",deadline = "",nama_aktivitas = "";
+        int id_kategori = spKategori.getSelectedItemPosition() + 1;
         try {
+
+            id_satuan = satuanMap.get(acSatuan.getText().toString());
+            nama_satuan = acSatuan.getText().toString();
+            deadline = tvDuedate.getText().toString();
+            nama_aktivitas = etNama.getText().toString();
             target_nilai = Integer.parseInt(etTarget.getText().toString());
-        } catch (Exception e) {
-
-        }
-
-        int revenue_target_nilai = 0;
-        try {
             if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
             revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
 
         }
+
         AlertDialogCustom ad = new AlertDialogCustom(this);
 
         if (id_kategori == 1) {

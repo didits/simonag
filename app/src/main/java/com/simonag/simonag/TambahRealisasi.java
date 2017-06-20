@@ -53,8 +53,9 @@ public class TambahRealisasi extends AppCompatActivity {
     EditText etNilai;
     @BindView(R.id.et_revenue)
     EditText etRevenue;
-    @BindView(R.id.tvrevenue)
-    TextView tvRevenue;
+
+    @BindView(R.id.tv_revenueRealisasi)
+    TextView tvRevenueRealisasi;
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
@@ -78,10 +79,71 @@ public class TambahRealisasi extends AppCompatActivity {
         id_kategori = getIntent().getExtras().getInt("id_kategori");
         if (id_kategori != 3) {
             etRevenue.setVisibility(View.GONE);
-            tvRevenue.setVisibility(View.GONE);
+            tvRevenueRealisasi.setVisibility(View.GONE);
         }
     }
 
+    private void setEditListener() {
+        button.setEnabled(false);
+        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+        if (id_kategori != 3) {
+            etNilai.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+        } else {
+            etNilai.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+
+
+            etRevenue.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!etRevenue.getText().toString().equals("") && !etNilai.getText().toString().equals("")) {
+                        button.setEnabled(true);
+                        button.setBackground(getResources().getDrawable(R.drawable.button));
+                    } else {
+                        button.setEnabled(false);
+                        button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
+                    }
+                }
+            });
+        }
+
+    }
 
     private void getdate() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
@@ -131,16 +193,17 @@ public class TambahRealisasi extends AppCompatActivity {
 
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String tanggal_realisasi = tvTanggal.getText().toString();
-        String keterangan = "null";
-        int realisasi_nilai = 0;
+        String tanggal_realisasi = "", keterangan = "null";
+        int realisasi_nilai = 0, revenue_realisasi_nilai = 0;
         try {
+            tanggal_realisasi = tvTanggal.getText().toString();
             realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
+            if (id_kategori != 3)
+                revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
 
         }
-        int revenue_realisasi_nilai = 0;
-        if(id_kategori == 1 || id_kategori == 2){
+        if (id_kategori == 1 || id_kategori == 2) {
             if (tanggal_realisasi.equals("") || etNilai.getText().toString().equals("")) {
                 AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
@@ -156,23 +219,21 @@ public class TambahRealisasi extends AppCompatActivity {
             try {
                 revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
             } catch (Exception e) {
-
             }
 
-        }
-        if (tanggal_realisasi.equals("")) {
-            AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
-            ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
-            return;
-        }
+            if (tanggal_realisasi.equals("")) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                return;
+            }
 
-
-        uploadRealisasi(
-                tanggal_realisasi,
-                keterangan,
-                realisasi_nilai,
-                revenue_realisasi_nilai
-        );
+            uploadRealisasi(
+                    tanggal_realisasi,
+                    keterangan,
+                    realisasi_nilai,
+                    revenue_realisasi_nilai
+            );
+        }
     }
 
     private void uploadRealisasi(
