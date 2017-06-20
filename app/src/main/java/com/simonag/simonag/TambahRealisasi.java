@@ -198,11 +198,13 @@ public class TambahRealisasi extends AppCompatActivity {
         try {
             tanggal_realisasi = tvTanggal.getText().toString();
             realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
-            if (id_kategori != 3)
+            if (id_kategori == 3)
                 revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
 
         }
+
+
         if (id_kategori == 1 || id_kategori == 2) {
             if (tanggal_realisasi.equals("") || etNilai.getText().toString().equals("")) {
                 AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
@@ -220,20 +222,21 @@ public class TambahRealisasi extends AppCompatActivity {
                 revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
             } catch (Exception e) {
             }
-
-            if (tanggal_realisasi.equals("")) {
-                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
-                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
-                return;
-            }
-
-            uploadRealisasi(
-                    tanggal_realisasi,
-                    keterangan,
-                    realisasi_nilai,
-                    revenue_realisasi_nilai
-            );
         }
+
+        if (tanggal_realisasi.equals("")) {
+            AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+            ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+            return;
+        }
+
+        uploadRealisasi(
+                tanggal_realisasi,
+                keterangan,
+                realisasi_nilai,
+                revenue_realisasi_nilai
+        );
+
     }
 
     private void uploadRealisasi(

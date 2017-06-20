@@ -238,8 +238,12 @@ public class TambahAktifitas extends AppCompatActivity {
         String nama_satuan= "",deadline = "",nama_aktivitas = "";
         int id_kategori = spKategori.getSelectedItemPosition() + 1;
         try {
-
             id_satuan = satuanMap.get(acSatuan.getText().toString());
+        }catch (Exception e){
+
+        }
+        try {
+
             nama_satuan = acSatuan.getText().toString();
             deadline = tvDuedate.getText().toString();
             nama_aktivitas = etNama.getText().toString();
@@ -247,16 +251,17 @@ public class TambahAktifitas extends AppCompatActivity {
             if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
             revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
         } catch (Exception e) {
-
+            Log.d("error_satuan", e.toString());
         }
 
         AlertDialogCustom ad = new AlertDialogCustom(this);
 
         if (id_kategori == 1) {
-            if (nama_aktivitas.equals("") || deadline.equals("")) {
+            if (nama_aktivitas.equals("") || deadline.equals("") || tvTargetPresentase.getText().toString().equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }
+            target_nilai = Integer.parseInt(tvTargetPresentase.getText().toString());
         } else if (id_kategori == 2) {
             if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
