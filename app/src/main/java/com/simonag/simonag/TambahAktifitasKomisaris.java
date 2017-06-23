@@ -65,7 +65,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class TambahAktifitasKomisaris extends AppCompatActivity {
 
     AktifitasKomisaris aktifitas;
-    int id_program;
     SimpleDateFormat dateFormatter;
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
@@ -92,7 +91,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
-    HashMap<String, Integer> satuanMap;
     @BindView(R.id.judul_tanggal_mulai)
     TextView judulTanggalMulai;
     @BindView(R.id.judul_tanggal_selesai)
@@ -136,7 +134,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         getJenisMedia();
         getKategori();
-        id_program = getIntent().getExtras().getInt("id_program");
         if (getIntent().hasExtra("aktifitas")) {
             button.setText("Simpan");
             setTitle("Edit Aktivfitas");

@@ -27,15 +27,14 @@
                 android:layout_marginBottom="5dp"
                 android:text="Nama Aktifitas" />
 
-            <EditText
-                android:id="@+id/et_nama"
+            <TextView
+                android:id="@+id/tv_nama"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
-                android:inputType="text"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
@@ -46,16 +45,15 @@
                 android:layout_marginBottom="5dp"
                 android:text="Kategori" />
 
-            <Spinner
-                android:id="@+id/sp_kategori"
+            <TextView
+                android:id="@+id/tv_kategori"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="@dimen/padding"
                 android:background="@drawable/edit_text"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
+                android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 
@@ -106,15 +104,14 @@
                 android:layout_marginBottom="5dp"
                 android:text="Nilai (Rp)" />
 
-            <EditText
-                android:id="@+id/et_nilai"
+            <TextView
+                android:id="@+id/tv_nilai"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
-                android:inputType="number"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
@@ -126,15 +123,14 @@
                 android:layout_marginBottom="5dp"
                 android:text="Keterangan" />
 
-            <EditText
-                android:id="@+id/et_keterangan"
+            <TextView
+                android:id="@+id/tv_keterangan"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
-                android:inputType="text"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
@@ -146,8 +142,8 @@
                 android:layout_marginBottom="5dp"
                 android:text="Jenis Media" />
 
-            <Spinner
-                android:id="@+id/sp_jenis_media"
+            <TextView
+                android:id="@+id/tv_jenis_media"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
@@ -166,15 +162,14 @@
                 android:layout_marginBottom="5dp"
                 android:text="URL" />
 
-            <EditText
-                android:id="@+id/et_url"
+            <TextView
+                android:id="@+id/tv_url"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
-                android:inputType="text"
                 android:padding="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
@@ -185,19 +180,6 @@
                 android:layout_marginBottom="5dp"
                 android:text="Capture" />
 
-            <Button
-                android:text="Pilih File"
-                android:id="@+id/b_capture"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
             <ImageView
                 android:id="@+id/IV_capture"
                 android:padding="16dp"
@@ -206,16 +188,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/button"
-                android:text="TAMBAH"
-                android:textAlignment="center"
-                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
