@@ -82,6 +82,12 @@ public class AktifitasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(Context.MODE_PRIVATE)
+                .setPrefsName(Config.SHARED_USER)
+                .setUseDefaultSharedPreference(true)
+                .build();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Asap-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)

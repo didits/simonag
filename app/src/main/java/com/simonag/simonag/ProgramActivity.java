@@ -82,6 +82,13 @@ public class ProgramActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(Context.MODE_PRIVATE)
+                .setPrefsName(Config.SHARED_USER)
+                .setUseDefaultSharedPreference(true)
+                .build();
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Asap-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -108,7 +115,7 @@ public class ProgramActivity extends AppCompatActivity {
                     .into(gambar_bumn);
         }
 
-        Log.d("cobacoba", Prefs.getInt(Config.ID_ROLE, 0) + "");
+
         if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(value)) {
             tambah_program.setVisibility(View.VISIBLE);
         } else {
