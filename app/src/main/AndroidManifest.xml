@@ -39,6 +39,7 @@
         <activity android:name=".TentangActivity" android:theme="@style/AppTheme" android:label="View Program" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahAktifitas" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahAktifitasKomisaris" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".DetailAktifitasKomisaris" android:theme="@style/AppTheme" android:label="Detail Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".TambahRealisasi" android:theme="@style/AppTheme" android:label="Tambah Aktifitas" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SplashActivity" android:screenOrientation="portrait" >
             <intent-filter>

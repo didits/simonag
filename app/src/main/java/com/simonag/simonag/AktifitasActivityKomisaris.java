@@ -57,7 +57,6 @@ import static java.lang.String.format;
  */
 
 public class AktifitasActivityKomisaris extends AppCompatActivity {
-    public static final String EXTRA_NAME = "id_program";
     public BottomSheetBehavior bottomSheetBehavior;
     String value, nama, pic, program;
     AktifitasKomisaris temp_aktivitas;
@@ -217,13 +216,11 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.tambah_aktifitas:
                 Intent intent = new Intent(AktifitasActivityKomisaris.this, TambahAktifitasKomisaris.class);
-                intent.putExtra("id_program", getIntent().getExtras().getInt("id_program"));
                 startActivity(intent);
                 break;
             case R.id.edit:
                 Intent intent2 = new Intent(AktifitasActivityKomisaris.this, TambahAktifitasKomisaris.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("id_program", getIntent().getExtras().getInt("id_program"));
                 bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
                 intent2.putExtras(bundle);
                 startActivity(intent2);
@@ -428,11 +425,22 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.setIsRecyclable(false);
             holder.tvNo.setText(mValues.get(position).getNo() + "");
-
             holder.tvDuedate.setText(mValues.get(position).getAkhirPelaksanaan());
             holder.tvKategori.setText("Kategori: " + mValues.get(position).getNama_kategori());
             holder.tvNilai.setText("Rp. " + format("%,d", mValues.get(position).getNilaiRupiah()).replace(",", "."));
-
+            holder.viewDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Prefs.getInt(Config.ID_BUMN, 0) == Integer.parseInt(val)) {
+                        Context context = v.getContext();
+                        Intent intent2 = new Intent(context, DetailAktifitasKomisaris.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("aktifitas", Parcels.wrap(mValues.get(position)));
+                        intent2.putExtras(bundle);
+                        context.startActivity(intent2);
+                    }
+                }
+            });
             if (mValues.get(position).getNama_kategori().equals("publikasi")) {
                 holder.tvNama.setText(mValues.get(position).getNamaAktivitas() + " (" + mValues.get(position).getJenisMedia() + ")");
                 holder.tvKategoriDanNama.setVisibility(View.VISIBLE);
