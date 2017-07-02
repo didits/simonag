@@ -4,10 +4,22 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
+    <TextView
+        android:layout_marginLeft="-10dp"
+        android:id="@+id/kategori"
+        android:layout_marginTop="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="270"
+        android:text="Rupiah" />
+
     <com.github.mikephil.charting.charts.LineChart
-        android:layout_margin="@dimen/padding"
         android:id="@+id/chart1"
         android:layout_width="match_parent"
-        android:layout_height="400dp" />
+        android:layout_height="450dp"
+        android:layout_marginTop="@dimen/padding"
+        android:layout_marginBottom="@dimen/padding"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="@dimen/padding"/>
 
 </RelativeLayout>

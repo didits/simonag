@@ -30,7 +30,7 @@
             <TextView
                 android:id="@+id/tv_nama"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -48,7 +48,7 @@
             <TextView
                 android:id="@+id/tv_kategori"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
             <TextView
                 android:id="@+id/tv_tanggal_mulai"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -88,7 +88,7 @@
             <TextView
                 android:id="@+id/tv_tanggal_selesai"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -107,7 +107,7 @@
             <TextView
                 android:id="@+id/tv_nilai"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -126,7 +126,7 @@
             <TextView
                 android:id="@+id/tv_keterangan"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"
@@ -145,7 +145,7 @@
             <TextView
                 android:id="@+id/tv_jenis_media"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:layout_marginBottom="@dimen/padding"
@@ -165,7 +165,7 @@
             <TextView
                 android:id="@+id/tv_url"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_weight="1"

@@ -12,7 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -22,17 +24,20 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.DayAxisValueFormatter;
 import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.Config;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -49,6 +54,13 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
         View v = inflater.inflate(R.layout.aktifitas_per_tanggal, container, false);
 
+        TextView kategori_text = (TextView) v.findViewById(R.id.kategori);
+        if(Prefs.getInt(Config.FILTER_KOMISARIS, 0)==0){
+            kategori_text.setText("aktivitas");
+        }else {
+            kategori_text.setText("rupiah");
+        }
+
 
         mChart = (LineChart) v.findViewById(R.id.chart1);
         mChart.setOnChartGestureListener(this);
@@ -63,12 +75,12 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
         // enable scaling and dragging
         mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        // mChart.setScaleXEnabled(true);
-        // mChart.setScaleYEnabled(true);
+        //mChart.setScaleEnabled(true);
+        mChart.setScaleXEnabled(true);
+        mChart.setScaleYEnabled(true);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        mChart.setPinchZoom(true);
+        //mChart.setPinchZoom(true);
 
         // set an alternative background color
         // mChart.setBackgroundColor(Color.GRAY);
@@ -76,7 +88,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
         // x-axis limit line
         LimitLine llXAxis = new LimitLine(10f, "Index 10");
-        llXAxis.setLineWidth(4f);
+        llXAxis.setLineWidth(100f);
         llXAxis.enableDashedLine(10f, 10f, 0f);
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
@@ -95,17 +107,26 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
-        xAxis.setLabelCount(7);
+        xAxis.setLabelCount(3);
         xAxis.setValueFormatter(xAxisFormatter);
 
 
+
         YAxis leftAxis = mChart.getAxisLeft();
+
+
+
+
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
         //leftAxis.setAxisMaximum(200f);
         //leftAxis.setAxisMinimum(-5f);
         //leftAxis.setYOffset(20f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setDrawZeroLine(false);
+        leftAxis.setDrawZeroLine(true);
+
+        MyValueFormatter f = new MyValueFormatter();
+        //leftAxis.setValueFormatter(f);
+
 
         // limit lines are drawn behind data (and not on top)
         leftAxis.setDrawLimitLinesBehindData(true);
@@ -134,8 +155,10 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         // // dont forget to refresh the drawing
         // mChart.invalidate();
 
+
         return v;
     }
+
 
 
     @Override
@@ -157,6 +180,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
     }
 
+
     private void setData(int count, float range) {
 
         ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
@@ -165,6 +189,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
         int i = 0;
         if(Prefs.getInt(Config.FILTER_KOMISARIS, 0)==0){
+
             for (Pertanggal k : t) {
                 values.add(new Entry(i, k.getTotal_aktivitas(), getResources().getDrawable(R.drawable.logo)));
                 i = i + 1;
@@ -205,6 +230,9 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
             set1.setFormLineWidth(1f);
             set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
             set1.setFormSize(15.f);
+
+            //MyValueFormatter f = new MyValueFormatter();
+            //set1.setValueFormatter(f);
 
             if (Utils.getSDKInt() >= 18) {
                 // fill drawable only supported on api level 18 and above

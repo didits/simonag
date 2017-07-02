@@ -20,7 +20,7 @@
             <group>
                 <item
                     android:id="@+id/aktivitas"
-                    android:title="Aktifitas" />
+                    android:title="Aktivitas" />
                 <item
                     android:id="@+id/biaya"
                     android:title="Biaya" />
