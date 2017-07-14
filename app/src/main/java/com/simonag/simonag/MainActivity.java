@@ -115,31 +115,36 @@ public class MainActivity extends AppCompatActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Sponsorship").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
-                        new PrimaryDrawerItem().withIdentifier(6).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
+                        new PrimaryDrawerItem().withIdentifier(4).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        Intent i;
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
                                 break;
                             case 2:
-                                Intent i = new Intent(MainActivity.this, ProgramActivity.class);
+                                i = new Intent(MainActivity.this, ProgramActivity.class);
                                 i.putExtra("KEY", "" + Prefs.getInt(Config.ID_BUMN, 0));
                                 i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN, "").toUpperCase());
                                 i.putExtra("GAMBAR_PERUSAHAAN", "" + Prefs.getString(Config.FOTO, ""));
                                 startActivity(i);
                                 break;
                             case 3:
+                                i = new Intent(MainActivity.this, MainActivityKomisaris.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
                                 break;
                             case 4:
-                                startActivity(new Intent(MainActivity.this, TentangActivity.class));
+                                i = new Intent(MainActivity.this, TentangActivity.class);
+                                startActivity(i);
                                 break;
                             case 5:
-                                out();
-                            case 6:
                                 out();
                                 break;
                         }
