@@ -42,14 +42,14 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_dashboard_list, container, false);
         setupRecyclerView(rv);
-        Log.d("get_data", ((MainActivityKomisaris) getActivity()).db.size()+"");
+        Log.d("get_data", ((MainActivity) getActivity()).dbkom.size()+"");
         return rv;
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivityKomisaris) getActivity()).db, Prefs.getInt(Config.FILTER_KOMISARIS, 0)));
+                ((MainActivity) getActivity()).dbkom, Prefs.getInt(Config.FILTER_KOMISARIS, 0)));
     }
 
     public static class SimpleStringRecyclerViewAdapter

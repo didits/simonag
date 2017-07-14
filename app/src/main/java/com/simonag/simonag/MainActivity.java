@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout subheader;
     @BindView(R.id.jumlah_bumn)
     TextView keterangan;
+    boolean dashajs=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPrefsName(Config.SHARED_USER)
                 .setUseDefaultSharedPreference(true)
                 .build();
-
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Asap-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO, "");
         final IProfile profile = new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
                 .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
@@ -138,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i;
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
+                                dashajs=true;
                                 setTitle("Pencapaian 3K");
                                 invalidateOptionsMenu();
                                 header.setVisibility(View.VISIBLE);
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                 getDashboard();
                                 break;
                             case 2:
+                                dashajs=false;
                                 setTitle("Sponsorship");
                                 invalidateOptionsMenu();
                                 header.setVisibility(View.GONE);
@@ -184,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             judul.setText("KUALITAS");
             persentase.setText(kualitas + "%");
-        }else if(result.getCurrentSelection()==2){
+        }else{
             judul.setText("Aktivitas Per");
             persentase.setText("BUMN");
         }
@@ -196,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             judulTwo.setText("KAPASITAS");
             persentaseTwo.setText(kapasitas + "%");
-        }else if(result.getCurrentSelection()==2){
+        }else{
             judulTwo.setText("Aktivitas Per");
             persentaseTwo.setText("Kategori");
         }
@@ -208,10 +209,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             judulThree.setText("KOMERSIAL");
             persentaseThree.setText(komersial + "%");
-        }else if(result.getCurrentSelection()==2){
+        }else{
             judulThree.setText("Aktivitas Per");
             persentaseThree.setText("Tanggal");
         }
@@ -228,13 +229,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager() {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        if(result.getCurrentSelection()==1){
+        Log.d("aaaa",dashajs+"");
+        if(dashajs){
             adapter.addFragment(new DashboardKualitasFragment(), "Kualitas");
             adapter.addFragment(new DashboardKapasitasFragment(), "Kapasitas");
             adapter.addFragment(new DashboardKomersialFragment(), "Komersial");
-        }else if(result.getCurrentSelection()==2){
+        }else{
             adapter.addFragment(new DashboardAktivitasBUMNFragment(), "Kualitas");
             adapter.addFragment(new DashboardAktivitasKategoriFragmentCoba(), "Kapasitas");
             adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Komersial");
@@ -297,9 +299,9 @@ public class MainActivity extends AppCompatActivity {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "";
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             url=Config.URL_GET_DASHBOARD + tokena;
-        }else if(result.getCurrentSelection()==2){
+        }else{
             url=Config.URL_GET_DASHBOARD_2 + tokena;
         }
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -308,26 +310,27 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             if (response.getString("status").equals("success")) {
-                                if(result.getCurrentSelection()==1){
+                                if(dashajs){
                                     db = jsonDecodeBilling(response.getString("perusahaan"));
                                     keterangan.setVisibility(View.VISIBLE);
                                     keterangan.setText("Jumlah BUMN: " + response.getString("jumlah_perusahaan")
                                             + " | Jumlah Program: " + response.getString("jumlah_program"));
-                                }else if(result.getCurrentSelection()==2){
+                                }else{
                                     dbkom = jsonDecodeBillingKom(response.getString("perusahaan"));
                                     db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                                     db_tanggal = jsonPertanggal(response.getString("pertanggal"));
                                 }
 
                                 if (viewPager != null) {
+                                    Log.d("get_dataajs", "adadds");
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                                    setupViewPager(viewPager);
+                                    setupViewPager();
                                 }
                                 tabLayout.setupWithViewPager(viewPager);
 
-                                if(result.getCurrentSelection()==1){
+                                if(dashajs){
                                     jsonDecodePersentaseKategori(response.getString("kategori"));
-                                }else if(result.getCurrentSelection()==2){
+                                }else{
                                     createTabIcons(0.0,0.0,0.0);
                                 }
 
@@ -524,6 +527,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 return true;
+            case R.id.aktivitas:
+                Prefs.putInt(Config.FILTER_KOMISARIS, 0);
+                getTabSelected();
+                getDashboard();
+                return true;
+            case R.id.biaya:
+                Prefs.putInt(Config.FILTER_KOMISARIS, 1);
+                getTabSelected();
+                getDashboard();
+                return true;
             case R.id.refresh:
                 getTabSelected();
                 getDashboard();
@@ -549,9 +562,9 @@ public class MainActivity extends AppCompatActivity {
     private void getDashboardFilter(final String tanggal_awal, final String tanggal_akhir) {
         avi.show();
         String url="";
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             url=Config.URL_FILTER_1 + Prefs.getString(Config.TOKEN_BUMN, "");
-        }else if(result.getCurrentSelection()==2){
+        }else{
             url=Config.URL_FILTER_2 + Prefs.getString(Config.TOKEN_BUMN, "");
         }
 
@@ -563,23 +576,24 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject response = new JSONObject(s);
                     if (response.getString("status").equals("success")) {
 
-                        if(result.getCurrentSelection()==1){
+                        if(dashajs){
                             db = jsonDecodeBilling(response.getString("perusahaan"));
-                        }else if(result.getCurrentSelection()==2){
+                        }else{
                             dbkom = jsonDecodeBillingKom(response.getString("perusahaan"));
                             db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                             db_tanggal = jsonPertanggal(response.getString("pertanggal"));
                         }
 
                         if (viewPager != null) {
+                            Log.d("get_dataajs", "adadds");
                             viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                            setupViewPager(viewPager);
+                            setupViewPager();
                         }
                         tabLayout.setupWithViewPager(viewPager);
 
-                        if(result.getCurrentSelection()==1){
+                        if(dashajs){
                             jsonDecodePersentaseKategori(response.getString("kategori"));
-                        }else if(result.getCurrentSelection()==2){
+                        }else{
                             createTabIcons(0.0,0.0,0.0);
                         }
 
@@ -612,9 +626,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(result.getCurrentSelection()==1){
+        if(dashajs){
             getMenuInflater().inflate(R.menu.menu_pak_ajs, menu);
-        }else if(result.getCurrentSelection()==2){
+        }else{
             getMenuInflater().inflate(R.menu.menu_bu_devy, menu);
         }
         return true;

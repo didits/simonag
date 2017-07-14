@@ -67,7 +67,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
     Toolbar toolbar;
     public AccountHeader headerResult;
     public Drawer result;
-    ArrayList<DashboardKomisaris> db = new ArrayList<>();
+    ArrayList<DashboardKomisaris> dbkom = new ArrayList<>();
     ArrayList<Kategori> db_kategori = new ArrayList<>();
     ArrayList<Pertanggal> db_tanggal = new ArrayList<>();
     @BindView(R.id.tabs)
@@ -273,7 +273,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             if(response.getString("status").equals("success")){
-                                db = jsonDecodeBilling(response.getString("perusahaan"));
+                                dbkom = jsonDecodeBilling(response.getString("perusahaan"));
                                 db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                                 db_tanggal = jsonPertanggal(response.getString("pertanggal"));
 
@@ -324,7 +324,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 try {
                     JSONObject response = new JSONObject(s);
                     if(response.getString("status").equals("success")){
-                        db = jsonDecodeBilling(response.getString("perusahaan"));
+                        dbkom = jsonDecodeBilling(response.getString("perusahaan"));
                         db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
                         db_tanggal = jsonPertanggal(response.getString("pertanggal"));
                         if (viewPager != null) {

@@ -1,6 +1,5 @@
 package com.simonag.simonag;
 
-import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -24,20 +22,17 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.DayAxisValueFormatter;
 import com.simonag.simonag.model.Pertanggal;
 import com.simonag.simonag.utils.Config;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -93,7 +88,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
-        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivity) getActivity()).db_tanggal;
 
         int tanggal=0;
         for (Pertanggal k : t) {
@@ -183,7 +178,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
     private void setData(int count, float range) {
 
-        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivity) getActivity()).db_tanggal;
 
         ArrayList<Entry> values = new ArrayList<Entry>();
 

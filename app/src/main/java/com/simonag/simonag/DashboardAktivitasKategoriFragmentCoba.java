@@ -1,40 +1,23 @@
 package com.simonag.simonag;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.utils.Config;
-
-import org.eazegraph.lib.charts.PieChart;
-import org.eazegraph.lib.models.PieModel;
 
 import java.util.ArrayList;
 
@@ -107,7 +90,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
 
     private void setData(int count, float range) {
 
-        ArrayList<Kategori> kategoris = ((MainActivityKomisaris) getActivity()).db_kategori;
+        ArrayList<Kategori> kategoris = ((MainActivity) getActivity()).db_kategori;
         int j = Prefs.getInt(Config.FILTER_KOMISARIS, 0);
 
         float mult = range;
