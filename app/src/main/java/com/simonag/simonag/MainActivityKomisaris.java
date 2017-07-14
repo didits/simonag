@@ -94,7 +94,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
         );
         setContentView(R.layout.activity_main_komisaris);
         ButterKnife.bind(this);
-        setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
         final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
@@ -117,7 +116,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Aktivitas").withIcon(FontAwesome.Icon.faw_plus),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Pencapaian 3K").withIcon(FontAwesome.Icon.faw_bar_chart),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Pencapaian 3K").withIcon(FontAwesome.Icon.faw_check_square_o),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withIdentifier(4).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
                         new PrimaryDrawerItem().withIdentifier(5).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)

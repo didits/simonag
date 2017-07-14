@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         );
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setTitle("Pencapaian 3K");
         setSupportActionBar(toolbar);
 
         String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Input Program").withIcon(FontAwesome.Icon.faw_plus),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Sponsorship").withIcon(FontAwesome.Icon.faw_bar_chart),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Sponsorship").withIcon(FontAwesome.Icon.faw_handshake_o),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withIdentifier(4).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
                         new PrimaryDrawerItem().withIdentifier(5).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
