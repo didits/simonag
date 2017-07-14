@@ -174,8 +174,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
     }
 
     private void createTabIcons() {
-
-
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
@@ -189,7 +187,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
         judulTwo.setText("Aktivitas Per");
         persentaseTwo.setText("Kategori");
         tabLayout.getTabAt(1).setCustomView(tabTwo);
-
 
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
@@ -274,7 +271,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("respons", response.toString());
                         try {
                             if(response.getString("status").equals("success")){
                                 db = jsonDecodeBilling(response.getString("perusahaan"));
@@ -325,7 +321,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
             @Override
             public void onSuccess(String s) {
-                Log.d("get_server", s);
                 try {
                     JSONObject response = new JSONObject(s);
                     if(response.getString("status").equals("success")){

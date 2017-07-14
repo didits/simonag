@@ -118,13 +118,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void move(int id_role, int id_tipe) {
-        if (id_tipe == 1) {
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-        }else if(id_tipe == 2){
-            Intent i = new Intent(LoginActivity.this, MainActivityKomisaris.class);
-            startActivity(i);
-        }
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
+//        if (id_tipe == 1) {
+//            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(i);
+//        }else if(id_tipe == 2){
+//            Intent i = new Intent(LoginActivity.this, MainActivityKomisaris.class);
+//            startActivity(i);
+//        }
         finish();
     }
 

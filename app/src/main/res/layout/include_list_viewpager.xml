@@ -21,35 +21,41 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_scrollFlags="scroll|enterAlways|snap" />
+
         <LinearLayout
-            android:gravity="center"
-            android:background="@color/colorAbuAbu"
+            android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorAbuAbu"
+            android:gravity="center">
+
             <TextView
                 fontPath="fonts/Asap-Bold.ttf"
-                android:textColor="@color/colorPrimary"
-                android:gravity="center_horizontal"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sistem Informasi Monitoring\nProgram Kerja BUMN untuk Asian Games"/>
+                android:layout_margin="8dp"
+                android:gravity="center_horizontal"
+                android:text="Sistem Informasi Monitoring\nProgram Kerja BUMN untuk Asian Games"
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
+
         <LinearLayout
-            android:padding="5dp"
-            android:gravity="center_horizontal"
-            android:background="@color/colorWhite"
+            android:id="@+id/subheader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:gravity="center_horizontal"
+            android:padding="5dp">
+
             <TextView
-                android:visibility="gone"
-                android:textSize="10sp"
                 android:id="@+id/jumlah_bumn"
-                android:textColor="#000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jumlah BUMN | Jumlah Program"/>
+                android:text="Jumlah BUMN | Jumlah Program"
+                android:textColor="#000"
+                android:textSize="10sp"
+                android:visibility="gone" />
         </LinearLayout>
         <LinearLayout
             android:background="@color/colorWhite"
