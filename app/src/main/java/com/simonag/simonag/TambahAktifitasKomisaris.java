@@ -340,11 +340,15 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             if (nama_aktivitas.equals("")||akhir_pelaksanaan.equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
+            }else {
+                awal_pelaksanaan = akhir_pelaksanaan;
             }
         }else if(id_kategori2 == 3){
             if (nama_aktivitas.equals("") || akhir_pelaksanaan.equals("") ) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
+            }else {
+                awal_pelaksanaan = akhir_pelaksanaan;
             }
         }
         if (getIntent().hasExtra("aktifitas")) {
@@ -376,7 +380,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         params.put("capture", capture + "");
         params.put("isi_capture", isi_capture + "");
         params.put("id_aktivitas", aktifitas.getIdAktivitas() + "");
-        Log.d("[DEBUG]", String.valueOf(params));
+        Log.d("parame", String.valueOf(params));
         VolleyClass2 cek = new VolleyClass2(this, true);
         cek.get_data_from_server(new VolleyClass2.VolleyCallback() {
             @Override
