@@ -20,7 +20,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -72,10 +71,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     EditText etNama;
     @BindView(R.id.sp_kategori)
     Spinner spKategori;
-    @BindView(R.id.sp_jenis_media)
-    Spinner spJenisMedia;
-    @BindView(R.id.et_url)
-    EditText etUrl;
     @BindView(R.id.b_capture)
     Button bCapture;
     @BindView(R.id.tv_tanggal_mulai)
@@ -91,18 +86,12 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
-    @BindView(R.id.judul_tanggal_mulai)
-    TextView judulTanggalMulai;
-    @BindView(R.id.judul_tanggal_selesai)
-    TextView judulTanggalSelesai;
+    @BindView(R.id.judul_tanggal)
+    TextView judulTanggal;
     @BindView(R.id.judul_nilai)
     TextView judulNilai;
     @BindView(R.id.judul_keterangan)
     TextView judulKeterangan;
-    @BindView(R.id.judul_jenis_media)
-    TextView judulJenisMedia;
-    @BindView(R.id.judul_url)
-    TextView judulUrl;
 
     //Image request code
     private int PICK_IMAGE_REQUEST = 1;
@@ -138,7 +127,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         showActionBar();
         setTitle("Tambah Aktifitas");
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        getJenisMedia();
         getKategori();
         if (getIntent().hasExtra("aktifitas")) {
             button.setText("Simpan");
@@ -147,10 +135,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             etNama.setText(aktifitas.getNamaAktivitas());
             if (aktifitas.getIdKategori() >= 0)
                 spKategori.setSelection(aktifitas.getIdKategori() - 1);
-            if (aktifitas.getJenisMedia().contentEquals("Offline")) spJenisMedia.setSelection(0);
-            else spJenisMedia.setSelection(1);
-
-            etUrl.setText(aktifitas.getUrl());
             tvTanggalMulai.setText(aktifitas.getAwalPelaksanaan());
             tvTanggalSelesai.setText(aktifitas.getAkhirPelaksanaan());
             etNilai.setText(aktifitas.getNilaiRupiah() + "");
@@ -206,61 +190,15 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
 
     private void getKategori() {
         String[] kategoriArray = new String[3];
-        kategoriArray[0] = "Publikasi";
-        kategoriArray[1] = "Sponsorship";
-        kategoriArray[2] = "Hospitality";
+        kategoriArray[0] = "Cash";
+        kategoriArray[1] = "In Kind";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spKategori.setAdapter(adapter);
-        spKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                int item = spKategori.getSelectedItemPosition();
-                if (item == 0) {
-                    etUrl.setVisibility(View.VISIBLE);
-                    spJenisMedia.setVisibility(View.VISIBLE);
-                    tvTanggalMulai.setVisibility(View.VISIBLE);
-                    judulUrl.setVisibility(View.VISIBLE);
-                    judulJenisMedia.setVisibility(View.VISIBLE);
-                    judulTanggalMulai.setVisibility(View.VISIBLE);
-                    judulTanggalSelesai.setText("Tanggal Selesai");
-                } else if (item == 1) {
-                    etUrl.setVisibility(View.GONE);
-                    spJenisMedia.setVisibility(View.GONE);
-                    tvTanggalMulai.setVisibility(View.GONE);
-                    judulUrl.setVisibility(View.GONE);
-                    judulJenisMedia.setVisibility(View.GONE);
-                    judulTanggalMulai.setVisibility(View.GONE);
-                    judulTanggalSelesai.setText("Tanggal Pelaksanaan");
-                } else {
-                    etUrl.setVisibility(View.GONE);
-                    spJenisMedia.setVisibility(View.GONE);
-                    tvTanggalMulai.setVisibility(View.GONE);
-                    judulUrl.setVisibility(View.GONE);
-                    judulJenisMedia.setVisibility(View.GONE);
-                    judulTanggalMulai.setVisibility(View.GONE);
-                    judulTanggalSelesai.setText("Tanggal Pelaksanaan");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-            }
-
-        });
     }
 
-    private void getJenisMedia() {
-        String[] jenismediaArray = new String[2];
-        jenismediaArray[0] = "Offline";
-        jenismediaArray[1] = "Online";
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, jenismediaArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spJenisMedia.setAdapter(adapter);
-    }
 
-    private void getdateawal() {
+    private void getdate() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         Calendar newCalendar = Calendar.getInstance();
         datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -268,19 +206,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 tvTanggalMulai.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        datepicker.show();
-    }
-
-    private void getdateakhir() {
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        Calendar newCalendar = Calendar.getInstance();
-        datepicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                tvTanggalSelesai.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         datepicker.show();
@@ -320,8 +245,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             keterangan = etKeterangan.getText().toString();
             nilai_rupiah = Integer.parseInt(etNilai.getText().toString());
             id_perusahaan = Prefs.getInt(Config.ID_BUMN, 0);
-            jenis_media = spJenisMedia.getSelectedItem().toString();
-            url = etUrl.getText().toString();
             if (bitmap != null) {
                 isi_capture = getStringImage(bitmap);
                 capture = String.valueOf(filePath);
@@ -483,14 +406,11 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_tanggal_mulai, R.id.tv_tanggal_selesai, R.id.button, R.id.b_capture})
+    @OnClick({R.id.tv_tanggal, R.id.tv_tanggal_selesai, R.id.button, R.id.b_capture})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_tanggal_mulai:
-                getdateawal();
-                break;
-            case R.id.tv_tanggal_selesai:
-                getdateakhir();
+            case R.id.tv_tanggal:
+                getdate();
                 break;
             case R.id.button:
                 tambah_aktifitas();

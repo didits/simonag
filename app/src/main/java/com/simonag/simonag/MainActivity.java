@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             judul.setText("KUALITAS");
             persentase.setText(kualitas + "%");
         }else{
-            judul.setText("Aktivitas Per");
+            judul.setText("Sponsorship");
             persentase.setText("BUMN");
         }
         tabLayout.getTabAt(0).setCustomView(tabOne);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             judulTwo.setText("KAPASITAS");
             persentaseTwo.setText(kapasitas + "%");
         }else{
-            judulTwo.setText("Aktivitas Per");
+            judulTwo.setText("Sponsorship");
             persentaseTwo.setText("Kategori");
         }
         tabLayout.getTabAt(1).setCustomView(tabTwo);
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             judulThree.setText("KOMERSIAL");
             persentaseThree.setText(komersial + "%");
         }else{
-            judulThree.setText("Aktivitas Per");
+            judulThree.setText("Sponsorship");
             persentaseThree.setText("Tanggal");
         }
 
@@ -229,19 +229,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupViewPager() {
+    private void setupViewPager(ViewPager viewpager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        Log.d("aaaa",dashajs+"");
         if(dashajs){
             adapter.addFragment(new DashboardKualitasFragment(), "Kualitas");
             adapter.addFragment(new DashboardKapasitasFragment(), "Kapasitas");
             adapter.addFragment(new DashboardKomersialFragment(), "Komersial");
         }else{
-            adapter.addFragment(new DashboardAktivitasBUMNFragment(), "Kualitas");
-            adapter.addFragment(new DashboardAktivitasKategoriFragmentCoba(), "Kapasitas");
-            adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Komersial");
+            adapter.addFragment(new DashboardAktivitasBUMNFragment(), "BUMN");
+            adapter.addFragment(new DashboardAktivitasKategoriFragmentCoba(), "Kategori");
+            adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Tanggal");
         }
-        viewPager.setAdapter(adapter);
+        viewpager.setAdapter(adapter);
     }
 
     private void out() {
@@ -324,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (viewPager != null) {
                                     Log.d("get_dataajs", "adadds");
                                     viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                                    setupViewPager();
+                                    setupViewPager(viewPager);
                                 }
                                 tabLayout.setupWithViewPager(viewPager);
 
@@ -587,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
                         if (viewPager != null) {
                             Log.d("get_dataajs", "adadds");
                             viewPager.setPageTransformer(true, new ZoomOutSlideTransformer());
-                            setupViewPager();
+                            setupViewPager(viewPager);
                         }
                         tabLayout.setupWithViewPager(viewPager);
 

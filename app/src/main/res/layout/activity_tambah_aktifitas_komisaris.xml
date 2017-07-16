@@ -3,13 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:indicatorColor="@color/primary"
-        app:indicatorName="BallPulseIndicator" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -59,7 +53,7 @@
                 android:textSize="@dimen/text" />
 
             <TextView
-                android:id="@+id/judul_tanggal_mulai"
+                android:id="@+id/judul_tanggal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -67,7 +61,7 @@
 
 
             <TextView
-                android:id="@+id/tv_tanggal_mulai"
+                android:id="@+id/tv_tanggal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
@@ -78,25 +72,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 
-            <TextView
-                android:id="@+id/judul_tanggal_selesai"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Tanggal Selesai" />
-
-
-            <TextView
-                android:id="@+id/tv_tanggal_selesai"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
 
             <TextView
                 android:id="@+id/judul_nilai"
@@ -127,46 +102,6 @@
 
             <EditText
                 android:id="@+id/et_keterangan"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:id="@+id/judul_jenis_media"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Jenis Media" />
-
-            <Spinner
-                android:id="@+id/sp_jenis_media"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:layout_marginBottom="@dimen/padding"
-                android:background="@drawable/edit_text"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:id="@+id/judul_url"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="URL" />
-
-            <EditText
-                android:id="@+id/et_url"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
@@ -217,4 +152,12 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:indicatorColor="@color/primary"
+        app:indicatorName="BallPulseIndicator" />
 </RelativeLayout>

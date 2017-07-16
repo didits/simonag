@@ -29,7 +29,7 @@ import static java.lang.String.format;
 
 public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
     private com.github.mikephil.charting.charts.PieChart mChart;
-    TextView publikasi, sponsorship, hospitality;
+    TextView cash, inkind;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -37,9 +37,8 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
 
 
         View v = inflater.inflate(R.layout.activity_piechart, container, false);
-        publikasi = (TextView) v.findViewById(R.id.publikasi);
-        sponsorship = (TextView) v.findViewById(R.id.sponsorship);
-        hospitality = (TextView) v.findViewById(R.id.hospitality);
+        cash = (TextView) v.findViewById(R.id.cash);
+        inkind = (TextView) v.findViewById(R.id.inkind);
 
         mChart = (com.github.mikephil.charting.charts.PieChart) v.findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
@@ -102,32 +101,24 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
 
         if (j == 0) {
             for (Kategori k : kategoris) {
-                if (k.getNama().equals("publikasi")) {
-                    entries.add(new PieEntry(k.getTotal_aktifitas(), "Publikasi"));
-                    publikasi.setText(": " + k.getTotal_aktifitas() + "");
+                if (k.getNama().equals("cash")) {
+                    entries.add(new PieEntry(k.getTotal_aktifitas(), "Cash"));
+                    cash.setText(": " + k.getTotal_aktifitas() + "");
                 }
-                if (k.getNama().equals("sponsorship")) {
-                    entries.add(new PieEntry(k.getTotal_aktifitas(), "Sponsorship"));
-                    sponsorship.setText(": " +k.getTotal_aktifitas() + "");
-                }
-                if (k.getNama().equals("hospitality")) {
-                    entries.add(new PieEntry(k.getTotal_aktifitas(), "Hospitality"));
-                    hospitality.setText(": " +k.getTotal_aktifitas() + "");
+                if (k.getNama().equals("inkind")) {
+                    entries.add(new PieEntry(k.getTotal_aktifitas(), "In Kind"));
+                    inkind.setText(": " +k.getTotal_aktifitas() + "");
                 }
             }
         } else if (j == 1) {
             for (Kategori k : kategoris) {
-                if (k.getNama().equals("publikasi")) {
-                    entries.add(new PieEntry(k.getTotal_rupiah(), "Publikasi"));
-                    publikasi.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
+                if (k.getNama().equals("cash")) {
+                    entries.add(new PieEntry(k.getTotal_rupiah(), "Cash"));
+                    cash.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
                 }
-                if (k.getNama().equals("sponsorship")) {
-                    entries.add(new PieEntry(k.getTotal_rupiah(), "Sponsorship"));
-                    sponsorship.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
-                }
-                if (k.getNama().equals("hospitality")) {
-                    entries.add(new PieEntry(k.getTotal_rupiah(), "Hospitality"));
-                    hospitality.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
+                if (k.getNama().equals("inkind")) {
+                    entries.add(new PieEntry(k.getTotal_rupiah(), "In Kind"));
+                    inkind.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
                 }
             }
         }
