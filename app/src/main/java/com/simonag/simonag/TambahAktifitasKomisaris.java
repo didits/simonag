@@ -73,10 +73,8 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     Spinner spKategori;
     @BindView(R.id.b_capture)
     Button bCapture;
-    @BindView(R.id.tv_tanggal_mulai)
-    TextView tvTanggalMulai;
-    @BindView(R.id.tv_tanggal_selesai)
-    TextView tvTanggalSelesai;
+    @BindView(R.id.tv_tanggal)
+    TextView tvTanggal;
     @BindView(R.id.et_nilai)
     EditText etNilai;
     @BindView(R.id.et_keterangan)
@@ -135,8 +133,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             etNama.setText(aktifitas.getNamaAktivitas());
             if (aktifitas.getIdKategori() >= 0)
                 spKategori.setSelection(aktifitas.getIdKategori() - 1);
-            tvTanggalMulai.setText(aktifitas.getAwalPelaksanaan());
-            tvTanggalSelesai.setText(aktifitas.getAkhirPelaksanaan());
+            tvTanggal.setText(aktifitas.getAkhirPelaksanaan());
             etNilai.setText(aktifitas.getNilaiRupiah() + "");
             etKeterangan.setText(aktifitas.getKeterangan());
             etKeterangan.setText(aktifitas.getKeterangan());
@@ -205,7 +202,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                tvTanggalMulai.setText(dateFormatter.format(newDate.getTime()));
+                tvTanggal.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         datepicker.show();
@@ -240,8 +237,8 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         int id_kategori2 = spKategori.getSelectedItemPosition() + 1;
         try {
             nama_aktivitas = etNama.getText().toString();
-            awal_pelaksanaan = tvTanggalMulai.getText().toString();
-            akhir_pelaksanaan = tvTanggalSelesai.getText().toString();
+            awal_pelaksanaan = "";
+            akhir_pelaksanaan = tvTanggal.getText().toString();
             keterangan = etKeterangan.getText().toString();
             nilai_rupiah = Integer.parseInt(etNilai.getText().toString());
             id_perusahaan = Prefs.getInt(Config.ID_BUMN, 0);
