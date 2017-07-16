@@ -186,7 +186,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     }
 
     private void getKategori() {
-        String[] kategoriArray = new String[3];
+        String[] kategoriArray = new String[2];
         kategoriArray[0] = "Cash";
         kategoriArray[1] = "In Kind";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
@@ -403,7 +403,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_tanggal, R.id.tv_tanggal_selesai, R.id.button, R.id.b_capture})
+    @OnClick({R.id.tv_tanggal,R.id.button, R.id.b_capture})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_tanggal:
