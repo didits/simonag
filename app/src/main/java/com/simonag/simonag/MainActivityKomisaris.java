@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -95,7 +96,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
         setContentView(R.layout.activity_main_komisaris);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
+        /*String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
         final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
                 .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
         headerResult = new AccountHeaderBuilder()
@@ -154,9 +155,20 @@ public class MainActivityKomisaris extends AppCompatActivity {
                 .build();
 
         //result.setSelection(1, true);
+        */
 
         getDashboard();
+        showActionBar();
     }
+
+    private void showActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setDisplayUseLogoEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
 
     private void getTabSelected(){
         try {
@@ -177,22 +189,22 @@ public class MainActivityKomisaris extends AppCompatActivity {
         LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judul = (TextView) tabOne.findViewById(R.id.tab);
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
-        judul.setText("Aktivitas Per");
-        persentase.setText("BUMN");
+        judul.setText("Sponsorship");
+        persentase.setText("Per BUMN");
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         LinearLayout tabTwo = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulTwo = (TextView) tabTwo.findViewById(R.id.tab);
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
-        judulTwo.setText("Aktivitas Per");
-        persentaseTwo.setText("Kategori");
+        judulTwo.setText("Sponsorship");
+        persentaseTwo.setText("Per Kategori");
         tabLayout.getTabAt(1).setCustomView(tabTwo);
 
         LinearLayout tabThree = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView judulThree = (TextView) tabThree.findViewById(R.id.tab);
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
-        judulThree.setText("Aktivitas Per");
-        persentaseThree.setText("Tanggal");
+        judulThree.setText("Sponsorship");
+        persentaseThree.setText("Per Tanggal");
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
         if(tab_selected==0){
@@ -209,7 +221,12 @@ public class MainActivityKomisaris extends AppCompatActivity {
         adapter.addFragment(new DashboardAktivitasBUMNFragment(), "Kualitas");
         adapter.addFragment(new DashboardAktivitasKategoriFragmentCoba(), "Kapasitas");
         adapter.addFragment(new DashboardAktivitasTanggalFragment(), "Komersial");
-        viewPager.setAdapter(adapter);
+        try {
+            viewPager.setAdapter(adapter);
+        }catch (Exception e){
+
+        }
+
     }
 
     private void out() {
@@ -451,6 +468,8 @@ public class MainActivityKomisaris extends AppCompatActivity {
                     }
                 });
                 return true;
+            case android.R.id.home:
+                finish();
             case R.id.aktivitas:
                 Prefs.putInt(Config.FILTER_KOMISARIS, 0);
                 getTabSelected();

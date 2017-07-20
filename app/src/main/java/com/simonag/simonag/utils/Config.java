@@ -5,7 +5,7 @@ package com.simonag.simonag.utils;
  */
 
 public class Config {
-    public static final String URL = "http://simonag.owline.org/api/v1/";
+    public static final String URL = "http://server-laravel-project-fadholy.apps.playcourt.id/api/v1/";
     public static final String URL_GAMBAR = "http://simonag.owline.org/logo/";
     public static final String URL_CAPTURE = "http://simonag.owline.org/capture/";
     public static final String URL_LOGIN = URL + "login";
@@ -32,7 +32,7 @@ public class Config {
 
 
     //----------- USER KOMISARIS --------------//
-    public static final String URL_2 = "http://simonag.owline.org/api/v2/";
+    public static final String URL_2 = "http://server-laravel-project-fadholy.apps.playcourt.id/api/v2/";
     public static final String URL_GET_DASHBOARD_2 = URL_2 + "get/Dashboard/";
     public static final String URL_GET_ALL_KATEGORI_2 = URL_2 + "get/allKategori/";
     public static final String URL_GET_TARGET_PROGRAM_2 = URL_2 + "get/aktivitasPerusahaan/";

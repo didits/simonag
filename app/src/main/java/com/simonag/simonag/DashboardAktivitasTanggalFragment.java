@@ -88,7 +88,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
         llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
 
-        ArrayList<Pertanggal> t = ((MainActivity) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
 
         int tanggal=0;
         for (Pertanggal k : t) {
@@ -178,7 +178,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
 
     private void setData(int count, float range) {
 
-        ArrayList<Pertanggal> t = ((MainActivity) getActivity()).db_tanggal;
+        ArrayList<Pertanggal> t = ((MainActivityKomisaris) getActivity()).db_tanggal;
 
         ArrayList<Entry> values = new ArrayList<Entry>();
 

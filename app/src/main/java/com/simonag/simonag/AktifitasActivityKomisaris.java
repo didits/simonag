@@ -424,6 +424,8 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.setIsRecyclable(false);
+            holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
+            holder.tvRentang.setText("Pelaksanaan: " + mValues.get(position).getAwalPelaksanaan());
             holder.tvNo.setText(mValues.get(position).getNo() + "");
             holder.tvDuedate.setText(mValues.get(position).getAkhirPelaksanaan());
             holder.tvKategori.setText("Kategori: " + mValues.get(position).getNama_kategori());
@@ -441,6 +443,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                     }
                 }
             });
+
             if (mValues.get(position).getNama_kategori().equals("publikasi")) {
                 holder.tvNama.setText(mValues.get(position).getNamaAktivitas() + " (" + mValues.get(position).getJenisMedia() + ")");
                 holder.tvKategoriDanNama.setVisibility(View.VISIBLE);
@@ -453,6 +456,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                 holder.tvNama.setText(mValues.get(position).getNamaAktivitas());
                 holder.tvRentang.setText("Pelaksanaan: " + mValues.get(position).getAwalPelaksanaan());
             }
+
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
             } else {

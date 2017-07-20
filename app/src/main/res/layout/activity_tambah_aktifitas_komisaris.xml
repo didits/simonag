@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Tanggal Mulai" />
+                android:text="Tanggal" />
 
 
             <TextView
@@ -114,12 +114,14 @@
                 android:textSize="@dimen/text" />
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="Capture" />
 
             <Button
+                android:visibility="gone"
                 android:text="Pilih File"
                 android:id="@+id/b_capture"
                 android:layout_width="match_parent"
@@ -138,6 +140,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content" />
 
             <Button

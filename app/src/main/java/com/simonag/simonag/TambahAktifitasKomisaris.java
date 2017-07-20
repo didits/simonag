@@ -123,7 +123,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         ButterKnife.bind(this);
         avi.hide();
         showActionBar();
-        setTitle("Tambah Aktifitas");
+        setTitle("Tambah Sponsorship");
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         getKategori();
         if (getIntent().hasExtra("aktifitas")) {
@@ -251,20 +251,20 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         }
 
         AlertDialogCustom ad = new AlertDialogCustom(this);
-        if (id_kategori2 == 1) {
+        if (id_kategori2 == 0) {
             if (nama_aktivitas.equals("")||awal_pelaksanaan.equals("")||akhir_pelaksanaan.equals("")||url.equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }
-        } else if (id_kategori2 == 2) {
-            if (nama_aktivitas.equals("")||akhir_pelaksanaan.equals("")) {
+        } else if (id_kategori2 == 1) {
+            if (nama_aktivitas.equals("")||akhir_pelaksanaan.equals("")||etNilai.getText().toString().equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }else {
                 awal_pelaksanaan = akhir_pelaksanaan;
             }
-        }else if(id_kategori2 == 3){
-            if (nama_aktivitas.equals("") || akhir_pelaksanaan.equals("") ) {
+        }else if(id_kategori2 == 2){
+            if (nama_aktivitas.equals("") || akhir_pelaksanaan.equals("")||etNilai.getText().toString().equals("") ) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }else {
@@ -310,7 +310,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("edit-success")) {
-                        Toast toast = Toast.makeText(TambahAktifitasKomisaris.this, "Sukses Mengedit Program", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(TambahAktifitasKomisaris.this, "Sukses Mengedit Aktivitas", Toast.LENGTH_LONG);
                         toast.show();
                         onBackPressed();
                     } else if (status.equals("wrong-id")) {
@@ -483,6 +483,4 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             }
         }
     }
-
-
 }

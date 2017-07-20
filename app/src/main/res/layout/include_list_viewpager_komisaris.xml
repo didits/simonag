@@ -24,8 +24,6 @@
             <android.support.design.widget.TabLayout
                 app:tabIndicatorColor="@color/primary"
                 app:tabIndicatorHeight="3dp"
-                android:layout_marginRight="@dimen/padding"
-                android:layout_marginLeft="@dimen/padding"
                 android:id="@+id/tabs"
                 android:background="@color/colorWhite"
                 android:layout_width="match_parent"

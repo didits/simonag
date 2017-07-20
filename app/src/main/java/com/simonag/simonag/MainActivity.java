@@ -145,12 +145,14 @@ public class MainActivity extends AppCompatActivity {
                                 getDashboard();
                                 break;
                             case 2:
-                                dashajs=false;
+                                /*dashajs=false;
                                 setTitle("Sponsorship");
                                 invalidateOptionsMenu();
                                 header.setVisibility(View.GONE);
                                 subheader.setVisibility(View.GONE);
-                                getDashboard();
+                                getDashboard();*/
+                                i = new Intent(MainActivity.this, MainActivityKomisaris.class);
+                                startActivity(i);
                                 break;
                             case 3:
                                 i = new Intent(MainActivity.this, ProgramActivity.class);

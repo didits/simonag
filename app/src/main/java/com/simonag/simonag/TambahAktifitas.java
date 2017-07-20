@@ -111,7 +111,7 @@ public class TambahAktifitas extends AppCompatActivity {
 //        Kategori spinner
         String[] kategoriArray = new String[3];
         kategoriArray[0] = "Kualitas";
-        kategoriArray[1] = "Kuantitas";
+        kategoriArray[1] = "Kapasitas";
         kategoriArray[2] = "Komersial";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
