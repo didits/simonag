@@ -123,7 +123,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         ButterKnife.bind(this);
         avi.hide();
         showActionBar();
-        setTitle("Tambah Sponsorship");
+        setTitle("List Sponsorship");
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         getKategori();
         if (getIntent().hasExtra("aktifitas")) {

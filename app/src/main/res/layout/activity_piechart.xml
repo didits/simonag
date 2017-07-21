@@ -41,7 +41,7 @@
                 android:id="@+id/cash_kanan"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_weight="0.3"
+                android:layout_weight="1.0"
                 android:background="#ffd302"
                 android:orientation="horizontal"></LinearLayout>
 
@@ -49,7 +49,7 @@
                 android:id="@+id/cash_kiri"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.0"
                 android:orientation="horizontal"></LinearLayout>
         </LinearLayout>
 
@@ -84,7 +84,7 @@
                 android:id="@+id/in_kind_kanan"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_weight="0.3"
+                android:layout_weight="1.0"
                 android:background="#67b6dd"
                 android:orientation="horizontal"></LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:id="@+id/in_kind_kiri"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.0"
                 android:orientation="horizontal"></LinearLayout>
         </LinearLayout>
 
