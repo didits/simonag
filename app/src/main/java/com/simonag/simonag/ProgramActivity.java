@@ -304,6 +304,8 @@ public class ProgramActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("delete-success")) {
                                 getProgram();
+                                Toast toast = Toast.makeText(ProgramActivity.this, "Sukses menghapus program", Toast.LENGTH_LONG);
+                                toast.show();
                             } else if (response.getString("status").equals("invalid-token")) {
                                 GetToken k = new GetToken(ProgramActivity.this);
                                 k.setCallback(new GetToken.callback() {

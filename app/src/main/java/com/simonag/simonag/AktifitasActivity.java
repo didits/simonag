@@ -43,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -358,10 +359,10 @@ public class AktifitasActivity extends AppCompatActivity {
                             jObject.getInt("id_target"),
                             jObject.getString("nama_aktivitas"),
                             jObject.getString("nama_kategori"),
-                            jObject.getInt("target_nilai"),
-                            jObject.getInt("revenue_target_nilai"),
-                            jObject.getInt("realisasi"),
-                            jObject.getInt("realisasi_revenue"),
+                            new BigInteger(jObject.getString("target_nilai")),
+                            new BigInteger(jObject.getString("revenue_target_nilai")),
+                            new BigInteger(jObject.getString("realisasi")),
+                            new BigInteger(jObject.getString("realisasi_revenue")),
                             jObject.getString("due_date"),
                             jObject.getString("nama_satuan"),
                             jObject.getDouble("realisasi_persen"),
@@ -377,6 +378,10 @@ public class AktifitasActivity extends AppCompatActivity {
             }
         }
         return billing;
+    }
+
+    private BigInteger convertBigInteger(String angka){
+        return new BigInteger(angka);
     }
 
     public static class SimpleStringRecyclerViewAdapter

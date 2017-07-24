@@ -22,6 +22,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.DashboardKomisaris;
 import com.simonag.simonag.utils.Config;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -59,7 +60,7 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
         private int mBackground;
         private ArrayList<DashboardKomisaris> mValues;
         Activity c;
-        int nilai_tertinggi=0;
+        BigInteger nilai_tertinggi= BigInteger.valueOf(0);
         int tipe = 0;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -98,16 +99,15 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             this.tipe = tipe;
             if(tipe == 0){
                 for (DashboardKomisaris k:items){
-                    if(nilai_tertinggi<k.getTotal_aktifitas())
-                        nilai_tertinggi = k.getTotal_aktifitas();
+                    if(nilai_tertinggi.compareTo(BigInteger.valueOf(k.getTotal_aktifitas()))<0 )
+                        nilai_tertinggi = BigInteger.valueOf(k.getTotal_aktifitas());
                 }
             }else {
                 for (DashboardKomisaris k:items){
-                    if(nilai_tertinggi<k.getTotal_rupiah())
+                    if(nilai_tertinggi.compareTo(k.getTotal_rupiah())<0)
                         nilai_tertinggi = k.getTotal_rupiah();
                 }
             }
-
         }
 
         @Override
@@ -127,14 +127,14 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
             double hasil=0;
             if(tipe==0){
                 try {
-                    hasil = (double) mValues.get(position).getTotal_aktifitas()/(double) nilai_tertinggi*100.0;
+                    hasil = (double) mValues.get(position).getTotal_aktifitas()/(double) nilai_tertinggi.doubleValue()*100.0;
                 }catch (Exception e){
                     Log.e("bind_error", e.toString());
                 }
                 holder.text2.setText(mValues.get(position).getTotal_aktifitas()+"");
             }else {
                 try {
-                    hasil = (double)mValues.get(position).getTotal_rupiah()/(double)nilai_tertinggi*100.0;
+                    hasil = (double)mValues.get(position).getTotal_rupiah().doubleValue()/(double)nilai_tertinggi.doubleValue()*100.0;
                 }catch (Exception e){
                     Log.e("bind_error", e.toString());
                 }

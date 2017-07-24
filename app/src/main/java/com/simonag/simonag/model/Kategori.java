@@ -1,5 +1,7 @@
 package com.simonag.simonag.model;
 
+import java.math.BigInteger;
+
 /**
  * Created by diditsepiyanto on 6/17/17.
  */
@@ -8,10 +10,10 @@ public class Kategori {
     int id;
     String nama;
     int status;
-    int total_rupiah;
+    BigInteger total_rupiah;
     int total_aktifitas;
 
-    public Kategori(int id, String nama, int status, int total_rupiah, int total_aktifitas) {
+    public Kategori(int id, String nama, int status, BigInteger total_rupiah, int total_aktifitas) {
         this.id = id;
         this.nama = nama;
         this.status = status;
@@ -43,11 +45,11 @@ public class Kategori {
         this.status = status;
     }
 
-    public int getTotal_rupiah() {
+    public BigInteger getTotal_rupiah() {
         return total_rupiah;
     }
 
-    public void setTotal_rupiah(int total_rupiah) {
+    public void setTotal_rupiah(BigInteger total_rupiah) {
         this.total_rupiah = total_rupiah;
     }
 

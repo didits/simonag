@@ -2,6 +2,8 @@ package com.simonag.simonag.model;
 
 import org.parceler.Parcel;
 
+import java.math.BigInteger;
+
 /**
  * Created by Zaki on 13/06/2017.
  */
@@ -11,11 +13,11 @@ public class Aktifitas {
     int id;
     String nama;
     String kategori;
-    int target;
-    int target_revenue;
-    int realisasi;
+    BigInteger target;
+    BigInteger target_revenue;
+    BigInteger realisasi;
     double realisasi_persen;
-    int realisasi_revenue;
+    BigInteger realisasi_revenue;
     String duedate;
     String satuan;
 
@@ -27,7 +29,7 @@ public class Aktifitas {
 //    String koordinat
 
     public Aktifitas(){}
-    public Aktifitas(int no, int id, String nama, String kategori, int target, int revenue, int realisasi, int realisasi_revenue, String duedate, String satuan ,double realisasi_persen, int statusRevenue, int idKategori,int idSatuan) {
+    public Aktifitas(int no, int id, String nama, String kategori, BigInteger target, BigInteger revenue, BigInteger realisasi, BigInteger realisasi_revenue, String duedate, String satuan ,double realisasi_persen, int statusRevenue, int idKategori,int idSatuan) {
         this.no = no;
         this.id = id;
         this.nama = nama;
@@ -108,35 +110,35 @@ public class Aktifitas {
         this.kategori = kategori;
     }
 
-    public int getTarget() {
+    public BigInteger getTarget() {
         return target;
     }
 
-    public void setTarget(int target) {
+    public void setTarget(BigInteger target) {
         this.target = target;
     }
 
-    public int getTarget_revenue() {
+    public BigInteger getTarget_revenue() {
         return target_revenue;
     }
 
-    public void setTarget_revenue(int target_revenue) {
+    public void setTarget_revenue(BigInteger target_revenue) {
         this.target_revenue = target_revenue;
     }
 
-    public int getRealisasi() {
+    public BigInteger getRealisasi() {
         return realisasi;
     }
 
-    public void setRealisasi(int realisasi) {
+    public void setRealisasi(BigInteger realisasi) {
         this.realisasi = realisasi;
     }
 
-    public int getRealisasi_revenue() {
+    public BigInteger getRealisasi_revenue() {
         return realisasi_revenue;
     }
 
-    public void setRealisasi_revenue(int realisasi_revenue) {
+    public void setRealisasi_revenue(BigInteger realisasi_revenue) {
         this.realisasi_revenue = realisasi_revenue;
     }
 

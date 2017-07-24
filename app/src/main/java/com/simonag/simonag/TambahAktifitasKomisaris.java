@@ -44,6 +44,7 @@ import org.parceler.Parcels;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -123,7 +124,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
         ButterKnife.bind(this);
         avi.hide();
         showActionBar();
-        setTitle("List Sponsorship");
+        setTitle("Tambah Sponsorship");
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         getKategori();
         if (getIntent().hasExtra("aktifitas")) {
@@ -231,7 +232,8 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
 
 
     private void tambah_aktifitas() {
-        int nilai_rupiah = 0,id_perusahaan=0;
+        BigInteger nilai_rupiah = new BigInteger("0");
+        int id_perusahaan=0;
         String nama_aktivitas="",awal_pelaksanaan="",akhir_pelaksanaan="",keterangan="",jenis_media="",url="";
         String isi_capture = "";
         int id_kategori2 = spKategori.getSelectedItemPosition() + 1;
@@ -240,7 +242,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
             awal_pelaksanaan = "";
             akhir_pelaksanaan = tvTanggal.getText().toString();
             keterangan = etKeterangan.getText().toString();
-            nilai_rupiah = Integer.parseInt(etNilai.getText().toString());
+            nilai_rupiah = new BigInteger(etNilai.getText().toString());
             id_perusahaan = Prefs.getInt(Config.ID_BUMN, 0);
             if (bitmap != null) {
                 isi_capture = getStringImage(bitmap);
@@ -283,7 +285,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
 
 
     private void editAktifitas(
-            String nama_aktivitas, String awal_pelaksanaan, String akhir_pelaksanaan, String keterangan, int nilai_rupiah, int id_kategori2, int id_perusahaan, String jenis_media, String url, String capture, String isi_capture
+            String nama_aktivitas, String awal_pelaksanaan, String akhir_pelaksanaan, String keterangan, BigInteger nilai_rupiah, int id_kategori2, int id_perusahaan, String jenis_media, String url, String capture, String isi_capture
     ) {
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
@@ -340,7 +342,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     }
 
     private void uploadAktifitas(
-            String nama_aktivitas, String awal_pelaksanaan, String akhir_pelaksanaan, String keterangan, int nilai_rupiah, int id_kategori2, int id_perusahaan, String jenis_media, String url, String capture, String isi_capture
+            String nama_aktivitas, String awal_pelaksanaan, String akhir_pelaksanaan, String keterangan, BigInteger nilai_rupiah, int id_kategori2, int id_perusahaan, String jenis_media, String url, String capture, String isi_capture
     ) {
         avi.show();
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");

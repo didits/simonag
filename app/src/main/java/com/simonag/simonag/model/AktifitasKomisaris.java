@@ -1,6 +1,8 @@
 package com.simonag.simonag.model;
 import org.parceler.Parcel;
 
+import java.math.BigInteger;
+
 /**
  * Created by Zaki on 13/06/2017.
  */
@@ -14,7 +16,7 @@ public class AktifitasKomisaris{
 	private String capture;
 	private int statusKategori;
 	private String awalPelaksanaan;
-	private int nilaiRupiah;
+	private BigInteger nilaiRupiah;
 	private String url;
 	private int idAktivitas;
 	private String keterangan;
@@ -28,8 +30,7 @@ public class AktifitasKomisaris{
 			String akhirPelaksanaan,
 			String capture,
 			int statusKategori,
-			String awalPelaksanaan,
-			int nilaiRupiah,
+			String awalPelaksanaan, BigInteger nilaiRupiah,
 			String url,
 			int idAktivitas,
 							  String keterangan, String nama_kategori){
@@ -128,11 +129,11 @@ public class AktifitasKomisaris{
 		return awalPelaksanaan;
 	}
 
-	public void setNilaiRupiah(int nilaiRupiah){
+	public void setNilaiRupiah(BigInteger nilaiRupiah){
 		this.nilaiRupiah = nilaiRupiah;
 	}
 
-	public int getNilaiRupiah(){
+	public BigInteger getNilaiRupiah(){
 		return nilaiRupiah;
 	}
 

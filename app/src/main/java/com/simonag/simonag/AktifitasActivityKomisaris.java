@@ -42,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -348,7 +349,7 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
                             jObject.getString("capture"),
                             jObject.getInt("status_kategori"),
                             jObject.getString("awal_pelaksanaan"),
-                            jObject.getInt("nilai_rupiah"),
+                            new BigInteger(jObject.getString("nilai_rupiah")),
                             jObject.getString("url"),
                             jObject.getInt("id_aktivitas"),
                             jObject.getString("keterangan"),

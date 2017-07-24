@@ -1,5 +1,7 @@
 package com.simonag.simonag.model;
 
+import java.math.BigInteger;
+
 /**
  * Created by diditsepiyanto on 6/17/17.
  */
@@ -8,11 +10,11 @@ public class DashboardKomisaris {
     int id_perusahaan;
     String nama_perusahaan;
     String keterangan;
-    int total_rupiah;
+    BigInteger total_rupiah;
     int total_aktifitas;
     String image;
 
-    public DashboardKomisaris(int id_perusahaan, String nama_perusahaan, String keterangan, int total_rupiah, int total_aktifitas, String image) {
+    public DashboardKomisaris(int id_perusahaan, String nama_perusahaan, String keterangan, BigInteger total_rupiah, int total_aktifitas, String image) {
         this.id_perusahaan = id_perusahaan;
         this.nama_perusahaan = nama_perusahaan;
         this.keterangan = keterangan;
@@ -45,11 +47,11 @@ public class DashboardKomisaris {
         this.keterangan = keterangan;
     }
 
-    public int getTotal_rupiah() {
+    public BigInteger getTotal_rupiah() {
         return total_rupiah;
     }
 
-    public void setTotal_rupiah(int total_rupiah) {
+    public void setTotal_rupiah(BigInteger total_rupiah) {
         this.total_rupiah = total_rupiah;
     }
 

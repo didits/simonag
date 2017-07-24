@@ -46,11 +46,11 @@ public class DashboardAktivitasKategoriFragment extends Fragment {
         }else {
             for (Kategori k : kategoris) {
                 if (k.getNama().equals("publikasi"))
-                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah(), Color.parseColor("#FE6DA8")));
+                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah().floatValue(), Color.parseColor("#FE6DA8")));
                 if (k.getNama().equals("sponsorship"))
-                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah(), Color.parseColor("#56B7F1")));
+                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah().floatValue(), Color.parseColor("#56B7F1")));
                 if (k.getNama().equals("hospitality"))
-                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah(), Color.parseColor("#CDA67F")));
+                    mPieChart.addPieSlice(new PieModel(k.getNama() + ": Rp. "+ format("%,d", k.getTotal_rupiah()).replace(",", "."), k.getTotal_rupiah().floatValue(), Color.parseColor("#CDA67F")));
             }
         }
 

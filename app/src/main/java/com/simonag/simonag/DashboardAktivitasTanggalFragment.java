@@ -191,7 +191,7 @@ public class DashboardAktivitasTanggalFragment extends Fragment implements SeekB
             }
         }else {
             for (Pertanggal k : t) {
-                values.add(new Entry(i, k.getTotal_biaya(), getResources().getDrawable(R.drawable.logo)));
+                values.add(new Entry(i, k.getTotal_biaya().floatValue(), getResources().getDrawable(R.drawable.logo)));
                 i = i + 1;
             }
         }

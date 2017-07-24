@@ -28,6 +28,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.model.Kategori;
 import com.simonag.simonag.utils.Config;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -84,7 +85,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
 
         ArrayList<Kategori> kategoris = ((MainActivityKomisaris) getActivity()).db_kategori;
         int j = Prefs.getInt(Config.FILTER_KOMISARIS, 0);
-        int total = 0;
+        double total = 0;
         if (j == 0) {
             for (Kategori k : kategoris) {
                 total = total+k.getTotal_aktifitas();
@@ -92,7 +93,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
             mChart.setCenterText(generateCenterSpannableText(total+""));
         } else if (j == 1) {
             for (Kategori k : kategoris) {
-                total = total+k.getTotal_rupiah();
+                total = total+k.getTotal_rupiah().doubleValue();
             }
             mChart.setCenterText(generateCenterSpannableText("Rp. " + format("%,d", total).replace(",", ".")));
         }
@@ -137,7 +138,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
             }
         } else if (j == 1) {
             for (Kategori k : kategoris) {
-                total = total+k.getTotal_rupiah();
+                total = total+k.getTotal_rupiah().floatValue();
             }
         }
 
@@ -165,18 +166,18 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
         } else if (j == 1) {
             for (Kategori k : kategoris) {
                 if (k.getNama().equals("cash")) {
-                    entries.add(new PieEntry(k.getTotal_rupiah(), "Cash"));
+                    entries.add(new PieEntry(k.getTotal_rupiah().floatValue(), "Cash"));
                     cash.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
-                    float hasil = (k.getTotal_rupiah()*1.f)/total;
+                    float hasil = (k.getTotal_rupiah().floatValue()*1.f)/total;
                     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,1-hasil);
                     LinearLayout.LayoutParams q = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,hasil);
                     cash_kanan.setLayoutParams(p);
                     cash_kiri.setLayoutParams(q);
                 }
                 if (k.getNama().equals("in kind")) {
-                    entries.add(new PieEntry(k.getTotal_rupiah(), "In Kind"));
+                    entries.add(new PieEntry(k.getTotal_rupiah().floatValue(), "In Kind"));
                     inkind.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
-                    float hasil = (k.getTotal_rupiah()*1.f)/total;
+                    float hasil = (k.getTotal_rupiah().floatValue()*1.f)/total;
                     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,1-hasil);
                     LinearLayout.LayoutParams q = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,hasil);
                     in_kind_kanan.setLayoutParams(p);

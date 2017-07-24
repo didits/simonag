@@ -53,6 +53,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -389,7 +390,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             jObject.getInt("id_perusahaan"),
                             jObject.getString("nama_perusahaan"),
                             jObject.getString("keterangan"),
-                            jObject.getInt("total_rupiah"),
+                            new BigInteger(jObject.getString("total_rupiah")),
                             jObject.getInt("total_aktivitas"),
                             jObject.getString("image")
                     );
@@ -415,7 +416,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             i,
                             jObject.getString("tanggal"),
                             jObject.getInt("total_aktivitas"),
-                            jObject.getInt("total_biaya")
+                            new BigInteger(jObject.getString("total_biaya"))
                     );
                     billing.add(d);
                 }
@@ -439,7 +440,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             jObject.getInt("id_kategori"),
                             jObject.getString("nama_kategori"),
                             jObject.getInt("status"),
-                            jObject.getInt("total_rupiah"),
+                            new BigInteger(jObject.getString("total_rupiah")),
                             jObject.getInt("total_aktivitas")
                     );
                     billing.add(d);
