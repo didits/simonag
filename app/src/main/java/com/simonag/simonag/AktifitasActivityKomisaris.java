@@ -197,10 +197,11 @@ public class AktifitasActivityKomisaris extends AppCompatActivity {
     private void setupRecyclerView(RecyclerView recyclerView, ArrayList<AktifitasKomisaris> p, String value) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value);
+        LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
         if (p.size() == 0) {
-            LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
             info.setVisibility(View.VISIBLE);
-        }
+        }else
+            info.setVisibility(View.GONE);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
             public void action(AktifitasKomisaris aktifitas) {
