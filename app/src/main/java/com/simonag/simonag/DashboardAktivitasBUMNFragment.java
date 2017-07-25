@@ -43,7 +43,6 @@ public class DashboardAktivitasBUMNFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(
                 R.layout.fragment_dashboard_list, container, false);
         setupRecyclerView(rv);
-        Log.d("get_data", ((MainActivityKomisaris) getActivity()).dbkom.size()+"");
         return rv;
     }
 

@@ -97,67 +97,6 @@ public class MainActivityKomisaris extends AppCompatActivity {
         setContentView(R.layout.activity_main_komisaris);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        /*String url = Config.URL_GAMBAR + Prefs.getString(Config.FOTO,"");
-        final IProfile profile =new ProfileDrawerItem().withName(Prefs.getString(Config.NAMA_BUMN, ""))
-                .withEmail(Prefs.getString(Config.EMAIL_BUMN, "")).withIcon(url);
-        headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.latar)
-                .addProfiles(
-                        profile
-                )
-                .withSelectionListEnabledForSingleProfile(false)
-                .build();
-
-        result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withSliderBackgroundColorRes(R.color.colorWhiteTrans)
-                .withDrawerWidthDp(200)
-                .withAccountHeader(headerResult)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withIdentifier(1).withName("Dashboard").withIcon(FontAwesome.Icon.faw_bar_chart),
-                        new PrimaryDrawerItem().withIdentifier(2).withName("Input Aktivitas").withIcon(FontAwesome.Icon.faw_plus),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Pencapaian 3K").withIcon(FontAwesome.Icon.faw_check_square_o),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(4).withName("Tentang").withIcon(FontAwesome.Icon.faw_info),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Keluar").withIcon(FontAwesome.Icon.faw_sign_out)
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        Intent i;
-                        switch ((int) drawerItem.getIdentifier()) {
-                            case 1:
-                                break;
-                            case 2:
-                                i = new Intent(MainActivityKomisaris.this, AktifitasActivityKomisaris.class);
-                                i.putExtra("ID_BUMN", "" + Prefs.getInt(Config.ID_BUMN,0));
-                                i.putExtra("NAMA_PERUSAHAAN", "" + Prefs.getString(Config.NAMA_BUMN,"").toUpperCase());
-                                startActivity(i);
-                                break;
-                            case 3:
-                                i = new Intent(MainActivityKomisaris.this, MainActivity.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
-                                break;
-                            case 4:
-                                i = new Intent(MainActivityKomisaris.this, TentangActivity.class);
-                                startActivity(i);
-                                break;
-                            case 5:
-                                out();
-                                break;
-                        }
-                        return false;
-                    }
-                })
-                .build();
-
-        //result.setSelection(1, true);
-        */
-
         getDashboard();
         showActionBar();
     }

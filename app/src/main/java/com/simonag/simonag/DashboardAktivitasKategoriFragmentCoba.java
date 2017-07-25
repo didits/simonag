@@ -95,7 +95,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
             for (Kategori k : kategoris) {
                 total = total+k.getTotal_rupiah().doubleValue();
             }
-            mChart.setCenterText(generateCenterSpannableText("Rp. " + format("%,d", total).replace(",", ".")));
+            mChart.setCenterText(generateCenterSpannableText("Rp. " + format("%,f", total).replace(",", ".")));
         }
 
         // mChart.setUnit(" €");
@@ -167,7 +167,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
             for (Kategori k : kategoris) {
                 if (k.getNama().equals("cash")) {
                     entries.add(new PieEntry(k.getTotal_rupiah().floatValue(), "Cash"));
-                    cash.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
+                    cash.setText(": Rp. " + format("%,f", k.getTotal_rupiah().floatValue()).replace(",", "."));
                     float hasil = (k.getTotal_rupiah().floatValue()*1.f)/total;
                     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,1-hasil);
                     LinearLayout.LayoutParams q = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,hasil);
@@ -176,7 +176,7 @@ public class DashboardAktivitasKategoriFragmentCoba extends Fragment {
                 }
                 if (k.getNama().equals("in kind")) {
                     entries.add(new PieEntry(k.getTotal_rupiah().floatValue(), "In Kind"));
-                    inkind.setText(": Rp. " + format("%,d", k.getTotal_rupiah()).replace(",", "."));
+                    inkind.setText(": Rp. " + format("%,f", k.getTotal_rupiah().floatValue()).replace(",", "."));
                     float hasil = (k.getTotal_rupiah().floatValue()*1.f)/total;
                     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,1-hasil);
                     LinearLayout.LayoutParams q = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50,hasil);
