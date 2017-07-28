@@ -224,11 +224,13 @@ public class MainActivityKomisaris extends AppCompatActivity {
         String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = Config.URL_GET_DASHBOARD_2 + tokena;
+        Log.d("dead", url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            Log.d("yes", response.getString("kategori2"));
                             if(response.getString("status").equals("success")){
                                 dbkom = jsonDecodeBilling(response.getString("perusahaan"));
                                 db_kategori = jsonDecodeAllKategori(response.getString("kategori2"));
@@ -379,7 +381,7 @@ public class MainActivityKomisaris extends AppCompatActivity {
                             jObject.getInt("id_kategori"),
                             jObject.getString("nama_kategori"),
                             jObject.getInt("status"),
-                            new BigInteger(jObject.getString("total_rupiah")),
+                            change_null(jObject.getString("total_rupiah")),
                             jObject.getInt("total_aktivitas")
                     );
                     billing.add(d);
@@ -390,6 +392,15 @@ public class MainActivityKomisaris extends AppCompatActivity {
             }
         }
         return billing;
+    }
+
+    private BigInteger change_null(String data){
+        try {
+            return new BigInteger(data);
+        }catch (Exception e){
+            return new BigInteger("0");
+        }
+
     }
 
     @Override
