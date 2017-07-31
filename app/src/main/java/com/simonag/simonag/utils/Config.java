@@ -26,7 +26,7 @@ public class Config {
     public static final String URL_DELETE_REAL_TARGET = URL + "delete/realisasiTarget/";
     public static final String URL_FILTER_1 = URL + "post/filterDashboard/";
 
-    public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword/";
+    public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword";
     public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail/";
     public static final String URL_CHANGE_PASSWORD = URL + "changePassword/";
 
