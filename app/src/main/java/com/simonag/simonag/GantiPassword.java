@@ -66,7 +66,7 @@ public class GantiPassword extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.B_reset_password:
-                if(inputPasscode.getText().toString().trim().equals(inputPassword.getText().toString().trim())){
+                if(!inputPasscode.getText().toString().trim().equals(inputPassword.getText().toString().trim())){
                     Toast.makeText(GantiPassword.this, "Password Tidak Sama", Toast.LENGTH_LONG).show();
                 }else{
                     sendCode();
@@ -91,7 +91,7 @@ public class GantiPassword extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("success")) {
-                        Toast.makeText(GantiPassword.this, "Berhasil mengirim", Toast.LENGTH_LONG).show();
+                        Toast.makeText(GantiPassword.this, "Berhasil mengubah password", Toast.LENGTH_LONG).show();
                         move();
                     } else if (status.equals("failed")) {
                         Toast.makeText(GantiPassword.this, "Gagal mengganti", Toast.LENGTH_LONG).show();
