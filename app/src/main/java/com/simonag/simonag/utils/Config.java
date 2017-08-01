@@ -5,6 +5,7 @@ package com.simonag.simonag.utils;
  */
 
 public class Config {
+    //http://server-laravel-project-fadholy.apps.playcourt.id/api
     public static final String URL = "http://server-laravel-project-fadholy.apps.playcourt.id/api/v1/";
     public static final String URL_GAMBAR = "http://simonag.owline.org/logo/";
     public static final String URL_CAPTURE = "http://simonag.owline.org/capture/";
@@ -27,8 +28,8 @@ public class Config {
     public static final String URL_FILTER_1 = URL + "post/filterDashboard/";
 
     public static final String URL_SEND_EMAIL_FORGOT_PASSWORD = URL + "sendEmailForgotPassword";
-    public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail/";
-    public static final String URL_CHANGE_PASSWORD = URL + "changePassword/";
+    public static final String URL_VERIFY_CODE_EMAIL = URL + "verifyCodeEmail";
+    public static final String URL_CHANGE_PASSWORD = URL + "changePassword";
 
 
     //----------- USER KOMISARIS --------------//
