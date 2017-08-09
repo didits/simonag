@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,22 @@ public class TambahRealisasi extends AppCompatActivity {
     DatePickerDialog datepicker;
     @BindView(R.id.tv_tanggal)
     TextView tvTanggal;
+    @BindView(R.id.nama_program)
+    TextView tvNamaProgram;
+    @BindView(R.id.nama_aktivitas)
+    TextView tvNamaAktivitas;
+    @BindView(R.id.due_Date)
+    TextView tvdueDate;
+    @BindView(R.id.tipe_aktivitas)
+    TextView tvtipeAltivitas;
+    @BindView(R.id.realisasi)
+    TextView tvRealisasi;
+    @BindView(R.id.target)
+    TextView tvTarget;
+    @BindView(R.id.revenue)
+    TextView tvRevenue;
+    @BindView(R.id.pemisah)
+    FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +98,21 @@ public class TambahRealisasi extends AppCompatActivity {
         avi.hide();
         setTitle("Tambah Realisasi");
         showActionBar();
+
+        tvRevenue.setText(getIntent().getExtras().getString("revenue"));
+        tvTarget.setText(getIntent().getExtras().getString("target"));
+        tvRealisasi.setText(getIntent().getExtras().getString("realisasi_persen"));
+        tvNamaProgram.setText("Program: "+getIntent().getExtras().getString("nama_program"));
+        tvNamaAktivitas.setText(getIntent().getExtras().getString("nama_aktivitas"));
+        tvdueDate.setText(getIntent().getExtras().getString("due_date"));
+        tvtipeAltivitas.setText(getIntent().getExtras().getString("kategori"));
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
         id_kategori = getIntent().getExtras().getInt("id_kategori");
+
+        if(!getIntent().getExtras().getString("kategori").equals("komersial")){
+            frameLayout.setVisibility(View.GONE);
+            tvRevenue.setVisibility(View.GONE);
+        }
         if (id_kategori != 3) {
             etRevenue.setVisibility(View.GONE);
             tvRevenueRealisasi.setVisibility(View.GONE);
@@ -200,12 +230,12 @@ public class TambahRealisasi extends AppCompatActivity {
     private void tambah_realisasi() {
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         String tanggal_realisasi = "", keterangan = "null";
-        int realisasi_nilai = 0, revenue_realisasi_nilai = 0;
+        String realisasi_nilai = "0", revenue_realisasi_nilai = "0";
         try {
             tanggal_realisasi = tvTanggal.getText().toString();
-            realisasi_nilai = Integer.parseInt(etNilai.getText().toString());
+            realisasi_nilai = etNilai.getText().toString();
             if (id_kategori == 3)
-                revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
+                revenue_realisasi_nilai = etRevenue.getText().toString();
         } catch (Exception e) {
 
         }
@@ -225,7 +255,7 @@ public class TambahRealisasi extends AppCompatActivity {
                 return;
             }
             try {
-                revenue_realisasi_nilai = Integer.parseInt(etRevenue.getText().toString());
+                revenue_realisasi_nilai = etRevenue.getText().toString();
             } catch (Exception e) {
             }
         }
@@ -248,8 +278,8 @@ public class TambahRealisasi extends AppCompatActivity {
     private void uploadRealisasi(
             String tanggal_realisasi,
             String keterangan,
-            int realisasi_nilai,
-            int revenue_realisasi_nilai) {
+            String realisasi_nilai,
+            String revenue_realisasi_nilai) {
         Log.d("revenue", revenue_realisasi_nilai + "");
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");

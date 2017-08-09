@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow android:background="@color/colorAbuAbu"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_marginLeft="2px"
+        android:id="@+id/nomor"
+        android:layout_marginBottom="2px"
+        android:layout_marginRight="2px"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="1" />
+
+    <LinearLayout
+
+        android:layout_marginBottom="2px"
+        android:layout_marginRight="2px"
+        android:background="@color/colorWhite"
+        android:padding="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nama_aktivitas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Penambahan bandwith selular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/due_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:text="Last update: 30 June 2017"
+                android:textColor="#0a819f"
+                android:textSize="10sp"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:id="@+id/action_aktivitas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/rounded_info" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="3dp"
+                    android:src="@drawable/edit_black" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="3dp"
+                    android:src="@drawable/delete" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginRight="2px"
+        android:layout_marginBottom="2px"
+        android:background="@color/colorWhite"
+        android:layout_height="match_parent"
+        android:padding="3dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <HorizontalScrollView
+            android:layout_weight="1"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:gravity="center_horizontal"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/realisasi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20/200Gbs" />
+
+                <FrameLayout
+                    android:layout_margin="3dp"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAbuAbu" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/revenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20/200Gbs" />
+
+                <FrameLayout
+                    android:visibility="gone"
+                    android:id="@+id/garis"
+                    android:layout_margin="3dp"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAbuAbu" />
+
+                <TextView
+                    android:id="@+id/persentase"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="80%" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+
+        <FrameLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0a819f"
+            android:paddingBottom="1dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/nama_kategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="aktivitas"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp" />
+        </FrameLayout>
+    </LinearLayout>
+</TableRow>

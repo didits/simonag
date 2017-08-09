@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,14 +17,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +42,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.simonag.simonag.model.Program;
+import com.simonag.simonag.model.Aktifitas;
+import com.simonag.simonag.model.ProgramKedua;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
@@ -47,7 +55,9 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -56,10 +66,13 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static java.lang.String.format;
+
 public class ProgramActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
+    public BottomSheetBehavior bottomSheetBehavior2;
     String value, nama_perusahaan, nama_gambar;
-    Program temp_progam;
+    ProgramKedua temp_progam;
     @BindView(R.id.program)
     EditText program_text;
     @BindView(R.id.tambah_program)
@@ -76,8 +89,10 @@ public class ProgramActivity extends AppCompatActivity {
     LinearLayout hapus;
     @BindView(R.id.action)
     RelativeLayout action;
+    @BindView(R.id.action2)
+    RelativeLayout action2;
     EditText edit_nama;
-
+    Aktifitas temp_aktivitas;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,6 +146,12 @@ public class ProgramActivity extends AppCompatActivity {
                 setView("hidden");
             }
         });
+        action2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setView("hidden");
+            }
+        });
         tambahProgram.setEnabled(false);
         tambahProgram.setBackground(getResources().getDrawable(R.drawable.button_disabled));
         program_text.addTextChangedListener(new TextWatcher() {
@@ -151,6 +172,7 @@ public class ProgramActivity extends AppCompatActivity {
             }
         });
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
+        bottomSheetBehavior2 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout2));
         showActionBar();
     }
 
@@ -172,6 +194,54 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                // Check Logs to see how bottom sheets behaves
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.e("Bottom Sheet Behaviour", "STATE_EXPANDED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        setView("collapsed");
+                        Log.e("Bottom Sheet Behaviour", "STATE_HIDDEN");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        Log.e("Bottom Sheet Behaviour", "STATE_SETTLING");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    public void setView2(@NonNull String state) {
+        switch (state) {
+            case "collapsed":
+                bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+            case "expanded":
+                bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            case "hidden":
+                bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case "settling":
+                bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_SETTLING);
+                break;
+        }
+
+        bottomSheetBehavior2.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
@@ -227,7 +297,7 @@ public class ProgramActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<Program> p) {
+    private void setupRecyclerView(RecyclerView recyclerView, ArrayList<ProgramKedua> p) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         if (p.size() == 0) {
             LinearLayout info = (LinearLayout) findViewById(R.id.info_program);
@@ -236,9 +306,15 @@ public class ProgramActivity extends AppCompatActivity {
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value, nama_perusahaan, nama_gambar);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public void action(Program program) {
+            public void action(ProgramKedua program) {
                 temp_progam = program;
                 setView("expanded");
+            }
+
+            public void action2(ProgramKedua program, Aktifitas aktivitas) {
+                temp_progam = program;
+                temp_aktivitas = aktivitas;
+                setView2("expanded");
             }
         });
         recyclerView.setAdapter(k);
@@ -347,22 +423,22 @@ public class ProgramActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<Program> jsonDecodeProgram(String jsonStr) {
-        ArrayList<Program> billing = new ArrayList<>();
+    public ArrayList<ProgramKedua> jsonDecodeProgram(String jsonStr) {
+        ArrayList<ProgramKedua> billing = new ArrayList<>();
         if (jsonStr != null) {
             try {
                 JSONArray transaksi = new JSONArray(jsonStr);
                 for (int i = 0; i < transaksi.length(); i++) {
                     JSONObject jObject = transaksi.getJSONObject(i);
-
-                    Program d = new Program(
+                    JSONObject jsonArray = new JSONObject(jObject.getString("last_update"));
+                    ProgramKedua d = new ProgramKedua(
                             i + 1,
                             jObject.getInt("id_program"),
                             jObject.getString("nama_program"),
-                            convert(jObject.getString("realisasi_persen")),
-                            convert(jObject.getString("kualitas_persen")),
-                            convert(jObject.getString("kapasitas_persen")),
-                            convert(jObject.getString("komersial_persen"))
+                            cek_data(jObject.getString("realisasi_persen")),
+                            jsonArray.getString("date"),
+                            cek_data_target(jObject.getString("total_target")),
+                            jObject.getString("target")
                     );
                     billing.add(d);
                 }
@@ -372,6 +448,22 @@ public class ProgramActivity extends AppCompatActivity {
             }
         }
         return billing;
+    }
+
+    private double cek_data(String data) {
+        try {
+            return Double.parseDouble(data);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private int cek_data_target(String data) {
+        try {
+            return Integer.parseInt(data);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private void uploadProgram(String nama_program) {
@@ -424,7 +516,7 @@ public class ProgramActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.tambah_program, R.id.edit, R.id.hapus, R.id.add})
+    @OnClick({R.id.tambah_program, R.id.edit, R.id.hapus, R.id.add, R.id.edit_aktivitas,R.id.hapus_aktivitas, R.id.update_aktivitas})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tambah_program:
@@ -452,7 +544,88 @@ public class ProgramActivity extends AppCompatActivity {
                 }, "YA", "TIDAK");
                 setView("hidden");
                 break;
+            case R.id.edit_aktivitas:
+                Intent intent2 = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("id_program", temp_progam.getId_program());
+                bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
+                intent2.putExtras(bundle);
+                startActivity(intent2);
+                setView2("hidden");
+                break;
+            case R.id.hapus_aktivitas:
+                final AlertDialogCustom ads = new AlertDialogCustom(this);
+                ads.konfirmasi("KONFIRMASI", "Apakah anda yakin akan menghapus data?", R.drawable.trash, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        deleteAktifitas();
+                        ads.dismiss();
+                    }
+                }, "YA","TIDAK");
+
+                setView2("hidden");
+                break;
+            case R.id.update_aktivitas:
+                Intent intent3 = new Intent(this, TambahRealisasi.class);
+                intent3.putExtra("id_aktivitas", temp_aktivitas.getId());
+                intent3.putExtra("id_kategori", temp_aktivitas.getIdKategori());
+                intent3.putExtra("id_program", temp_progam.getId_program());
+                intent3.putExtra("nama_program", temp_progam.getNama_program());
+                intent3.putExtra("nama_aktivitas", temp_aktivitas.getNama());
+                intent3.putExtra("due_date", "due: "+temp_aktivitas.getDuedate());
+                intent3.putExtra("target", format("%,d", temp_aktivitas.getRealisasi()).replace(",", ".") + "/" + format("%,d", temp_aktivitas.getTarget()).replace(",", ".") + " " + temp_aktivitas.getSatuan());
+                intent3.putExtra("realisasi_persen", temp_aktivitas.getRealisasi_persen()+"%");
+                intent3.putExtra("revenue", "Rp. " + format("%,d", temp_aktivitas.getRealisasi_revenue()).replace(",", ".") + " / Rp." + format("%,d", temp_aktivitas.getTarget_revenue()).replace(",", "."));
+                intent3.putExtra("kategori", temp_aktivitas.getKategori());
+                this.startActivity(intent3);
+                break;
         }
+    }
+
+    private void deleteAktifitas() {
+        avi.show();
+        String tokena = Prefs.getString(Config.TOKEN_BUMN, "");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url = Config.URL_DELETE_TARGET_PROGRAM + tokena + "/" + temp_aktivitas.getId();
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        avi.hide();
+                        try {
+                            if (response.getString("status").equals("delete-success")) {
+                                getProgram();
+                                Toast.makeText(ProgramActivity.this, "Aktivitas sukses terhapus", Toast.LENGTH_LONG).show();
+                            } else if (response.getString("status").equals("invalid-token")) {
+                                GetToken k = new GetToken(ProgramActivity.this);
+                                k.setCallback(new GetToken.callback() {
+                                    @Override
+                                    public void action(boolean success) {
+                                        getProgram();
+                                    }
+                                });
+                            }
+
+                        } catch (JSONException E) {
+                            Log.e("json_error", E.toString());
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(ProgramActivity.this);
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(getRequest);
+        queue.add(getRequest);
     }
 
     private void posteditProgram(String program) {
@@ -488,7 +661,6 @@ public class ProgramActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -534,28 +706,41 @@ public class ProgramActivity extends AppCompatActivity {
         private callback callback_variable;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
-        private ArrayList<Program> mValues;
+        private ArrayList<ProgramKedua> mValues;
         private String val, nama_per, gambar_per;
         Activity c;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public ArrayList<Program> mBoundString;
+            public ArrayList<ProgramKedua> mBoundString;
 
             public final View mView;
             @BindView(R.id.tv_no)
             TextView tvNo;
             @BindView(R.id.tv_nama)
             TextView tvNama;
+            @BindView(R.id.total_aktivitas)
+            TextView tvTotalAktivitas;
             @BindView(R.id.tv_menu)
             LinearLayout tvMenu;
-            @BindView(R.id.progress)
+            @BindView(R.id.progres_program)
+            DonutProgress pgProgram;
+            @BindView(R.id.last_update)
+            TextView tvLastUpdate;
+            @BindView(R.id.expanding)
+            LinearLayout lnExpand;
+            @BindView(R.id.table_lay)
+            LinearLayout table_lay;
+
+
+            /*@BindView(R.id.progress)
+
             NumberProgressBar progress;
             @BindView(R.id.progress_kualitas)
             NumberProgressBar progress_kualitas;
             @BindView(R.id.progress_kapasitas)
             NumberProgressBar progress_kapasitas;
             @BindView(R.id.progress_komersial)
-            NumberProgressBar progress_komersial;
+            NumberProgressBar progress_komersial;*/
 
             public ViewHolder(View view) {
                 super(view);
@@ -569,7 +754,7 @@ public class ProgramActivity extends AppCompatActivity {
             }
         }
 
-        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<Program> items, String value, String nama_perusahaan,
+        public SimpleStringRecyclerViewAdapter(Activity context, ArrayList<ProgramKedua> items, String value, String nama_perusahaan,
                                                String gambar_perusahaan) {
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
@@ -582,7 +767,7 @@ public class ProgramActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_program, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_program_kedua, parent, false);
             view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }
@@ -590,7 +775,15 @@ public class ProgramActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.setIsRecyclable(false);
-            holder.tvNo.setText(mValues.get(position).getNo() + "");
+            holder.tvNo.setText("#" + mValues.get(position).getNo() + "");
+            holder.tvTotalAktivitas.setText(mValues.get(position).getTotal_aktivitas() + " aktivitas");
+            holder.pgProgram.setProgress((int) mValues.get(position).getRealisasi_target());
+
+
+            String[] separated = mValues.get(position).getLast_update().split(" ");
+            String[] bulan_tahun = separated[0].split("-");
+            String[] jam = separated[1].split(":");
+            holder.tvLastUpdate.setText("Last Update: " + bulan_tahun[2] + " " + bulan(bulan_tahun[1]) + " " + bulan_tahun[0] + " " + jam[0] + ":" + jam[1]);
 
             holder.tvNama.setText(mValues.get(position).getNama_program());
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
@@ -605,15 +798,97 @@ public class ProgramActivity extends AppCompatActivity {
                     }
                 });
             }
-            holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
-            holder.progress_kualitas.setProgress((int) mValues.get(position).getKualitas_persen());
-            holder.progress_kapasitas.setProgress((int) mValues.get(position).getKuantitas_persen());
-            holder.progress_komersial.setProgress((int) mValues.get(position).getKomersial_persen());
+            //holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
+            //holder.progress_kualitas.setProgress((int) mValues.get(position).getKualitas_persen());
+            //holder.progress_kapasitas.setProgress((int) mValues.get(position).getKuantitas_persen());
+            //holder.progress_komersial.setProgress((int) mValues.get(position).getKomersial_persen());
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
+            int jumlah_aktivitas = 0;
+            try {
+                JSONArray transaksi = new JSONArray(mValues.get(position).getTarget());
+                for (int i = 0; i < transaksi.length(); i++) {
+
+                    jumlah_aktivitas += 1;
+                    JSONObject jObject = transaksi.getJSONObject(i);
+
+                    final Aktifitas d = new Aktifitas(
+                            i + 1,
+                            jObject.getInt("id_target"),
+                            jObject.getString("nama_aktivitas"),
+                            jObject.getString("nama_kategori"),
+                            new BigInteger(jObject.getString("target_nilai")),
+                            new BigInteger(jObject.getString("revenue_target_nilai")),
+                            new BigInteger(jObject.getString("realisasi")),
+                            new BigInteger(jObject.getString("realisasi_revenue")),
+                            jObject.getString("due_date"),
+                            jObject.getString("nama_satuan"),
+                            jObject.getDouble("realisasi_persen"),
+                            jObject.getInt("status_revenue"),
+                            jObject.getInt("id_kategori"),
+                            jObject.getInt("id_satuan")
+                    );
+
+                    LayoutInflater li = LayoutInflater.from(c);
+                    View inputnya = li.inflate(R.layout.inflate_aktivitas, null);
+                    int nomor = i + 1;
+                    TextView no = (TextView) inputnya.findViewById(R.id.nomor);
+                    no.setText(nomor + "");
+
+                    TextView nama_akvitas = (TextView) inputnya.findViewById(R.id.nama_aktivitas);
+                    nama_akvitas.setText(jObject.getString("nama_aktivitas"));
+
+                    TextView due_date = (TextView) inputnya.findViewById(R.id.due_date);
+                    due_date.setText("Due :" + jObject.getString("due_date"));
+
+                    TextView nama_kategori = (TextView) inputnya.findViewById(R.id.nama_kategori);
+                    nama_kategori.setText(jObject.getString("nama_kategori"));
+
+                    TextView realisasi = (TextView) inputnya.findViewById(R.id.realisasi);
+                    realisasi.setText(format("%,d", new BigInteger(jObject.getString("realisasi"))).replace(",", ".") + "/" + format("%,d", new BigInteger(jObject.getString("target_nilai"))).replace(",", ".") + " " + jObject.getString("nama_satuan"));
+
+                    TextView percentase = (TextView) inputnya.findViewById(R.id.persentase);
+                    percentase.setText(jObject.getString("realisasi_persen") + "%");
+
+                    LinearLayout action_aktivitas = (LinearLayout) inputnya.findViewById(R.id.action_aktivitas);
+                    if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
+                        action_aktivitas.setVisibility(View.GONE);
+                    }
+                    action_aktivitas.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (callback_variable != null) {
+                                callback_variable.action2(mValues.get(position),d);
+                            }
+                        }
+                    });
+
+                    if (jObject.getString("nama_kategori").equals("komersial")) {
+                        FrameLayout garis = (FrameLayout) inputnya.findViewById(R.id.garis);
+                        garis.setVisibility(View.VISIBLE);
+
+                        TextView realisasi_revenue = (TextView) inputnya.findViewById(R.id.revenue);
+                        realisasi_revenue.setVisibility(View.VISIBLE);
+                        realisasi_revenue.setText("Rp. " + format("%,d", new BigInteger(jObject.getString("realisasi_revenue"))).replace(",", ".") + " / Rp." + format("%,d", new BigInteger(jObject.getString("revenue_target_nilai"))).replace(",", "."));
+                    }
+                    holder.table_lay.addView(inputnya);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            if (jumlah_aktivitas > 0) {
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (holder.lnExpand.getVisibility() == View.GONE) {
+                            holder.lnExpand.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.lnExpand.setVisibility(View.GONE);
+                        }
+
+                    /*Context context = v.getContext();
                     Intent intent;
                     intent = new Intent(context, AktifitasActivity.class);
                     intent.putExtra("id_program", mValues.get(position).getId_program());
@@ -621,9 +896,11 @@ public class ProgramActivity extends AppCompatActivity {
                     intent.putExtra("NAMA_PERUSAHAAN", nama_per);
                     intent.putExtra("NAMA_PROGRAM", mValues.get(position).getNama_program());
                     intent.putExtra("GAMBAR_PERUSAHAAN", gambar_per);
-                    context.startActivity(intent);
-                }
-            });
+                    context.startActivity(intent);*/
+
+                    }
+                });
+            }
         }
 
         @Override
@@ -636,7 +913,29 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            public void action(Program temp_progam);
+            public void action(ProgramKedua temp_progam);
+            public void action2(ProgramKedua temp_progam, Aktifitas temp_aktivitas);
+        }
+
+
+        public String[] bulan_ = {"", "Januari ", "Februari ", "Maret ", "April ", "Mei ",
+                "Juni ", "Juni ", "Agustus ", "Sepember ", "Oktober ", "November ", "Desember "};
+
+        public String bulan(String bulan) {
+            String bulan_sekarang = "";
+            if (bulan.equals("01")) bulan_sekarang = bulan_[1];
+            else if (bulan.equals("02")) bulan_sekarang = bulan_[2];
+            else if (bulan.equals("03")) bulan_sekarang = bulan_[3];
+            else if (bulan.equals("04")) bulan_sekarang = bulan_[4];
+            else if (bulan.equals("05")) bulan_sekarang = bulan_[5];
+            else if (bulan.equals("06")) bulan_sekarang = bulan_[6];
+            else if (bulan.equals("07")) bulan_sekarang = bulan_[7];
+            else if (bulan.equals("08")) bulan_sekarang = bulan_[8];
+            else if (bulan.equals("09")) bulan_sekarang = bulan_[9];
+            else if (bulan.equals("10")) bulan_sekarang = bulan_[10];
+            else if (bulan.equals("11")) bulan_sekarang = bulan_[11];
+            else if (bulan.equals("12")) bulan_sekarang = bulan_[12];
+            return bulan_sekarang;
         }
     }
 
@@ -650,4 +949,6 @@ public class ProgramActivity extends AppCompatActivity {
         super.onResume();
         getProgram();
     }
+
+
 }

@@ -252,6 +252,7 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
 
         }
 
+
         AlertDialogCustom ad = new AlertDialogCustom(this);
         if (id_kategori2 == 0) {
             if (nama_aktivitas.equals("")||awal_pelaksanaan.equals("")||akhir_pelaksanaan.equals("")||url.equals("")) {

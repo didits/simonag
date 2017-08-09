@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -240,7 +241,9 @@ public class TambahAktifitas extends AppCompatActivity {
 
     private void tambah_aktifitas() {
         String keterangan = "null";
-        int target_nilai = 0,id_satuan = 0,revenue_target_nilai = 0;
+        BigInteger target_nilai = new BigInteger("0");
+        int id_satuan = 0;
+        BigInteger revenue_target_nilai = new BigInteger("0");
         String nama_satuan= "",deadline = "",nama_aktivitas = "";
         int id_kategori = spKategori.getSelectedItemPosition() + 1;
         try {
@@ -253,9 +256,9 @@ public class TambahAktifitas extends AppCompatActivity {
             nama_satuan = acSatuan.getText().toString();
             deadline = tvDuedate.getText().toString();
             nama_aktivitas = etNama.getText().toString();
-            target_nilai = Integer.parseInt(etTarget.getText().toString());
+            target_nilai = new BigInteger(etTarget.getText().toString());
             if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
-            revenue_target_nilai = Integer.parseInt(etRevenue.getText().toString());
+            revenue_target_nilai = new BigInteger(etRevenue.getText().toString());
         } catch (Exception e) {
             Log.d("error_satuan", e.toString());
         }
@@ -267,7 +270,7 @@ public class TambahAktifitas extends AppCompatActivity {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }
-            target_nilai = Integer.parseInt(tvTargetPresentase.getText().toString());
+            target_nilai = new BigInteger(tvTargetPresentase.getText().toString());
         } else if (id_kategori == 2) {
             if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
@@ -315,8 +318,8 @@ public class TambahAktifitas extends AppCompatActivity {
             String deadline,
             String keterangan,
             String nama_aktivitas,
-            int target_nilai,
-            int revenue_target_nilai) {
+            BigInteger target_nilai,
+            BigInteger revenue_target_nilai) {
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
         VolleyClass cek = new VolleyClass(this, true);
@@ -376,8 +379,8 @@ public class TambahAktifitas extends AppCompatActivity {
             String deadline,
             String keterangan,
             String nama_aktivitas,
-            int target_nilai,
-            int revenue_target_nilai) {
+            BigInteger target_nilai,
+            BigInteger revenue_target_nilai) {
 
         avi.show();
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
