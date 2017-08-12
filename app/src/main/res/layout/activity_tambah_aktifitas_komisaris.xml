@@ -12,32 +12,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/padding">
+            android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Nama Aktifitas" />
-
-            <EditText
-                android:id="@+id/et_nama"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_nama"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:hint="Nama aktivitas"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Kategori" />
+                android:text="Kategori"/>
 
             <Spinner
                 android:id="@+id/sp_kategori"
@@ -45,84 +43,66 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:layout_marginBottom="@dimen/padding"
-                android:background="@drawable/edit_text"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="@dimen/text" />
 
-            <TextView
-                android:id="@+id/judul_tanggal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Tanggal" />
-
-
-            <TextView
-                android:id="@+id/tv_tanggal"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
+                android:layout_height="wrap_content">
 
+                <EditText
+                    android:id="@+id/tv_tanggal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="Tanggal"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/judul_nilai"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Nilai (Rp)" />
-
-            <EditText
-                android:id="@+id/et_nilai"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:inputType="number"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/judul_keterangan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Keterangan" />
+                <EditText
+                    android:id="@+id/et_nilai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:hint="Nilai (Rp)"
+                    android:inputType="number"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/et_keterangan"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_keterangan"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:hint="Keterangan"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Capture" />
+                android:text="Capture"
+                android:visibility="gone" />
 
             <Button
-                android:visibility="gone"
-                android:text="Pilih File"
                 android:id="@+id/b_capture"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -131,17 +111,19 @@
                 android:layout_weight="1"
                 android:background="@drawable/edit_text"
                 android:padding="16dp"
+                android:text="Pilih File"
                 android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
+                android:textSize="@dimen/text"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/IV_capture"
-                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="wrap_content" />
+                android:padding="16dp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/button"

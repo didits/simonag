@@ -44,7 +44,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TambahRealisasi extends AppCompatActivity {
 
-
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
     SimpleDateFormat dateFormatter;
@@ -55,8 +54,6 @@ public class TambahRealisasi extends AppCompatActivity {
     @BindView(R.id.et_revenue)
     EditText etRevenue;
 
-    @BindView(R.id.tv_revenueRealisasi)
-    TextView tvRevenueRealisasi;
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
@@ -115,7 +112,6 @@ public class TambahRealisasi extends AppCompatActivity {
         }
         if (id_kategori != 3) {
             etRevenue.setVisibility(View.GONE);
-            tvRevenueRealisasi.setVisibility(View.GONE);
         }
     }
 

@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/padding">
 
-    <NumberPicker
+    <com.shawnlin.numberpicker.NumberPicker
         android:padding="@dimen/padding"
-        android:background="@drawable/edit_text"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
         android:id="@+id/presentase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        app:np_width="64dp"
+        app:np_height="180dp"
+        app:np_dividerColor="@color/colorPrimary"
+        app:np_max="100"
+        app:np_min="1"
+        app:np_selectedTextColor="@color/colorPrimary"
+        app:np_selectedTextSize="30dp"
+        app:np_textColor="@color/colorAbu"
+        app:np_textSize="20dp"/>
 </LinearLayout>

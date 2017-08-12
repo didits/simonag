@@ -22,6 +22,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -306,15 +309,62 @@ public class ProgramActivity extends AppCompatActivity {
         SimpleStringRecyclerViewAdapter k = new SimpleStringRecyclerViewAdapter(this, p, value, nama_perusahaan, nama_gambar);
         k.setCallback(new SimpleStringRecyclerViewAdapter.callback() {
             @Override
-            public void action(ProgramKedua program) {
+            public void action(Context c, ProgramKedua program, String action) {
                 temp_progam = program;
-                setView("expanded");
+                //setView("expanded");
+                if (action.equals("edit")){
+                    editProgram();
+                }else if(action.equals("tambah")){
+                    Intent intent;
+                    intent = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                    intent.putExtra("id_program", temp_progam.getId_program());
+                    startActivity(intent);
+                }else if(action.equals("hapus")){
+                    final AlertDialogCustom ad = new AlertDialogCustom(c);
+                    ad.konfirmasi("KONFIRMASI", "Apakah anda yakin akan menghapus data?", R.drawable.trash, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            deleteProgram();
+                            ad.dismiss();
+                        }
+                    }, "YA", "TIDAK");
+                }
             }
 
-            public void action2(ProgramKedua program, Aktifitas aktivitas) {
+            public void action2(Context c,ProgramKedua program, Aktifitas aktivitas, String action) {
                 temp_progam = program;
                 temp_aktivitas = aktivitas;
-                setView2("expanded");
+                if(action.equals("update_aktivitas")){
+                    Intent intent3 = new Intent(c, TambahRealisasi.class);
+                    intent3.putExtra("id_aktivitas", temp_aktivitas.getId());
+                    intent3.putExtra("id_kategori", temp_aktivitas.getIdKategori());
+                    intent3.putExtra("id_program", temp_progam.getId_program());
+                    intent3.putExtra("nama_program", temp_progam.getNama_program());
+                    intent3.putExtra("nama_aktivitas", temp_aktivitas.getNama());
+                    intent3.putExtra("due_date", "due: "+temp_aktivitas.getDuedate());
+                    intent3.putExtra("target", format("%,d", temp_aktivitas.getRealisasi()).replace(",", ".") + "/" + format("%,d", temp_aktivitas.getTarget()).replace(",", ".") + " " + temp_aktivitas.getSatuan());
+                    intent3.putExtra("realisasi_persen", temp_aktivitas.getRealisasi_persen()+"%");
+                    intent3.putExtra("revenue", "Rp. " + format("%,d", temp_aktivitas.getRealisasi_revenue()).replace(",", ".") + " / Rp." + format("%,d", temp_aktivitas.getTarget_revenue()).replace(",", "."));
+                    intent3.putExtra("kategori", temp_aktivitas.getKategori());
+                    startActivity(intent3);
+                }else if(action.equals("edit")){
+                    Intent intent2 = new Intent(ProgramActivity.this, TambahAktifitas.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id_program", temp_progam.getId_program());
+                    bundle.putParcelable("aktifitas", Parcels.wrap(temp_aktivitas));
+                    intent2.putExtras(bundle);
+                    startActivity(intent2);
+                }else if(action.equals("hapus")){
+                    final AlertDialogCustom ads = new AlertDialogCustom(c);
+                    ads.konfirmasi("KONFIRMASI", "Apakah anda yakin akan menghapus data?", R.drawable.trash, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            deleteAktifitas();
+                            ads.dismiss();
+                        }
+                    }, "YA","TIDAK");
+                }
+                //setView2("expanded");
             }
         });
         recyclerView.setAdapter(k);
@@ -574,6 +624,7 @@ public class ProgramActivity extends AppCompatActivity {
                 intent3.putExtra("nama_aktivitas", temp_aktivitas.getNama());
                 intent3.putExtra("due_date", "due: "+temp_aktivitas.getDuedate());
                 intent3.putExtra("target", format("%,d", temp_aktivitas.getRealisasi()).replace(",", ".") + "/" + format("%,d", temp_aktivitas.getTarget()).replace(",", ".") + " " + temp_aktivitas.getSatuan());
+                intent3.putExtra("target_asli", format("%,d", temp_aktivitas.getTarget()).replace(",", "."));
                 intent3.putExtra("realisasi_persen", temp_aktivitas.getRealisasi_persen()+"%");
                 intent3.putExtra("revenue", "Rp. " + format("%,d", temp_aktivitas.getRealisasi_revenue()).replace(",", ".") + " / Rp." + format("%,d", temp_aktivitas.getTarget_revenue()).replace(",", "."));
                 intent3.putExtra("kategori", temp_aktivitas.getKategori());
@@ -676,7 +727,7 @@ public class ProgramActivity extends AppCompatActivity {
     }
 
     private void editProgram() {
-        final AlertDialog dialog = buildDialog("Edit program");
+        final AlertDialog dialog = buildDialog("Edit nama program");
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -730,6 +781,13 @@ public class ProgramActivity extends AppCompatActivity {
             LinearLayout lnExpand;
             @BindView(R.id.table_lay)
             LinearLayout table_lay;
+
+            @BindView(R.id.gambar_tambah)
+            ImageView gambar_tambah;
+            @BindView(R.id.gambar_edit)
+            ImageView gambar_edit;
+            @BindView(R.id.gambar_hapus)
+            ImageView gambar_hapus;
 
 
             /*@BindView(R.id.progress)
@@ -788,16 +846,46 @@ public class ProgramActivity extends AppCompatActivity {
             holder.tvNama.setText(mValues.get(position).getNama_program());
             if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                 holder.tvMenu.setVisibility(View.GONE);
-            } else {
+            }
+            /*else {
                 holder.tvMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (callback_variable != null) {
-                            callback_variable.action(mValues.get(position));
+                            callback_variable.action(mValues.get(position), null);
                         }
                     }
                 });
-            }
+            }*/
+
+            holder.gambar_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (callback_variable != null) {
+                        callback_variable.action(c, mValues.get(position), "edit");
+                    }
+                }
+            });
+
+            holder.gambar_tambah.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (callback_variable != null) {
+                        callback_variable.action(c, mValues.get(position), "tambah");
+                    }
+                }
+            });
+
+            holder.gambar_hapus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (callback_variable != null) {
+                        callback_variable.action(c, mValues.get(position), "hapus");
+                    }
+                }
+            });
+
+
             //holder.progress.setProgress((int) mValues.get(position).getRealisasi_persen());
             //holder.progress_kualitas.setProgress((int) mValues.get(position).getKualitas_persen());
             //holder.progress_kapasitas.setProgress((int) mValues.get(position).getKuantitas_persen());
@@ -838,7 +926,7 @@ public class ProgramActivity extends AppCompatActivity {
                     nama_akvitas.setText(jObject.getString("nama_aktivitas"));
 
                     TextView due_date = (TextView) inputnya.findViewById(R.id.due_date);
-                    due_date.setText("Due :" + jObject.getString("due_date"));
+                    due_date.setText("Due: " + jObject.getString("due_date"));
 
                     TextView nama_kategori = (TextView) inputnya.findViewById(R.id.nama_kategori);
                     nama_kategori.setText(jObject.getString("nama_kategori"));
@@ -853,14 +941,46 @@ public class ProgramActivity extends AppCompatActivity {
                     if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
                         action_aktivitas.setVisibility(View.GONE);
                     }
-                    action_aktivitas.setOnClickListener(new View.OnClickListener() {
+
+                    ImageView update_aktivitas = (ImageView) inputnya.findViewById(R.id.update_aktivitas);
+                    ImageView edit_aktivitas = (ImageView) inputnya.findViewById(R.id.edit_aktivitas);
+                    ImageView hapus_aktivitas = (ImageView) inputnya.findViewById(R.id.hapus_aktivitas);
+
+                    update_aktivitas.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (callback_variable != null) {
-                                callback_variable.action2(mValues.get(position),d);
+                                callback_variable.action2(c,mValues.get(position),d,"update_aktivitas");
                             }
                         }
                     });
+
+                    edit_aktivitas.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (callback_variable != null) {
+                                callback_variable.action2(c,mValues.get(position),d,"edit");
+                            }
+                        }
+                    });
+
+                    hapus_aktivitas.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (callback_variable != null) {
+                                callback_variable.action2(c,mValues.get(position),d,"hapus");
+                            }
+                        }
+                    });
+
+
+                    /*action_aktivitas.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });*/
+
 
                     if (jObject.getString("nama_kategori").equals("komersial")) {
                         FrameLayout garis = (FrameLayout) inputnya.findViewById(R.id.garis);
@@ -877,15 +997,15 @@ public class ProgramActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
             if (jumlah_aktivitas > 0) {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (holder.lnExpand.getVisibility() == View.GONE) {
                             holder.lnExpand.setVisibility(View.VISIBLE);
+                            expand(holder.lnExpand);
                         } else {
-                            holder.lnExpand.setVisibility(View.GONE);
+                            collapse(holder.lnExpand);
                         }
 
                     /*Context context = v.getContext();
@@ -903,6 +1023,60 @@ public class ProgramActivity extends AppCompatActivity {
             }
         }
 
+        public static void expand(final View v) {
+            v.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            final int targetHeight = v.getMeasuredHeight();
+
+            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+            v.getLayoutParams().height = 1;
+            v.setVisibility(View.VISIBLE);
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? LinearLayout.LayoutParams.WRAP_CONTENT
+                            : (int)(targetHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // 1dp/ms
+            a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)+100);
+            v.startAnimation(a);
+        }
+
+        public static void collapse(final View v) {
+            final int initialHeight = v.getMeasuredHeight();
+
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if(interpolatedTime == 1){
+                        v.setVisibility(View.GONE);
+                    }else{
+                        v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // 1dp/ms
+            a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density)+100);
+            v.startAnimation(a);
+        }
+
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -913,8 +1087,8 @@ public class ProgramActivity extends AppCompatActivity {
         }
 
         public interface callback {
-            public void action(ProgramKedua temp_progam);
-            public void action2(ProgramKedua temp_progam, Aktifitas temp_aktivitas);
+            public void action(Context c, ProgramKedua temp_progam, String action);
+            public void action2(Context c, ProgramKedua temp_progam, Aktifitas temp_aktivitas, String action);
         }
 
 

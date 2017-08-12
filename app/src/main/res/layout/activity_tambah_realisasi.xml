@@ -23,7 +23,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:orientation="vertical"
-            android:padding="@dimen/padding">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/nama_program"
@@ -38,28 +38,41 @@
                 android:layout_height="match_parent"
                 android:stretchColumns="1">
 
-                <TableRow android:background="#5c909f">
+                <TableRow android:background="@color/colorWhite">
 
-                    <TextView
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="Aktivitas"
-                        android:textColor="@color/colorWhite" />
+                    <LinearLayout
+                        android:layout_marginRight="2px"
+                        android:background="#5c909f">
 
-                    <TextView
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="Real/Target"
-                        android:textColor="@color/colorWhite" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="Aktivitas"
+                            android:textColor="@color/colorWhite" />
+                    </LinearLayout>
+
+                    <LinearLayout android:background="#5c909f">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="Real/Target"
+                            android:textColor="@color/colorWhite" />
+                    </LinearLayout>
+
                 </TableRow>
 
                 <TableRow android:background="@color/colorAbuAbu">
 
                     <LinearLayout
-                        android:layout_marginLeft="3px"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3px"
+                        android:layout_marginLeft="3px"
                         android:layout_marginRight="3px"
                         android:background="@color/colorWhite"
                         android:orientation="vertical"
@@ -94,59 +107,63 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginRight="3px"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="3px"
+                        android:layout_marginRight="3px"
                         android:background="@color/colorWhite"
                         android:orientation="vertical"
                         android:padding="5dp">
+
                         <HorizontalScrollView
-                            android:layout_weight="1"
-                            android:scrollbars="none"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:id="@+id/target"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="20/200Gbs" />
+                            android:scrollbars="none">
 
-                            <FrameLayout
-                                android:layout_width="3px"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_margin="3dp"
-                                android:background="@color/colorAbuAbu" />
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/revenue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="20/200Gbs" />
+                                <TextView
+                                    android:id="@+id/target"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="20/200Gbs" />
 
-                            <FrameLayout
-                                android:id="@+id/pemisah"
-                                android:layout_width="3px"
-                                android:layout_height="match_parent"
-                                android:layout_margin="3dp"
-                                android:background="@color/colorAbuAbu" />
+                                <FrameLayout
+                                    android:layout_width="3px"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="3dp"
+                                    android:background="@color/colorAbuAbu" />
 
-                            <TextView
-                                android:id="@+id/realisasi"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="80%" />
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/revenue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="20/200Gbs" />
+
+                                <FrameLayout
+                                    android:id="@+id/pemisah"
+                                    android:layout_width="3px"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="3dp"
+                                    android:background="@color/colorAbuAbu" />
+
+                                <TextView
+                                    android:id="@+id/realisasi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="80%" />
+                            </LinearLayout>
                         </HorizontalScrollView>
+
                         <FrameLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -170,60 +187,58 @@
 
             </TableLayout>
 
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Tanggal" />
 
-            <TextView
-                android:id="@+id/tv_tanggal"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/edit_text"
-                android:padding="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="@dimen/text" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Nilai Realisasi" />
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/tv_tanggal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="Tanggal realisasi"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:hint="Nilai realisasi"
+                    android:id="@+id/et_nilai"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:inputType="number"
+                    android:padding="@dimen/padding"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_nilai"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/edit_text"
-                android:inputType="number"
-                android:padding="@dimen/padding"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_revenueRealisasi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Revenue Realisasi" />
-
-            <EditText
+                android:hint="Nilai realisasi revenue (Rp.)"
                 android:id="@+id/et_revenue"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/edit_text"
                 android:inputType="number"
                 android:padding="@dimen/padding"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/button"

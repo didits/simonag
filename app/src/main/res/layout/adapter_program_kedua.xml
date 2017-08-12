@@ -119,21 +119,24 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/gambar_tambah"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/plus_black" />
 
                     <ImageView
+                        android:id="@+id/gambar_edit"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
+                        android:layout_marginLeft="8dp"
                         android:src="@drawable/edit_black" />
 
                     <ImageView
+                        android:id="@+id/gambar_hapus"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
+                        android:layout_marginLeft="8dp"
                         android:src="@drawable/delete" />
                 </LinearLayout>
 
@@ -141,41 +144,72 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/expanding"
-        android:orientation="vertical"
-        android:background="@color/colorAbuAbu"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/expanding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/colorAbuAbu"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/table_lay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/table_lay"
-            android:stretchColumns="2">
+            android:stretchColumns="*">
 
-            <TableRow android:background="#5c909f">
+            <TableRow android:background="@color/colorWhite">
 
-                <TextView
-                    android:gravity="center"
-                    android:padding="3dp"
-                    android:text="No"
-                    android:textColor="@color/colorWhite" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_marginRight="2px"
+                    android:background="#5c909f">
 
-                <TextView
-                    android:gravity="center"
-                    android:padding="3dp"
-                    android:text="Aktivitas"
-                    android:textColor="@color/colorWhite" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="No"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
 
-                <TextView
-                    android:gravity="center"
-                    android:padding="3dp"
-                    android:text="Real/Target"
-                    android:textColor="@color/colorWhite" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="2px"
+                    android:layout_weight="1"
+                    android:background="#5c909f">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Aktivitas"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:background="#5c909f">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Real/Target"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
             </TableRow>
 
 
         </TableLayout>
     </LinearLayout>
+
 </LinearLayout>

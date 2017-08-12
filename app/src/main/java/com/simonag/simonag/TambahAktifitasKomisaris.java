@@ -85,12 +85,6 @@ public class TambahAktifitasKomisaris extends AppCompatActivity {
     @BindView(R.id.button)
     Button button;
     DatePickerDialog datepicker;
-    @BindView(R.id.judul_tanggal)
-    TextView judulTanggal;
-    @BindView(R.id.judul_nilai)
-    TextView judulNilai;
-    @BindView(R.id.judul_keterangan)
-    TextView judulKeterangan;
 
     //Image request code
     private int PICK_IMAGE_REQUEST = 1;

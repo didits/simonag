@@ -3,6 +3,7 @@ package com.simonag.simonag;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.shawnlin.numberpicker.NumberPicker;
 import com.simonag.simonag.model.Aktifitas;
 import com.simonag.simonag.model.Satuan;
 import com.simonag.simonag.utils.AlertDialogCustom;
@@ -80,12 +81,17 @@ public class TambahAktifitas extends AppCompatActivity {
     @BindView(R.id.tv_target_presentase)
     TextView tvTargetPresentase;
 
-    @BindView(R.id.judul_revenue)
-    TextView judulRevenue;
     @BindView(R.id.ac_satuan)
     AutoCompleteTextView acSatuan;
     @BindView(R.id.tv_duedate)
     TextView tvDuedate;
+
+    @BindView(R.id.text_target)
+    TextInputLayout text_target;
+    @BindView(R.id.text_target_presentase)
+    TextInputLayout text_target_presentase;
+    @BindView(R.id.text_target_revenue)
+    TextInputLayout text_target_revenue;
 
     DatePickerDialog datepicker;
 
@@ -122,24 +128,23 @@ public class TambahAktifitas extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 int item = spKategori.getSelectedItemPosition();
                 if (item == 0) {
-                    etRevenue.setVisibility(View.GONE);
-                    judulRevenue.setVisibility(View.GONE);
+                    text_target_revenue.setVisibility(View.GONE);
                     acSatuan.setText("%");
                     acSatuan.setEnabled(false);
-                    tvTargetPresentase.setVisibility(View.VISIBLE);
-                    etTarget.setVisibility(View.GONE);
+                    text_target_presentase.setVisibility(View.VISIBLE);
+                    text_target.setVisibility(View.GONE);
                 } else if (item == 1) {
-                    etRevenue.setVisibility(View.GONE);
-                    judulRevenue.setVisibility(View.GONE);
+                    text_target_revenue.setVisibility(View.GONE);
                     acSatuan.setEnabled(true);
-                    tvTargetPresentase.setVisibility(View.GONE);
-                    etTarget.setVisibility(View.VISIBLE);
+                    acSatuan.setText("");
+                    text_target_presentase.setVisibility(View.GONE);
+                    text_target.setVisibility(View.VISIBLE);
                 } else {
-                    etRevenue.setVisibility(View.VISIBLE);
-                    judulRevenue.setVisibility(View.VISIBLE);
+                    acSatuan.setText("");
+                    text_target_revenue.setVisibility(View.VISIBLE);
                     acSatuan.setEnabled(true);
-                    tvTargetPresentase.setVisibility(View.GONE);
-                    etTarget.setVisibility(View.VISIBLE);
+                    text_target_presentase.setVisibility(View.GONE);
+                    text_target.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -179,7 +184,7 @@ public class TambahAktifitas extends AppCompatActivity {
     }
 
     private void getpresentase() {
-        final AlertDialog dialog = buildDialog("Target");
+        final AlertDialog dialog = buildDialog("Target (1-100%)");
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,8 +198,15 @@ public class TambahAktifitas extends AppCompatActivity {
         AlertDialog.Builder result = new AlertDialog.Builder(this);
         View alertView = getLayoutInflater().inflate(R.layout.dialog_presentase, null);
         presentase = (NumberPicker) alertView.findViewById(R.id.presentase);
-        presentase.setMinValue(0);
+        presentase.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%d %%", i);
+            }
+        });
+        presentase.setMinValue(1);
         presentase.setMaxValue(100);
+        presentase.setValue(100);
         result.setTitle(title)
                 .setView(alertView)
                 .setPositiveButton("Simpan", null);
@@ -331,7 +343,7 @@ public class TambahAktifitas extends AppCompatActivity {
                     JSONObject jObject = new JSONObject(response);
                     String status = jObject.getString("status");
                     if (status.equals("edit-success")) {
-                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Mengedit Program", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses mengedit aktivitas", Toast.LENGTH_LONG);
                         toast.show();
                         onBackPressed();
                     } else if (status.equals("wrong-id")) {
