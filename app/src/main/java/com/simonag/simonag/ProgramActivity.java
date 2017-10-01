@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -931,11 +932,14 @@ public class ProgramActivity extends AppCompatActivity {
                     TextView nama_kategori = (TextView) inputnya.findViewById(R.id.nama_kategori);
                     nama_kategori.setText(jObject.getString("nama_kategori"));
 
-                    TextView realisasi = (TextView) inputnya.findViewById(R.id.realisasi);
-                    realisasi.setText(format("%,d", new BigInteger(jObject.getString("realisasi"))).replace(",", ".") + "/" + format("%,d", new BigInteger(jObject.getString("target_nilai"))).replace(",", ".") + " " + jObject.getString("nama_satuan"));
+                    String text = "";
+                    text+= format("%,d", new BigInteger(jObject.getString("realisasi"))).replace(",", ".") + "/" + format("%,d", new BigInteger(jObject.getString("target_nilai"))).replace(",", ".") + " " + jObject.getString("nama_satuan");
+                    text+= " | "+jObject.getString("realisasi_persen") + "%";
+                    //TextView realisasi = (TextView) inputnya.findViewById(R.id.realisasi);
+                    //realisasi.setText(format("%,d", new BigInteger(jObject.getString("realisasi"))).replace(",", ".") + "/" + format("%,d", new BigInteger(jObject.getString("target_nilai"))).replace(",", ".") + " " + jObject.getString("nama_satuan"));
 
-                    TextView percentase = (TextView) inputnya.findViewById(R.id.persentase);
-                    percentase.setText(jObject.getString("realisasi_persen") + "%");
+                    //TextView percentase = (TextView) inputnya.findViewById(R.id.persentase);
+                    //percentase.setText(jObject.getString("realisasi_persen") + "%");
 
                     LinearLayout action_aktivitas = (LinearLayout) inputnya.findViewById(R.id.action_aktivitas);
                     if (Prefs.getInt(Config.ID_BUMN, 0) != Integer.parseInt(val)) {
@@ -983,13 +987,18 @@ public class ProgramActivity extends AppCompatActivity {
 
 
                     if (jObject.getString("nama_kategori").equals("komersial")) {
-                        FrameLayout garis = (FrameLayout) inputnya.findViewById(R.id.garis);
-                        garis.setVisibility(View.VISIBLE);
-
-                        TextView realisasi_revenue = (TextView) inputnya.findViewById(R.id.revenue);
-                        realisasi_revenue.setVisibility(View.VISIBLE);
-                        realisasi_revenue.setText("Rp. " + format("%,d", new BigInteger(jObject.getString("realisasi_revenue"))).replace(",", ".") + " / Rp." + format("%,d", new BigInteger(jObject.getString("revenue_target_nilai"))).replace(",", "."));
+                        //FrameLayout garis = (FrameLayout) inputnya.findViewById(R.id.garis);
+                        //garis.setVisibility(View.VISIBLE);
+                        text+=" | Rp. " + format("%,d", new BigInteger(jObject.getString("realisasi_revenue"))).replace(",", ".") + " / Rp." + format("%,d", new BigInteger(jObject.getString("revenue_target_nilai"))).replace(",", ".");
+                        //TextView realisasi_revenue = (TextView) inputnya.findViewById(R.id.revenue);
+                        //realisasi_revenue.setVisibility(View.VISIBLE);
+                        //realisasi_revenue.setText("Rp. " + format("%,d", new BigInteger(jObject.getString("realisasi_revenue"))).replace(",", ".") + " / Rp." + format("%,d", new BigInteger(jObject.getString("revenue_target_nilai"))).replace(",", "."));
                     }
+
+                    TextView realisasi_revenuse = (TextView) inputnya.findViewById(R.id.scrollingtext);
+                    realisasi_revenuse.setText(text);
+                    realisasi_revenuse.setSelected(true);
+
                     holder.table_lay.addView(inputnya);
                 }
 
