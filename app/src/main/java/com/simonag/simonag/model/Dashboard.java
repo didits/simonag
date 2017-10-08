@@ -1,10 +1,12 @@
 package com.simonag.simonag.model;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by diditsepiyanto on 6/13/17.
  */
 
-public class Dashboard {
+public class Dashboard implements Comparable<Dashboard> {
     int id;
     int id_bumn;
     String nama_bumn;
@@ -77,5 +79,19 @@ public class Dashboard {
 
     public void setLink_gambar(String link_gambar) {
         this.link_gambar = link_gambar;
+    }
+
+    @Override
+    public int compareTo(@NonNull Dashboard o) {
+        return 0;
+    }
+
+
+    @Override
+    public String toString() {
+        return "[ id=" + id + ", id_bumn=" + id_bumn + ", nama_bumn=" + nama_bumn + ", persentase_komersial=" + persentase_komersial
+                + ", persentase_kualitas=" + persentase_kualitas + ", persentase_kapasitas=" + persentase_kapasitas
+                + ", link_gambar=" + link_gambar+
+                "]";
     }
 }

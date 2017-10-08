@@ -55,6 +55,8 @@ import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -314,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                             if (response.getString("status").equals("success")) {
                                 if(dashajs){
                                     db = jsonDecodeBilling(response.getString("perusahaan"));
+
                                     keterangan.setVisibility(View.VISIBLE);
                                     keterangan.setText("Jumlah BUMN: " + response.getString("jumlah_perusahaan")
                                             + " | Jumlah Program: " + response.getString("jumlah_program"));

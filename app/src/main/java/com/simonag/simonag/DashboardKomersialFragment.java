@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.simonag.simonag.model.Dashboard;
 import com.simonag.simonag.utils.Config;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,9 +48,26 @@ public class DashboardKomersialFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
+        ArrayList<Dashboard> kapasitas_sementara = ((MainActivity) getActivity()).db;
+        ArrayList employees = new ArrayList();
+        for (int i=0; i<kapasitas_sementara.size();i++)
+            employees.add(kapasitas_sementara.get(i));
+        Collections.sort(employees, new Comparator<Dashboard>() {
+            @Override
+            public int compare(Dashboard dashboard, Dashboard t1) {
+                Integer id1 = (int)dashboard.getPersentase_komersial();
+                Integer id2 = (int)t1.getPersentase_komersial();
+
+                // ascending order
+                //return id1.compareTo(id2);
+
+                // descending order
+                return id2.compareTo(id1);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                ((MainActivity) getActivity()).db));
+                employees));
 
 
     }
