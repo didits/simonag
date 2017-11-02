@@ -34,36 +34,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ).withListener(new MultiplePermissionsListener() {
+        avi.show();
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                avi.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        avi.hide();
-                        Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                }, 2000);
+            public void run() {
+                avi.hide();
+                Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
             }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).withErrorListener(new PermissionRequestErrorListener() {
-            @Override
-            public void onError(DexterError error) {
-                Log.e("Dexter", "There was an error: " + error.toString());
-            }
-        }).check();
+        }, 2000);
     }
 }

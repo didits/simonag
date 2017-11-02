@@ -18,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -63,5 +64,7 @@ dependencies {
     compile 'com.shawnlin:number-picker:2.4.4'
     compile 'com.weiwangcn.betterspinner:library-material:1.1.0'
     compile 'asia.ivity.android:marqueeview:1.1.5@aar'
+    compile 'com.github.angads25:filepicker:1.1.1'
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'
 //    compile project(':calligraphy-2.2.0')
 }

@@ -2,7 +2,9 @@ package com.simonag.simonag;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -14,9 +16,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
@@ -27,9 +38,13 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +91,10 @@ public class TambahRealisasi extends AppCompatActivity {
     @BindView(R.id.pemisah)
     FrameLayout frameLayout;
 
+    FilePickerDialog dialog;
+    String[] link_files;
+    byte[] bytesArray = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,19 +118,73 @@ public class TambahRealisasi extends AppCompatActivity {
         tvRevenue.setText(getIntent().getExtras().getString("revenue"));
         tvTarget.setText(getIntent().getExtras().getString("target"));
         tvRealisasi.setText(getIntent().getExtras().getString("realisasi_persen"));
-        tvNamaProgram.setText("Program: "+getIntent().getExtras().getString("nama_program"));
+        tvNamaProgram.setText("Program: " + getIntent().getExtras().getString("nama_program"));
         tvNamaAktivitas.setText(getIntent().getExtras().getString("nama_aktivitas"));
         tvdueDate.setText(getIntent().getExtras().getString("due_date"));
         tvtipeAltivitas.setText(getIntent().getExtras().getString("kategori"));
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
         id_kategori = getIntent().getExtras().getInt("id_kategori");
 
-        if(!getIntent().getExtras().getString("kategori").equals("komersial")){
+        if (!getIntent().getExtras().getString("kategori").equals("komersial")) {
             frameLayout.setVisibility(View.GONE);
             tvRevenue.setVisibility(View.GONE);
         }
         if (id_kategori != 3) {
             etRevenue.setVisibility(View.GONE);
+        }
+
+        Button tambah_file = (Button) findViewById(R.id.file);
+        tambah_file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFile();
+            }
+        });
+    }
+
+    private void addFile() {
+        DialogProperties properties = new DialogProperties();
+        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_type = DialogConfigs.FILE_SELECT;
+        properties.root = new File(DialogConfigs.DEFAULT_DIR);
+        properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+        properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+        properties.extensions = null;
+        dialog = new FilePickerDialog(TambahRealisasi.this, properties);
+        dialog.setTitle("Select a File");
+        dialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                TextView link_file = (TextView) findViewById(R.id.link_file);
+                link_files = files;
+                File file = new File(link_files[0]);
+                long fileSizeInBytes = file.length();
+                long fileSizeInKB = fileSizeInBytes / 1024;
+                long fileSizeInMB = fileSizeInKB / 1024;
+                if ((fileSizeInMB) >= 4) {
+                    AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                    ad.simple("Error", "File terlalu besar, maksimal 4mb", R.drawable.info_danger, null);
+                    link_files = null;
+                    link_file.setText("");
+                } else link_file.setText(link_files[0]);
+            }
+        });
+        dialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (dialog != null) {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }
+                } else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(TambahRealisasi.this, "Permission is Required for getting list of files", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -271,13 +344,88 @@ public class TambahRealisasi extends AppCompatActivity {
 
     }
 
-    private void uploadRealisasi(
+    private void uploadRealisasi(final String tanggal_realisasi,
+                                 final String keterangan,
+                                 final String realisasi_nilai,
+                                 final String revenue_realisasi_nilai) {
+        button.setEnabled(false);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.VISIBLE);
+        String token = Prefs.getString(Config.TOKEN_BUMN, "");
+        if (link_files!=null) {
+            File file = new File(link_files[0]);
+            bytesArray = new byte[(int) file.length()];
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                fis.read(bytesArray); //read file into bytes[]
+                fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, Config.URL_POST_REALISASI_TARGET + token, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+                try {
+                    JSONObject jObject = new JSONObject(resultResponse);
+                    String status = jObject.getString("status");
+                    if (status.equals("post-success")) {
+                        Toast toast = Toast.makeText(TambahRealisasi.this, "Sukses Menambahkan Realisasi", Toast.LENGTH_LONG);
+                        toast.show();
+                        finish();
+                    } else if (status.equals("wrong-id")) {
+                        Toast.makeText(TambahRealisasi.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
+                    } else if (status.equals("post-failed")) {
+                        Toast.makeText(TambahRealisasi.this, "Post data gagal", Toast.LENGTH_LONG).show();
+                    }
+                    progressBar.setVisibility(View.GONE);
+                    button.setEnabled(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                button.setEnabled(true);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("id_target", id_aktifitas + "");
+                params.put("tanggal_realisasi", tanggal_realisasi);
+                params.put("keterangan", keterangan);
+                params.put("realisasi_nilai", realisasi_nilai);
+                params.put("revenue_realisasi_nilai", revenue_realisasi_nilai);
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                if(link_files!=null)
+                params.put("attachment", new DataPart(link_files[0], bytesArray));
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
+    }
+
+
+    private void uploadRealisasi2(
             String tanggal_realisasi,
             String keterangan,
             String realisasi_nilai,
             String revenue_realisasi_nilai) {
-        Log.d("revenue", revenue_realisasi_nilai + "");
         avi.show();
+
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
         VolleyClass cek = new VolleyClass(this, true);
         cek.get_data_from_server(new VolleyClass.VolleyCallback() {
@@ -308,7 +456,6 @@ public class TambahRealisasi extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

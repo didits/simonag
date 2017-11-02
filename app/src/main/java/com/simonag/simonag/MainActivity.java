@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         TextView persentase = (TextView) tabOne.findViewById(R.id.percent);
         if(dashajs){
             judul.setText("KUALITAS");
-            persentase.setText(kualitas + "%");
+            persentase.setText(String.format("%.2f", kualitas) + "%");
         }else{
             judul.setText("Sponsorship");
             persentase.setText("BUMN");
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         TextView persentaseTwo = (TextView) tabTwo.findViewById(R.id.percent);
         if(dashajs){
             judulTwo.setText("KAPASITAS");
-            persentaseTwo.setText(kapasitas + "%");
+            persentaseTwo.setText(String.format("%.2f", kapasitas) + "%");
         }else{
             judulTwo.setText("Sponsorship");
             persentaseTwo.setText("Kategori");
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         TextView persentaseThree = (TextView) tabThree.findViewById(R.id.percent);
         if(dashajs){
             judulThree.setText("KOMERSIAL");
-            persentaseThree.setText(komersial + "%");
+            persentaseThree.setText(String.format("%.2f", komersial) + "%");
         }else{
             judulThree.setText("Sponsorship");
             persentaseThree.setText("Tanggal");

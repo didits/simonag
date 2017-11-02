@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -55,6 +56,11 @@ public class VolleyClass {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null && networkResponse.data != null) {
+                            String jsonError = new String(networkResponse.data);
+                            //longLog(jsonError);
+                        }
                         if(show_progress){
                             if (progress_dialog != null && progress_dialog.isShowing()) {
                                 progress_dialog.hide();
@@ -67,10 +73,8 @@ public class VolleyClass {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                Log.d("sasas", params.toString());
                 for (String aParam : param) {
                     String[] separated = aParam.split("\\|");
-                    Log.d("sasa",separated[0]+" "+separated[1]);
                     params.put(separated[0], separated[1]);
                 }
                 return params;
@@ -92,6 +96,14 @@ public class VolleyClass {
     private void alert(){
         AlertDialogCustom ad = new AlertDialogCustom(context);
         ad.simple("KONEKSI GAGAL", "Tidak tersambung ke jaringan. Harap periksa koneksi internet Anda.", R.drawable.broken_link, null);
+    }
+
+    public static void longLog(String str) {
+        if (str.length() > 4000) {
+            Log.d("long_string", str.substring(0, 4000));
+            longLog(str.substring(4000));
+        } else
+            Log.d("long_string", str);
     }
 
 }
