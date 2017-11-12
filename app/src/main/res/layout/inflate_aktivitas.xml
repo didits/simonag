@@ -49,11 +49,20 @@
                 android:textSize="10sp"
                 android:textStyle="italic" />
 
+            <ImageView
+                android:id="@+id/view_target"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/eye" />
+
             <LinearLayout
                 android:id="@+id/action_aktivitas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
+
 
                 <ImageView
                     android:id="@+id/update_aktivitas"

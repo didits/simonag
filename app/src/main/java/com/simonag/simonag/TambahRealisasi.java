@@ -1,10 +1,18 @@
 package com.simonag.simonag;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -24,6 +32,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
@@ -40,6 +49,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -92,8 +103,9 @@ public class TambahRealisasi extends AppCompatActivity {
     FrameLayout frameLayout;
 
     FilePickerDialog dialog;
-    String[] link_files;
+    //String[] link_files;
     byte[] bytesArray = null;
+    File uploadedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +155,8 @@ public class TambahRealisasi extends AppCompatActivity {
     }
 
     private void addFile() {
-        DialogProperties properties = new DialogProperties();
+        openFilePicker();
+        /*DialogProperties properties = new DialogProperties();
         properties.selection_mode = DialogConfigs.SINGLE_MODE;
         properties.selection_type = DialogConfigs.FILE_SELECT;
         properties.root = new File(DialogConfigs.DEFAULT_DIR);
@@ -169,7 +182,44 @@ public class TambahRealisasi extends AppCompatActivity {
                 } else link_file.setText(link_files[0]);
             }
         });
-        dialog.show();
+        dialog.show();*/
+    }
+
+    private void openFilePicker(){
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"pilih file"),200);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 200) {
+                if (data.getData() != null) {
+                    TextView link_file = (TextView) findViewById(R.id.link_file);
+                    String uri = UriConverter.getPath(TambahRealisasi.this, data.getData());
+                    if (uri != null) {
+                        uploadedImage = new File(uri);
+                        long fileSizeInBytes = uploadedImage.length();
+                        long fileSizeInKB = fileSizeInBytes / 1024;
+                        long fileSizeInMB = fileSizeInKB / 1024;
+                        if ((fileSizeInMB) >= 4) {
+                            AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                            ad.simple("Error", "File terlalu besar, maksimal 4mb", R.drawable.info_danger, null);
+                            uploadedImage = null;
+                            link_file.setText("");
+                        } else link_file.setText(uploadedImage.getPath());
+                    }else {
+                        uploadedImage = null;
+                        link_file.setText("");
+                    }
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -177,9 +227,10 @@ public class TambahRealisasi extends AppCompatActivity {
         switch (requestCode) {
             case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (dialog != null) {   //Show dialog if the read permission has been granted.
+                    /*if (dialog != null) {   //Show dialog if the read permission has been granted.
                         dialog.show();
-                    }
+                    }*/
+                    openFilePicker();
                 } else {
                     //Permission has not been granted. Notify the user.
                     Toast.makeText(TambahRealisasi.this, "Permission is Required for getting list of files", Toast.LENGTH_SHORT).show();
@@ -306,7 +357,7 @@ public class TambahRealisasi extends AppCompatActivity {
             if (id_kategori == 3)
                 revenue_realisasi_nilai = etRevenue.getText().toString();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
 
@@ -316,6 +367,12 @@ public class TambahRealisasi extends AppCompatActivity {
                 ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
                 return;
             }
+            if (Double.parseDouble(etNilai.getText().toString()) > Double.parseDouble(getIntent().getExtras().getString("target_real"))) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Nilai realisasi harus kurang atau sama dengan " + getIntent().getExtras().getString("target_real"), R.drawable.info_danger, null);
+                return;
+            }
+
         }
         if (id_kategori == 3) {
             if (tanggal_realisasi.equals("") || etRevenue.getText().toString().equals("") || etNilai.getText().toString().equals("")) {
@@ -326,6 +383,19 @@ public class TambahRealisasi extends AppCompatActivity {
             try {
                 revenue_realisasi_nilai = etRevenue.getText().toString();
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (Double.parseDouble(etNilai.getText().toString()) > Double.parseDouble(getIntent().getExtras().getString("target_real"))) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Nilai realisasi harus kurang atau sama dengan " + getIntent().getExtras().getString("target_real"), R.drawable.info_danger, null);
+                return;
+            }
+
+            if (Double.parseDouble(etRevenue.getText().toString()) > Double.parseDouble(getIntent().getExtras().getString("target_real_revenue"))) {
+                AlertDialogCustom ad = new AlertDialogCustom(TambahRealisasi.this);
+                ad.simple("Peringatan", "Nilai realisasi revenue harus kurang atau sama dengan " + getIntent().getExtras().getString("target_real_revenue"), R.drawable.info_danger, null);
+                return;
             }
         }
 
@@ -352,16 +422,18 @@ public class TambahRealisasi extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
-        if (link_files!=null) {
-            File file = new File(link_files[0]);
-            bytesArray = new byte[(int) file.length()];
+
+        if (uploadedImage != null) {
+
+            bytesArray = new byte[(int) uploadedImage.length()];
             try {
-                FileInputStream fis = new FileInputStream(file);
+                FileInputStream fis = new FileInputStream(uploadedImage);
                 fis.read(bytesArray); //read file into bytes[]
                 fis.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
 
@@ -409,8 +481,8 @@ public class TambahRealisasi extends AppCompatActivity {
             @Override
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
-                if(link_files!=null)
-                params.put("attachment", new DataPart(link_files[0], bytesArray));
+                if (uploadedImage != null)
+                    params.put("attachment", new DataPart(uploadedImage.toString(), bytesArray));
                 return params;
             }
         };

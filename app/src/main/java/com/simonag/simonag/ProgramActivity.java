@@ -1,12 +1,15 @@
 package com.simonag.simonag;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +48,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -344,6 +348,8 @@ public class ProgramActivity extends AppCompatActivity {
                     intent3.putExtra("nama_aktivitas", temp_aktivitas.getNama());
                     intent3.putExtra("due_date", "due: "+temp_aktivitas.getDuedate());
                     intent3.putExtra("target", format("%,d", temp_aktivitas.getRealisasi()).replace(",", ".") + "/" + format("%,d", temp_aktivitas.getTarget()).replace(",", ".") + " " + temp_aktivitas.getSatuan());
+                    intent3.putExtra("target_real", temp_aktivitas.getTarget()+"");
+                    intent3.putExtra("target_real_revenue", temp_aktivitas.getTarget_revenue()+"");
                     intent3.putExtra("realisasi_persen", temp_aktivitas.getRealisasi_persen()+"%");
                     intent3.putExtra("revenue", "Rp. " + format("%,d", temp_aktivitas.getRealisasi_revenue()).replace(",", ".") + " / Rp." + format("%,d", temp_aktivitas.getTarget_revenue()).replace(",", "."));
                     intent3.putExtra("kategori", temp_aktivitas.getKategori());
@@ -364,11 +370,53 @@ public class ProgramActivity extends AppCompatActivity {
                             ads.dismiss();
                         }
                     }, "YA","TIDAK");
+                }else if(action.equals("view")){
+                    launch();
                 }
-                //setView2("expanded");
             }
         });
         recyclerView.setAdapter(k);
+    }
+
+    public void launch() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            Intent intent3 = new Intent(ProgramActivity.this, ViewRealisasi.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("id_target", temp_aktivitas.getId()+"");
+            intent3.putExtras(bundle);
+            startActivity(intent3);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent3 = new Intent(ProgramActivity.this, ViewRealisasi.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id_target", temp_aktivitas.getId()+"");
+                    intent3.putExtras(bundle);
+                    startActivity(intent3);
+                } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    final AlertDialogCustom ad = new AlertDialogCustom(ProgramActivity.this);
+                    ad.konfirmasi("IZIN APLIKASI", "Simonag memerlukan beberapa perizinan", R.drawable.info, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ActivityCompat.requestPermissions(ProgramActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    }, 1);
+                            ad.dismiss();
+                        }
+                    }, "NYALAKAN", "BATAL");
+                }
+            }
+        }
     }
 
 
@@ -949,6 +997,7 @@ public class ProgramActivity extends AppCompatActivity {
                     ImageView update_aktivitas = (ImageView) inputnya.findViewById(R.id.update_aktivitas);
                     ImageView edit_aktivitas = (ImageView) inputnya.findViewById(R.id.edit_aktivitas);
                     ImageView hapus_aktivitas = (ImageView) inputnya.findViewById(R.id.hapus_aktivitas);
+                    ImageView view_target = (ImageView) inputnya.findViewById(R.id.view_target);
 
                     update_aktivitas.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -973,6 +1022,15 @@ public class ProgramActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             if (callback_variable != null) {
                                 callback_variable.action2(c,mValues.get(position),d,"hapus");
+                            }
+                        }
+                    });
+
+                    view_target.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (callback_variable != null) {
+                                callback_variable.action2(c,mValues.get(position),d,"view");
                             }
                         }
                     });
