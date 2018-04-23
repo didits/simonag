@@ -106,8 +106,6 @@ public class AktifitasActivity extends AppCompatActivity {
             pic = extras.getString("GAMBAR_PERUSAHAAN");
         }
 
-
-
         nama_bumn.setText(nama);
         nama_program.setText("Program: " + program);
         String url = Config.URL_GAMBAR + pic;
@@ -368,7 +366,8 @@ public class AktifitasActivity extends AppCompatActivity {
                             jObject.getDouble("realisasi_persen"),
                             jObject.getInt("status_revenue"),
                             jObject.getInt("id_kategori"),
-                            jObject.getInt("id_satuan")
+                            jObject.getInt("id_satuan"),
+                            jObject.getString("lokasi")
                     );
                     billing.add(d);
                 }

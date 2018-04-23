@@ -57,6 +57,23 @@
                 android:textSize="@dimen/text" />
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/txt_lokasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/tv_lokasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Lokasi (opsional)"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textSize="@dimen/text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_tanggal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -69,7 +86,6 @@
                     android:focusableInTouchMode="false"
                     android:hint="Due date"
                     android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textIsSelectable="false"
                     android:textSize="@dimen/text" />
             </android.support.design.widget.TextInputLayout>
 
@@ -131,6 +147,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_satuan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -164,6 +181,34 @@
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textSize="@dimen/text" />
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_file"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/file"
+                    style="@style/Base.Widget.AppCompat.Button.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button"
+                    android:text="File"
+                    android:textColor="@color/md_white_1000" />
+
+                <TextView
+                    android:id="@+id/link_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lines="1" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/button"

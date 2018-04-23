@@ -962,7 +962,8 @@ public class ProgramActivity extends AppCompatActivity {
                             jObject.getDouble("realisasi_persen"),
                             jObject.getInt("status_revenue"),
                             jObject.getInt("id_kategori"),
-                            jObject.getInt("id_satuan")
+                            jObject.getInt("id_satuan"),
+                            jObject.getString("lokasi")
                     );
 
                     LayoutInflater li = LayoutInflater.from(c);

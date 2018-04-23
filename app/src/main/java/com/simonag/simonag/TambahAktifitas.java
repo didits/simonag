@@ -2,7 +2,10 @@ package com.simonag.simonag;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -16,17 +19,21 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.shawnlin.numberpicker.NumberPicker;
 import com.simonag.simonag.model.Aktifitas;
@@ -35,6 +42,7 @@ import com.simonag.simonag.utils.AlertDialogCustom;
 import com.simonag.simonag.utils.Config;
 import com.simonag.simonag.utils.GetToken;
 import com.simonag.simonag.utils.VolleyClass;
+import com.simonag.simonag.utils.VolleyClass2;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -42,12 +50,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +79,10 @@ public class TambahAktifitas extends AppCompatActivity {
     EditText etTarget;
     @BindView(R.id.et_revenue)
     EditText etRevenue;
+
+    @BindView(R.id.tv_lokasi)
+    EditText etLokasi;
+
     @BindView(R.id.button)
     Button button;
     @BindView(R.id.sp_kategori)
@@ -92,6 +108,17 @@ public class TambahAktifitas extends AppCompatActivity {
     TextInputLayout text_target_presentase;
     @BindView(R.id.text_target_revenue)
     TextInputLayout text_target_revenue;
+    @BindView(R.id.txt_lokasi)
+    TextInputLayout text_lokasi;
+    @BindView(R.id.text_tanggal)
+    TextInputLayout text_tanggal;
+    @BindView(R.id.text_satuan)
+    TextInputLayout text_satuan;
+    @BindView(R.id.lin_file)
+    LinearLayout lin_file;
+
+    byte[] bytesArray = null;
+    File uploadedImage;
 
     DatePickerDialog datepicker;
 
@@ -116,10 +143,11 @@ public class TambahAktifitas extends AppCompatActivity {
         setTitle("Tambah Aktifitas");
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 //        Kategori spinner
-        String[] kategoriArray = new String[3];
+        String[] kategoriArray = new String[4];
         kategoriArray[0] = "Kualitas";
         kategoriArray[1] = "Kapasitas";
         kategoriArray[2] = "Komersial";
+        kategoriArray[3] = "Komersial-Kontra Prestasi";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, kategoriArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spKategori.setAdapter(adapter);
@@ -133,18 +161,38 @@ public class TambahAktifitas extends AppCompatActivity {
                     acSatuan.setEnabled(false);
                     text_target_presentase.setVisibility(View.VISIBLE);
                     text_target.setVisibility(View.GONE);
+                    text_lokasi.setVisibility(View.GONE);
+                    text_satuan.setVisibility(View.VISIBLE);
+                    lin_file.setVisibility(View.GONE);
+                    text_tanggal.setVisibility(View.VISIBLE);
                 } else if (item == 1) {
                     text_target_revenue.setVisibility(View.GONE);
                     acSatuan.setEnabled(true);
                     acSatuan.setText("");
                     text_target_presentase.setVisibility(View.GONE);
                     text_target.setVisibility(View.VISIBLE);
+                    text_lokasi.setVisibility(View.GONE);
+                    text_satuan.setVisibility(View.VISIBLE);
+                    lin_file.setVisibility(View.GONE);
+                    text_tanggal.setVisibility(View.VISIBLE);
+                } else if (item == 3) {
+                    text_target_revenue.setVisibility(View.VISIBLE);
+                    text_lokasi.setVisibility(View.VISIBLE);
+                    text_target_presentase.setVisibility(View.GONE);
+                    text_target.setVisibility(View.GONE);
+                    text_satuan.setVisibility(View.GONE);
+                    lin_file.setVisibility(View.VISIBLE);
+                    text_tanggal.setVisibility(View.GONE);
                 } else {
                     acSatuan.setText("");
                     text_target_revenue.setVisibility(View.VISIBLE);
                     acSatuan.setEnabled(true);
                     text_target_presentase.setVisibility(View.GONE);
                     text_target.setVisibility(View.VISIBLE);
+                    text_lokasi.setVisibility(View.GONE);
+                    text_satuan.setVisibility(View.VISIBLE);
+                    lin_file.setVisibility(View.GONE);
+                    text_tanggal.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -167,6 +215,72 @@ public class TambahAktifitas extends AppCompatActivity {
             spKategori.setSelection(aktifitas.getIdKategori() - 1);
             acSatuan.setText(aktifitas.getSatuan());
             tvDuedate.setText(aktifitas.getDuedate());
+            etLokasi.setText(aktifitas.getLokasi());
+        }
+        Button tambah_file = (Button) findViewById(R.id.file);
+        tambah_file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFile();
+            }
+        });
+    }
+
+    private void addFile() {
+        openFilePicker();
+    }
+
+    private void openFilePicker() {
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "pilih file"), 200);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 200) {
+                if (data.getData() != null) {
+                    TextView link_file = (TextView) findViewById(R.id.link_file);
+                    String uri = UriConverter.getPath(TambahAktifitas.this, data.getData());
+                    if (uri != null) {
+                        uploadedImage = new File(uri);
+                        long fileSizeInBytes = uploadedImage.length();
+                        long fileSizeInKB = fileSizeInBytes / 1024;
+                        long fileSizeInMB = fileSizeInKB / 1024;
+                        if ((fileSizeInMB) >= 4) {
+                            AlertDialogCustom ad = new AlertDialogCustom(TambahAktifitas.this);
+                            ad.simple("Error", "File terlalu besar, maksimal 4mb", R.drawable.info_danger, null);
+                            uploadedImage = null;
+                            link_file.setText("");
+                        } else link_file.setText(uploadedImage.getPath());
+                    } else {
+                        uploadedImage = null;
+                        link_file.setText("");
+                    }
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    /*if (dialog != null) {   //Show dialog if the read permission has been granted.
+                        dialog.show();
+                    }*/
+                    openFilePicker();
+                } else {
+                    //Permission has not been granted. Notify the user.
+                    Toast.makeText(TambahAktifitas.this, "Permission is Required for getting list of files", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -256,43 +370,57 @@ public class TambahAktifitas extends AppCompatActivity {
         BigInteger target_nilai = new BigInteger("0");
         int id_satuan = 0;
         BigInteger revenue_target_nilai = new BigInteger("0");
-        String nama_satuan= "",deadline = "",nama_aktivitas = "";
+        String nama_satuan = "", deadline = "", nama_aktivitas = "";
+        String lokasi = "-";
         int id_kategori = spKategori.getSelectedItemPosition() + 1;
         try {
             id_satuan = satuanMap.get(acSatuan.getText().toString());
-        }catch (Exception e){
-
-        }
-        try {
-
-            nama_satuan = acSatuan.getText().toString();
-            deadline = tvDuedate.getText().toString();
-            nama_aktivitas = etNama.getText().toString();
-            target_nilai = new BigInteger(etTarget.getText().toString());
-            if (etRevenue.getText().toString().isEmpty()) etRevenue.setText(0);
-            revenue_target_nilai = new BigInteger(etRevenue.getText().toString());
         } catch (Exception e) {
-            Log.d("error_satuan", e.toString());
+            e.printStackTrace();
         }
+
+        nama_satuan = acSatuan.getText().toString();
+        deadline = tvDuedate.getText().toString();
+        nama_aktivitas = etNama.getText().toString();
+        if (etTarget.getText().toString().isEmpty())
+            etTarget.setText("0");
+        target_nilai = new BigInteger(etTarget.getText().toString());
+        if (etRevenue.getText().toString().isEmpty())
+            etRevenue.setText("0");
+        revenue_target_nilai = new BigInteger(etRevenue.getText().toString());
+        lokasi = etLokasi.getText().toString();
+
 
         AlertDialogCustom ad = new AlertDialogCustom(this);
 
         if (id_kategori == 1) {
             if (nama_aktivitas.equals("") || deadline.equals("") || tvTargetPresentase.getText().toString().equals("")) {
-                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                ad.simple("Peringatan", "Data harus terisi semua. Coba cek kembali data yang kosong", R.drawable.info_danger, null);
                 return;
             }
             target_nilai = new BigInteger(tvTargetPresentase.getText().toString());
         } else if (id_kategori == 2) {
             if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
-                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+                ad.simple("Peringatan", "Data harus terisi semua. Coba cek kembali data yang kosong", R.drawable.info_danger, null);
                 return;
             }
-        }else if(id_kategori == 3){
-            if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("")) {
-                ad.simple("Peringatan", "Data harus terisi semua", R.drawable.info_danger, null);
+        } else if (id_kategori == 3) {
+            if (nama_aktivitas.equals("") || deadline.equals("") || nama_satuan.equals("") || etRevenue.getText().toString().equals("")) {
+                ad.simple("Peringatan", "Data harus terisi semua. Coba cek kembali data yang kosong", R.drawable.info_danger, null);
                 return;
             }
+        } else if (id_kategori == 4) {
+            if (nama_aktivitas.equals("") || etRevenue.getText().toString().equals("")) {
+                ad.simple("Peringatan", "Data harus terisi semua. Coba cek kembali data yang kosong", R.drawable.info_danger, null);
+                return;
+            }
+        }
+
+        if (deadline.equals("")){
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            deadline = df.format(c);
+            Log.d("mantan", deadline);
         }
 
         if (getIntent().hasExtra("aktifitas"))
@@ -306,7 +434,8 @@ public class TambahAktifitas extends AppCompatActivity {
                     keterangan,
                     nama_aktivitas,
                     target_nilai,
-                    revenue_target_nilai);
+                    revenue_target_nilai,
+                    lokasi);
         else
             uploadAktifitas(
                     id_program,
@@ -317,132 +446,180 @@ public class TambahAktifitas extends AppCompatActivity {
                     keterangan,
                     nama_aktivitas,
                     target_nilai,
-                    revenue_target_nilai);
+                    revenue_target_nilai,
+                    lokasi);
     }
 
 
-    private void editAktifitas(
-            int id_target,
-            int id_program,
-            int id_kategori,
-            int id_satuan,
-            String nama_satuan,
-            String deadline,
-            String keterangan,
-            String nama_aktivitas,
-            BigInteger target_nilai,
-            BigInteger revenue_target_nilai) {
+    private void editAktifitas(final int id_target,
+                               final int id_program,
+                               final int id_kategori,
+                               final int id_satuan,
+                               final String nama_satuan,
+                               final String deadline,
+                               final String keterangan,
+                               final String nama_aktivitas,
+                               final BigInteger target_nilai,
+                               final BigInteger revenue_target_nilai,
+                               final String lokasi) {
         avi.show();
+        button.setEnabled(false);
         String token = Prefs.getString(Config.TOKEN_BUMN, "");
-        VolleyClass cek = new VolleyClass(this, true);
-        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
+
+        if (uploadedImage != null) {
+
+            bytesArray = new byte[(int) uploadedImage.length()];
+            try {
+                FileInputStream fis = new FileInputStream(uploadedImage);
+                fis.read(bytesArray); //read file into bytes[]
+                fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, Config.URL_EDIT_TARGET_PROGRAM + token, new Response.Listener<NetworkResponse>() {
             @Override
-            public void onSuccess(String response) {
-                avi.hide();
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
                 try {
-                    JSONObject jObject = new JSONObject(response);
+                    JSONObject jObject = new JSONObject(resultResponse);
                     String status = jObject.getString("status");
                     if (status.equals("edit-success")) {
-                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses mengedit aktivitas", Toast.LENGTH_LONG);
-                        toast.show();
-                        onBackPressed();
-                    } else if (status.equals("wrong-id")) {
-                        Toast.makeText(TambahAktifitas.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
-                    } else if (status.equals("edit-failed")) {
-                        Toast.makeText(TambahAktifitas.this, "Edit data gagal", Toast.LENGTH_LONG).show();
-                    } else {
-                        GetToken k = new GetToken(TambahAktifitas.this);
-                        k.setCallback(new GetToken.callback() {
-                            @Override
-                            public void action(boolean success) {
-                                tambah_aktifitas();
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError() {
-                avi.hide();
-            }
-        }, Config.URL_EDIT_TARGET_PROGRAM + token, new String[]{
-                "id_target" + "|" + id_target,
-                "id_program" + "|" + id_program,
-                "id_kategori" + "|" + id_kategori,
-                "id_satuan" + "|" + id_satuan,
-                "nama_satuan" + "|" + nama_satuan,
-                "deadline" + "|" + deadline,
-                "keterangan" + "|" + keterangan,
-                "nama_aktivitas" + "|" + nama_aktivitas,
-                "target_nilai" + "|" + target_nilai,
-                "revenue_target_nilai" + "|" + revenue_target_nilai
-        });
-    }
-
-    private void uploadAktifitas(
-            int id_program,
-            int id_kategori,
-            int id_satuan,
-            String nama_satuan,
-            String deadline,
-            String keterangan,
-            String nama_aktivitas,
-            BigInteger target_nilai,
-            BigInteger revenue_target_nilai) {
-
-        avi.show();
-        String token = Prefs.getString(Config.TOKEN_BUMN, "");
-        VolleyClass cek = new VolleyClass(this, true);
-        cek.get_data_from_server(new VolleyClass.VolleyCallback() {
-            @Override
-            public void onSuccess(String response) {
-                avi.hide();
-                Log.d("respon onSuccess", response);
-                try {
-                    JSONObject jObject = new JSONObject(response);
-                    String status = jObject.getString("status");
-                    if (status.equals("post-success")) {
-                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Menambahkan Program", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Mengedit Aktivitas", Toast.LENGTH_LONG);
                         toast.show();
                         onBackPressed();
                     } else if (status.equals("wrong-id")) {
                         Toast.makeText(TambahAktifitas.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
                     } else if (status.equals("post-failed")) {
                         Toast.makeText(TambahAktifitas.this, "Post data gagal", Toast.LENGTH_LONG).show();
-                    } else {
-                        GetToken k = new GetToken(TambahAktifitas.this);
-                        k.setCallback(new GetToken.callback() {
-                            @Override
-                            public void action(boolean success) {
-                                tambah_aktifitas();
-                            }
-                        });
                     }
+                    avi.hide();
+                    button.setEnabled(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                button.setEnabled(true);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_target", String.valueOf(id_target));
+                params.put("id_program", String.valueOf(id_program));
+                params.put("id_kategori", String.valueOf(id_kategori));
+                params.put("id_satuan", String.valueOf(id_satuan));
+                params.put("nama_satuan", String.valueOf(nama_satuan));
+                params.put("deadline", String.valueOf(deadline));
+                params.put("keterangan", String.valueOf(keterangan));
+                params.put("nama_aktivitas", String.valueOf(nama_aktivitas));
+                params.put("target_nilai", String.valueOf(target_nilai));
+                params.put("revenue_target_nilai", String.valueOf(revenue_target_nilai));
+                params.put("lokasi", String.valueOf(lokasi));
+                return params;
             }
 
             @Override
-            public void onError() {
-                avi.hide();
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                if (uploadedImage != null)
+                    params.put("attachment", new DataPart(uploadedImage.toString(), bytesArray));
+                return params;
             }
-        }, Config.URL_POST_TARGET_PROGRAM + token, new String[]{
-                "id_program" + "|" + id_program,
-                "id_kategori" + "|" + id_kategori,
-                "id_satuan" + "|" + id_satuan,
-                "nama_satuan" + "|" + nama_satuan,
-                "deadline" + "|" + deadline,
-                "keterangan" + "|" + keterangan,
-                "nama_aktivitas" + "|" + nama_aktivitas,
-                "target_nilai" + "|" + target_nilai,
-                "revenue_target_nilai" + "|" + revenue_target_nilai
-        });
+        };
+
+        VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
+    }
+
+
+    private void uploadAktifitas(final int id_program,
+                                 final int id_kategori,
+                                 final int id_satuan,
+                                 final String nama_satuan,
+                                 final String deadline,
+                                 final String keterangan,
+                                 final String nama_aktivitas,
+                                 final BigInteger target_nilai,
+                                 final BigInteger revenue_target_nilai,
+                                 final String lokasi) {
+        avi.show();
+        button.setEnabled(false);
+        String token = Prefs.getString(Config.TOKEN_BUMN, "");
+
+        if (uploadedImage != null) {
+
+            bytesArray = new byte[(int) uploadedImage.length()];
+            try {
+                FileInputStream fis = new FileInputStream(uploadedImage);
+                fis.read(bytesArray); //read file into bytes[]
+                fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, Config.URL_POST_TARGET_PROGRAM + token, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+                try {
+                    JSONObject jObject = new JSONObject(resultResponse);
+                    String status = jObject.getString("status");
+                    if (status.equals("post-success")) {
+                        Toast toast = Toast.makeText(TambahAktifitas.this, "Sukses Menambahkan Aktivitas", Toast.LENGTH_LONG);
+                        toast.show();
+                        finish();
+                    } else if (status.equals("wrong-id")) {
+                        Toast.makeText(TambahAktifitas.this, "Aktivitas tidak ada", Toast.LENGTH_LONG).show();
+                    } else if (status.equals("post-failed")) {
+                        Toast.makeText(TambahAktifitas.this, "Post data gagal", Toast.LENGTH_LONG).show();
+                    }
+                    avi.hide();
+                    button.setEnabled(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                button.setEnabled(true);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_program", String.valueOf(id_program));
+                params.put("id_kategori", String.valueOf(id_kategori));
+                params.put("id_satuan", String.valueOf(id_satuan));
+                params.put("nama_satuan", String.valueOf(nama_satuan));
+                params.put("deadline", String.valueOf(deadline));
+                params.put("keterangan", String.valueOf(keterangan));
+                params.put("nama_aktivitas", String.valueOf(nama_aktivitas));
+                params.put("target_nilai", String.valueOf(target_nilai));
+                params.put("revenue_target_nilai", String.valueOf(revenue_target_nilai));
+                params.put("lokasi", String.valueOf(lokasi));
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                if (uploadedImage != null)
+                    params.put("attachment", new DataPart(uploadedImage.toString(), bytesArray));
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(getBaseContext()).addToRequestQueue(multipartRequest);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class VolleyClass {
                         NetworkResponse networkResponse = error.networkResponse;
                         if (networkResponse != null && networkResponse.data != null) {
                             String jsonError = new String(networkResponse.data);
-                            //longLog(jsonError);
+                            longLog(jsonError);
                         }
                         if(show_progress){
                             if (progress_dialog != null && progress_dialog.isShowing()) {

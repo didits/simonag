@@ -137,12 +137,10 @@ public class TambahRealisasi extends AppCompatActivity {
         id_aktifitas = getIntent().getExtras().getInt("id_aktivitas");
         id_kategori = getIntent().getExtras().getInt("id_kategori");
 
-        if (!getIntent().getExtras().getString("kategori").equals("komersial")) {
+        if (id_kategori < 3) {
+            etRevenue.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
             tvRevenue.setVisibility(View.GONE);
-        }
-        if (id_kategori != 3) {
-            etRevenue.setVisibility(View.GONE);
         }
 
         Button tambah_file = (Button) findViewById(R.id.file);
@@ -185,11 +183,11 @@ public class TambahRealisasi extends AppCompatActivity {
         dialog.show();*/
     }
 
-    private void openFilePicker(){
+    private void openFilePicker() {
         Intent intent = new Intent();
         intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"pilih file"),200);
+        startActivityForResult(Intent.createChooser(intent, "pilih file"), 200);
     }
 
     @Override
@@ -210,7 +208,7 @@ public class TambahRealisasi extends AppCompatActivity {
                             uploadedImage = null;
                             link_file.setText("");
                         } else link_file.setText(uploadedImage.getPath());
-                    }else {
+                    } else {
                         uploadedImage = null;
                         link_file.setText("");
                     }
@@ -242,7 +240,7 @@ public class TambahRealisasi extends AppCompatActivity {
     private void setEditListener() {
         button.setEnabled(false);
         button.setBackground(getResources().getDrawable(R.drawable.button_disabled));
-        if (id_kategori != 3) {
+        if (id_kategori < 3) {
             etNilai.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {
                 }

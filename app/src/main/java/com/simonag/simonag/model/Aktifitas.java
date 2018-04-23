@@ -20,6 +20,7 @@ public class Aktifitas {
     BigInteger realisasi_revenue;
     String duedate;
     String satuan;
+    String lokasi;
 
     int statusRevenue;
     int idKategori;
@@ -29,7 +30,7 @@ public class Aktifitas {
 //    String koordinat
 
     public Aktifitas(){}
-    public Aktifitas(int no, int id, String nama, String kategori, BigInteger target, BigInteger revenue, BigInteger realisasi, BigInteger realisasi_revenue, String duedate, String satuan ,double realisasi_persen, int statusRevenue, int idKategori,int idSatuan) {
+    public Aktifitas(int no, int id, String nama, String kategori, BigInteger target, BigInteger revenue, BigInteger realisasi, BigInteger realisasi_revenue, String duedate, String satuan ,double realisasi_persen, int statusRevenue, int idKategori,int idSatuan, String lokasi) {
         this.no = no;
         this.id = id;
         this.nama = nama;
@@ -44,6 +45,15 @@ public class Aktifitas {
         this.statusRevenue=statusRevenue;
         this.idKategori=idKategori;
         this.idSatuan=idSatuan;
+        this.lokasi = lokasi;
+    }
+
+    public String getLokasi() {
+        return lokasi;
+    }
+
+    public void setLokasi(String lokasi) {
+        this.lokasi = lokasi;
     }
 
     public int getIdKategori() {

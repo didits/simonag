@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="SUKSES KUALITAS"
-        android:textColor="@color/primary" />
+        android:textColor="@color/primary"
+        android:textSize="10sp" />
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/percent"
         fontPath="fonts/Asap-Bold.ttf"
